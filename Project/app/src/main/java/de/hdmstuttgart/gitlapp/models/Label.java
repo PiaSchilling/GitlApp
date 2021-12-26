@@ -8,14 +8,14 @@ import androidx.room.PrimaryKey;
 public class Label {
 
     @PrimaryKey
-    private final int id;
-    private final String name;
-    private final String color;
+    private int id;
+    private String name;
+    private String color;
 
     @ColumnInfo(name = "issue_id")
-    private final int issueId;
+    private int issueId;
     @ColumnInfo(name = "project_id")
-    private final int projectId;
+    private int projectId;
 
     public Label(int id, String name, String color, int issueId, int projectId) {
         this.id = id;
@@ -25,4 +25,45 @@ public class Label {
         this.issueId = issueId;
         this.projectId = projectId;
     }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
+
+    public int getIssueId() {
+        return issueId;
+    }
+
+    public void setIssueId(int issueId) {
+        this.issueId = issueId;
+    }
+
+    public int getProjectId() {
+        return projectId;
+    }
+
+    public void setProjectId(int projectId) {
+        this.projectId = projectId;
+    }
 }
+

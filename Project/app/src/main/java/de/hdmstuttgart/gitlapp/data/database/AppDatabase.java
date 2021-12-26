@@ -7,33 +7,38 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
 import de.hdmstuttgart.gitlapp.models.Issue;
-import de.hdmstuttgart.gitlapp.models.Label;
+/*import de.hdmstuttgart.gitlapp.models.Label;
 import de.hdmstuttgart.gitlapp.models.Milestone;
 import de.hdmstuttgart.gitlapp.models.Note;
 import de.hdmstuttgart.gitlapp.models.Profile;
-import de.hdmstuttgart.gitlapp.models.Project;
+import de.hdmstuttgart.gitlapp.models.Project;*/
 import de.hdmstuttgart.gitlapp.models.User;
 
-@Database(entities = {Issue.class, Label.class, Milestone.class, Note.class, Profile.class, Project.class, User.class}, version = 1)
+@Database(entities = {Issue.class,/* Label.class, Milestone.class, Note.class, Profile.class, Project.class,*/ User.class}, version = 1,exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
 
-    private static AppDatabase appDatabase;
+    private static AppDatabase INSTANCE;
 
-    private AppDatabase(){}
 
     //Singleton access bc each db object is expensive (its recommended to implement this as a singleton on android.developers.com)
+    //todo maybe make a dependency container
     public static AppDatabase getDatabaseInstance(Context context) {
-        if(appDatabase == null){
-            appDatabase = Room.databaseBuilder(context,AppDatabase.class,"app-database").build();
+        synchronized (AppDatabase.class){
+        if(INSTANCE == null){
+                INSTANCE = Room
+                        .databaseBuilder(context,AppDatabase.class,"app-database")
+                        .allowMainThreadQueries() //todo remove
+                        .build();
+            }
         }
-       return appDatabase;
+       return INSTANCE;
     }
 
     public abstract IssueDao issueDao();
-    public abstract LabelDao labelDao();
+    /*public abstract LabelDao labelDao();
     public abstract MilestoneDao milestoneDao();
     public abstract NoteDao noteDao();
     public abstract ProfileDao profileDao();
-    public abstract ProjectDao projectDao();
+    public abstract ProjectDao projectDao();*/
     public abstract UserDao userDao();
 }

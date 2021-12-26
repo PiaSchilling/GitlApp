@@ -1,3 +1,4 @@
+
 package de.hdmstuttgart.gitlapp.data.database;
 
 import androidx.room.Dao;
@@ -35,3 +36,4 @@ public interface LabelDao {
     //@Query("SELECT * FROM labels" + "JOIN project ON id = label.project_id")
 
 }
+

@@ -23,3 +23,4 @@ public interface ProfileDao {
     @Query("SELECT * FROM profile") //todo refactor so its only returning one profile
     Profile getProfile();
 }
+

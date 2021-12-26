@@ -1,3 +1,4 @@
+
 package de.hdmstuttgart.gitlapp.data.database;
 
 import androidx.room.Dao;

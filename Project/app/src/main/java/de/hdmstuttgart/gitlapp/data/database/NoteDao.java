@@ -8,7 +8,6 @@ import androidx.room.Update;
 
 import java.util.List;
 
-import de.hdmstuttgart.gitlapp.models.Issue;
 import de.hdmstuttgart.gitlapp.models.Note;
 
 @Dao
@@ -26,6 +25,5 @@ public interface NoteDao {
     @Query("SELECT * FROM notes")
     List<Note> getAllNotes();
 
-    @Query("SELECT * FROM notes WHERE issue_id = :issueId")
-    List<Issue> getIssueComments(int issueId);
 }
+

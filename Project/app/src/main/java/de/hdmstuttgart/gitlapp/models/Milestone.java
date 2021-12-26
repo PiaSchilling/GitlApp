@@ -1,3 +1,4 @@
+
 package de.hdmstuttgart.gitlapp.models;
 
 import androidx.room.ColumnInfo;
@@ -10,24 +11,50 @@ import java.util.Date;
 public class Milestone {
 
     @PrimaryKey
-    private final int id;
-    private final int iid;
+    private int id;
+    private int iid;
     @ColumnInfo(name = "project_id")
-    private final int projectId;
-    private final String title;
-    //private final String description; //todo those fields will not be displayed, keep them?
-    //private final State state;
-    //private final Date createDate;
-    //private final Date dueDate;
+    private int projectId;
+    private String title;
+
 
     public Milestone(int id, int iid, int projectId, String title, String description, State state, Date createDate, Date dueDate) {
         this.id = id;
         this.iid = iid;
         this.projectId = projectId;
         this.title = title;
-        /*this.description = description;
-        this.state = state;
-        this.createDate = createDate;
-        this.dueDate = dueDate;*/
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getIid() {
+        return iid;
+    }
+
+    public void setIid(int iid) {
+        this.iid = iid;
+    }
+
+    public int getProjectId() {
+        return projectId;
+    }
+
+    public void setProjectId(int projectId) {
+        this.projectId = projectId;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 }
+

@@ -5,50 +5,150 @@ import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
-import java.util.Date;
-import java.util.List;
+import java.util.Objects;
 
 @Entity(tableName = "issues")
 public class Issue {
 
     @PrimaryKey
-    private final int id;
-    private final int weight;
-    private final User author;
-    private final State state;
-    @ColumnInfo(name = "create_date")
-    private final Date createDate;
-    @ColumnInfo(name = "due_date")
-    private final Date dueDate;
-    private final String title;
-    private final String description;
+    private int id;
+
+    private int weight;
+    private String title;
+    private String description;
+    private int hashcode;
+    private int authorId; //FK
+
     @ColumnInfo(name = "thumbs_up")
-    private final int thumbsUp;
+    private int thumbsUp;
     @ColumnInfo(name = "thumbs_down")
-    private final int thumbsDown;
+    private int thumbsDown;
     @ColumnInfo(name = "project_id")
-    private final int projectId;
-    //private final Milestone milestone; //todo not sure if this is needed
+    private int projectId;
 
     @Ignore
-    private final List<Label> issueLabels;
-    @Ignore
-    private final List<Note> issueComments;
+    private State state;
 
-    public Issue(int id, int weight, User author, State state, Date createDate, Date dueDate, String title, String description, int thumbsUp, int thumbsDown, List<Label> issueLabels, List<Note> issueComments, int projectId) {
+
+    @Ignore
+    public Issue(int id, int weight, int authorId, State state, String title, String description, int thumbsUp, int thumbsDown, int projectId) {
         this.id = id;
         this.weight = weight;
-        this.author = author;
+        this.authorId = authorId;
         this.state = state;
-        this.createDate = createDate;
-        this.dueDate = dueDate;
         this.title = title;
         this.description = description;
         this.thumbsUp = thumbsUp;
         this.thumbsDown = thumbsDown;
-        this.issueLabels = issueLabels;
-        this.issueComments = issueComments;
+        this.projectId = projectId;
 
+        this.hashcode = hashCode();
+    }
+
+    public Issue(){
+
+    }
+
+    @Override
+    public String toString() {
+        return "Issue{" +
+                "id=" + id +
+                ", weight=" + weight +
+                ", title='" + title + '\'' +
+                ", hashcode=" + hashcode +
+                '}';
+    }
+
+    @Override//todo recreate for real issue implementation
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Issue issue = (Issue) o;
+        return id == issue.id && weight == issue.weight && hashcode == issue.hashcode && thumbsUp == issue.thumbsUp && thumbsDown == issue.thumbsDown && projectId == issue.projectId && authorId == issue.authorId && title.equals(issue.title) && description.equals(issue.description) && state == issue.state;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, weight, title, description,thumbsUp, thumbsDown, projectId, authorId, state);
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public int getWeight() {
+        return weight;
+    }
+
+    public int getAuthorId() {
+        return authorId;
+    }
+
+    public int getHashcode() {
+        return hashcode;
+    }
+
+    public void setHashcode(int hashcode) {
+        this.hashcode = hashcode;
+    }
+
+    public State getState() {
+        return state;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public int getThumbsUp() {
+        return thumbsUp;
+    }
+
+    public int getThumbsDown() {
+        return thumbsDown;
+    }
+
+    public int getProjectId() {
+        return projectId;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setWeight(int weight) {
+        this.weight = weight;
+    }
+
+    public void setAuthorId(int author_id) {
+        this.authorId = author_id;
+    }
+
+    public void setState(State state) {
+        this.state = state;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setThumbsUp(int thumbsUp) {
+        this.thumbsUp = thumbsUp;
+    }
+
+    public void setThumbsDown(int thumbsDown) {
+        this.thumbsDown = thumbsDown;
+    }
+
+    public void setProjectId(int projectId) {
         this.projectId = projectId;
     }
 }

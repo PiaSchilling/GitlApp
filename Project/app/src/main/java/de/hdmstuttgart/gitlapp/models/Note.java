@@ -2,6 +2,8 @@ package de.hdmstuttgart.gitlapp.models;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.Insert;
 import androidx.room.PrimaryKey;
 
 import java.util.Date;
@@ -10,19 +12,53 @@ import java.util.Date;
 public class Note {
 
     @PrimaryKey
-    private final int id;
-    private final User author;
-    private final String body;
-    @ColumnInfo(name = "create_date")
-    private final Date createDate;
-    @ColumnInfo(name = "issue_id")
-    private final int issueId;
+    private int id;
 
-    public Note(int id, User author, String body, Date createDate, int issueId) {
+    private int authorId;
+    private String body;
+    private int issueId;
+
+    public Note(int id, int authorId, String body, int issueId) {
         this.id = id;
-        this.author = author;
+        this.authorId = authorId;
         this.body = body;
-        this.createDate = createDate;
+        this.issueId = issueId;
+    }
+
+    public Note() {
+
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getAuthorId() {
+        return authorId;
+    }
+
+    public void setAuthorId(int authorId) {
+        this.authorId = authorId;
+    }
+
+    public String getBody() {
+        return body;
+    }
+
+    public void setBody(String body) {
+        this.body = body;
+    }
+
+    public int getIssueId() {
+        return issueId;
+    }
+
+    public void setIssueId(int issueId) {
         this.issueId = issueId;
     }
 }
+
