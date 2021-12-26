@@ -22,4 +22,6 @@ public class AppContainer {
     public AppDatabase appDatabase = AppDatabase.getDatabaseInstance(applicationContext);
     public IssueRepository issueRepository = new IssueRepository(appDatabase);
 
+    public String baseUrl = "https://gitlab.mi.hdm-stuttgart.de/api/v4/";
+
 }

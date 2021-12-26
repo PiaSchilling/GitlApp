@@ -5,6 +5,8 @@ import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.Objects;
 
 @Entity(tableName = "issues")
@@ -12,6 +14,7 @@ public class Issue {
 
     @PrimaryKey
     private int id;
+    //private int iid;
 
     private int weight;
     private String title;
@@ -23,15 +26,15 @@ public class Issue {
     private int thumbsUp;
     @ColumnInfo(name = "thumbs_down")
     private int thumbsDown;
-    @ColumnInfo(name = "project_id")
-    private int projectId;
+
+    private int project_id;
 
     @Ignore
     private State state;
 
 
     @Ignore
-    public Issue(int id, int weight, int authorId, State state, String title, String description, int thumbsUp, int thumbsDown, int projectId) {
+    public Issue(int id, int weight, int authorId, State state, String title, String description, int thumbsUp, int thumbsDown, int project_id) {
         this.id = id;
         this.weight = weight;
         this.authorId = authorId;
@@ -40,7 +43,7 @@ public class Issue {
         this.description = description;
         this.thumbsUp = thumbsUp;
         this.thumbsDown = thumbsDown;
-        this.projectId = projectId;
+        this.project_id = project_id;
 
         this.hashcode = hashCode();
     }
@@ -64,12 +67,12 @@ public class Issue {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Issue issue = (Issue) o;
-        return id == issue.id && weight == issue.weight && hashcode == issue.hashcode && thumbsUp == issue.thumbsUp && thumbsDown == issue.thumbsDown && projectId == issue.projectId && authorId == issue.authorId && title.equals(issue.title) && description.equals(issue.description) && state == issue.state;
+        return id == issue.id && weight == issue.weight && hashcode == issue.hashcode && thumbsUp == issue.thumbsUp && thumbsDown == issue.thumbsDown && project_id == issue.project_id && authorId == issue.authorId && title.equals(issue.title) && description.equals(issue.description) && state == issue.state;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, weight, title, description,thumbsUp, thumbsDown, projectId, authorId, state);
+        return Objects.hash(id, weight, title, description,thumbsUp, thumbsDown, project_id, authorId, state);
     }
 
     public int getId() {
@@ -112,8 +115,8 @@ public class Issue {
         return thumbsDown;
     }
 
-    public int getProjectId() {
-        return projectId;
+    public int getProject_id() {
+        return project_id;
     }
 
     public void setId(int id) {
@@ -148,7 +151,7 @@ public class Issue {
         this.thumbsDown = thumbsDown;
     }
 
-    public void setProjectId(int projectId) {
-        this.projectId = projectId;
+    public void setProject_id(int project_id) {
+        this.project_id = project_id;
     }
 }

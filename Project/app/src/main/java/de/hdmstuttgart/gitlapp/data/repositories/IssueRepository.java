@@ -1,5 +1,7 @@
 package de.hdmstuttgart.gitlapp.data.repositories;
 
+import android.util.Log;
+
 import androidx.lifecycle.MutableLiveData;
 
 import java.util.ArrayList;
@@ -7,8 +9,14 @@ import java.util.List;
 
 
 import de.hdmstuttgart.gitlapp.data.database.AppDatabase;
+import de.hdmstuttgart.gitlapp.data.network.ApiResponse;
 import de.hdmstuttgart.gitlapp.data.network.DummyAPI;
+import de.hdmstuttgart.gitlapp.data.network.IssueApi;
+import de.hdmstuttgart.gitlapp.data.network.ServiceGenerator;
 import de.hdmstuttgart.gitlapp.models.Issue;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class IssueRepository {
 
@@ -17,6 +25,8 @@ public class IssueRepository {
     private List<Issue> issuesAPI = new ArrayList<>();
     private MutableLiveData<List<Issue>> issuesLiveData = new MutableLiveData<>();
     private DummyAPI dummyAPI = new DummyAPI();
+    private ServiceGenerator serviceGenerator = new ServiceGenerator("https://gitlab.mi.hdm-stuttgart.de/api/v4/");
+    private IssueApi issueApi = serviceGenerator.getIssueApi();
 
     public IssueRepository(AppDatabase database){
         this.database = database;
@@ -29,8 +39,23 @@ public class IssueRepository {
         //todo make background thread for this (threadpool)
         //todo implement a callback
 
+        Call<List<Issue>> call = issueApi.getSearchResult("glpat-im7xUxYLmQv1LnKnvesr");
+        call.enqueue(new Callback<List<Issue>>() {
+            @Override
+            public void onResponse(Call<List<Issue>> call, Response<List<Issue>> response) {
+                List<Issue> issues = response.body();
+                Log.d("Api","Success" + issues.toString());
 
-        issuesAPI = dummyAPI.getIssues();                                   //1. fetch data from network
+                issuesAPI.addAll(issues);
+            }
+
+            @Override
+            public void onFailure(Call<List<Issue>> call, Throwable t) {
+                Log.d("Api","FAIL");
+            }
+        });
+
+        //issuesAPI = dummyAPI.getIssues();                                   //1. fetch data from network
         //database.issueDao().insertIssues(issuesAPI.toArray(new Issue[0]));  //2. save them into room
         database.issueDao().insertOrUpdate(issuesAPI);
         issues = database.issueDao().getAllIssues();                        //3. get all issues from room
