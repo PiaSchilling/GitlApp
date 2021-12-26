@@ -6,5 +6,5 @@ import de.hdmstuttgart.gitlapp.models.Issue;
 
 public class ApiResponse {
 
-    public List<Issue> issueResult;
+    public List<Issue> issueResult; //todo maybe remove
 }

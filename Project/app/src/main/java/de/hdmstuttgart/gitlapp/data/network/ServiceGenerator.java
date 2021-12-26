@@ -8,7 +8,7 @@ public class ServiceGenerator {
     private static String mBaseUrl  = "https://gitlab.mi.hdm-stuttgart.de/api/v4/";
 
     public ServiceGenerator(String baseUrl){
-        mBaseUrl = "https://gitlab.mi.hdm-stuttgart.de/api/v4/";
+        mBaseUrl = "https://gitlab.mi.hdm-stuttgart.de/api/v4/"; //todo make base url not hardcoded
     }
 
     private static Retrofit.Builder retrofitBuilder = new Retrofit.Builder()

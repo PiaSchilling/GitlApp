@@ -35,11 +35,11 @@ public class IssueRepository {
     /**
      * refresh the data saved in the room db by making an api call and insert the result in the room db
      */
-    public void refreshData(){
+    public void refreshData(){ //todo cleanup
         //todo make background thread for this (threadpool)
         //todo implement a callback
 
-        Call<List<Issue>> call = issueApi.getSearchResult("glpat-im7xUxYLmQv1LnKnvesr");
+        Call<List<Issue>> call = issueApi.getSearchResult("glpat-im7xUxYLmQv1LnKnvesr"); //todo make access token not hardcoded
         call.enqueue(new Callback<List<Issue>>() {
             @Override
             public void onResponse(Call<List<Issue>> call, Response<List<Issue>> response) {

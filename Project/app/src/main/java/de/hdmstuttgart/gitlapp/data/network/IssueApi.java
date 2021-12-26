@@ -11,6 +11,6 @@ import retrofit2.http.Query;
 //all the requests for the api
 public interface IssueApi {
 
-    @GET("projects/6414/issues")
+    @GET("projects/6414/issues") //todo make project id not hardcoded
     Call<List<Issue>> getSearchResult(@Header("Authorization") String auth);
 }
