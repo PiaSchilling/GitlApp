@@ -1,6 +1,5 @@
 package de.hdmstuttgart.gitlapp.models;
 
-import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
@@ -12,21 +11,31 @@ public class User {
     private int id;
     private String username;
     private String name;
-    @ColumnInfo(name = "avatar_url")
-    private String avatarUrl;
+    private String avatar_url;
     private String email;
 
     @Ignore
-    public User(int id, String username, String name, String avatarUrl, String email) {
+    public User(int id, String username, String name, String avatar_url, String email) {
         this.id = id;
         this.username = username;
         this.name = name;
-        this.avatarUrl = avatarUrl;
-        this.email = email;
+        this.avatar_url = avatar_url;
+        this.email = email; //todo maybe remove wont be displayed
     }
 
     public User(){
 
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", name='" + name + '\'' +
+                ", avatarUrl='" + avatar_url + '\'' +
+                ", email='" + email + '\'' +
+                '}';
     }
 
     public int getId() {
@@ -41,8 +50,8 @@ public class User {
         return name;
     }
 
-    public String getAvatarUrl() {
-        return avatarUrl;
+    public String getAvatar_url() {
+        return avatar_url;
     }
 
     public String getEmail() {
@@ -61,8 +70,8 @@ public class User {
         this.name = name;
     }
 
-    public void setAvatarUrl(String avatarUrl) {
-        this.avatarUrl = avatarUrl;
+    public void setAvatar_url(String avatar_url) {
+        this.avatar_url = avatar_url;
     }
 
     public void setEmail(String email) {

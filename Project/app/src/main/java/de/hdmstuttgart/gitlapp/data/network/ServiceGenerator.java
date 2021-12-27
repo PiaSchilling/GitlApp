@@ -3,23 +3,25 @@ package de.hdmstuttgart.gitlapp.data.network;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+/**
+ * Get API clients (the app will only use the gitlab api this is why its not dynamic)
+ */
 public class ServiceGenerator {
 
-    private static String mBaseUrl  = "https://gitlab.mi.hdm-stuttgart.de/api/v4/";
+    private final GitLabClient gitLabClient; //todo singleton or static
 
     public ServiceGenerator(String baseUrl){
-        mBaseUrl = "https://gitlab.mi.hdm-stuttgart.de/api/v4/"; //todo make base url not hardcoded
+
+        Retrofit.Builder retrofitBuilder = new Retrofit.Builder()
+                .baseUrl(baseUrl)
+                .addConverterFactory(GsonConverterFactory.create());
+
+        Retrofit retrofit = retrofitBuilder.build();
+        gitLabClient = retrofit.create(GitLabClient.class);
     }
 
-    private static Retrofit.Builder retrofitBuilder = new Retrofit.Builder()
-            .baseUrl(mBaseUrl)
-            .addConverterFactory(GsonConverterFactory.create());
-
-    private static Retrofit retrofit = retrofitBuilder.build();
-
-    private static IssueApi issueApi = retrofit.create(IssueApi.class);
-
-    public IssueApi getIssueApi(){
-        return issueApi;
+    public GitLabClient getGitLabClient(){
+        return gitLabClient;
     }
+
 }

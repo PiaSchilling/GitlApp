@@ -13,7 +13,7 @@ public class DummyAPI {
     List<Issue> issues = new ArrayList<>();
 
     public DummyAPI(){
-        User user = new User(1,"Pia Schilling","Schilling Pia","url","email@mail.com");
+       /* User user = new User(1,"Pia Schilling","Schilling Pia","url","email@mail.com");
 
         Issue i1 = new Issue(2,1,1, State.CLOSED,"Issue one","Awesome issue",2,3,6414);
         Issue i2 = new Issue(3,1,1, State.CLOSED,"Issue one","Awesome issue",2,3,6414);
@@ -24,7 +24,7 @@ public class DummyAPI {
 
         issues.add(i1);
         issues.add(i2);
-        issues.add(i3);
+        issues.add(i3);*/
     }
 
     public List<Issue> getIssues(){

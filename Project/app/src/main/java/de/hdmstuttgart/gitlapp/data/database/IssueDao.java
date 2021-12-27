@@ -39,7 +39,7 @@ public abstract class IssueDao {
     @Query("SELECT id FROM issues WHERE id = :id")
     public abstract Integer getIssueById(int id);
 
-    @Query("SELECT * FROM issues WHERE authorId = :userId")
+    @Query("SELECT * FROM issues WHERE author_id = :userId")
     public abstract List<Issue> issuesByUser(int userId);
 
 
