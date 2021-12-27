@@ -24,9 +24,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //AppContainer container = ((CustomApplication) getApplication()).container;
-        AppDatabase appDatabase = AppDatabase.getDatabaseInstance(this.getApplicationContext());
-        this.issueViewModel = new IssueViewModel(new IssueRepository(appDatabase));
+        // - - - - - get the di container for getting the global dependencies - - - - - - - (for now the container could be stored in the mainActivity but there might me more activities in the future)
+        CustomApplication customApplication = new CustomApplication();
+        AppContainer container = customApplication.getContainer(getApplicationContext());
+
+        // - - - - - - instance view model - - - - - - - -
+        this.issueViewModel = new IssueViewModel(container.issueRepository);
 
         button = findViewById(R.id.button);
         textView = findViewById(R.id.textView);
