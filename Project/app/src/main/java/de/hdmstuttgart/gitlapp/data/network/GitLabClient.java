@@ -9,7 +9,7 @@ import retrofit2.http.Header;
 import retrofit2.http.Query;
 
 //all the requests for the api
-public interface IssueApi {
+public interface GitLabClient {
 
     @GET("projects/6414/issues") //todo make project id not hardcoded
     Call<List<Issue>> getSearchResult(@Header("Authorization") String auth);
