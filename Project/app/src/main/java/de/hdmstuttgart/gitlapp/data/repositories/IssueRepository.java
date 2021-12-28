@@ -11,21 +11,23 @@ import java.util.List;
 import de.hdmstuttgart.gitlapp.data.database.AppDatabase;
 import de.hdmstuttgart.gitlapp.data.network.GitLabClient;
 import de.hdmstuttgart.gitlapp.models.Issue;
-import de.hdmstuttgart.gitlapp.models.User;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class IssueRepository {
 
+    // - - - - - Sources - - - - - - - -
     private final AppDatabase database;
     private final GitLabClient gitLabClient;
 
+    // - - - - - holding temp data - - - - -
     private List<Issue> responseList = new ArrayList<>();
     private List<Issue> issues = new ArrayList<>();
     private List<Issue> issuesAPI = new ArrayList<>();
-    private MutableLiveData<List<Issue>> issuesLiveData = new MutableLiveData<>();
 
+    // - - - - - present data to the viewModel - - - - - - - - - -
+    private MutableLiveData<List<Issue>> issuesLiveData = new MutableLiveData<>();
 
     public IssueRepository(AppDatabase database, GitLabClient gitLabClient){
         this.database = database;
@@ -39,7 +41,7 @@ public class IssueRepository {
         //todo make background thread for this (threadpool)
         //todo implement a callback
 
-        Call<List<Issue>> call = gitLabClient.getSearchResult("glpat-im7xUxYLmQv1LnKnvesr"); //todo make access token not hardcoded
+        Call<List<Issue>> call = gitLabClient.getProjectIssues("glpat-im7xUxYLmQv1LnKnvesr"); //todo make access token not hardcoded
         call.enqueue(new Callback<List<Issue>>() {
             @Override
             public void onResponse(Call<List<Issue>> call, Response<List<Issue>> response) {
@@ -75,7 +77,7 @@ public class IssueRepository {
     }
 
     private void splitResult(){
-        List<User> authors = new ArrayList<>();
+       /* List<User> authors = new ArrayList<>();
 
         for(Issue issue : responseList){
             User author = issue.getAuthor();
@@ -87,11 +89,10 @@ public class IssueRepository {
         database.userDao().insertUsers(authors);
 
         Log.d("Api","AUTHORS " + authors.toString());
-        Log.d("Api","DATABSE USER " + database.userDao().getAllUsers());
+        Log.d("Api","DATABSE USER " + database.userDao().getAllUsers());*/
 
-        //get list of all
-        //get the users
-        //save the users to room
-        //save the user id to issue author_id
+        IssueMapper issueMapper = new IssueMapper(database);
+        issueMapper.mapIssues(responseList);
+
     }
 }

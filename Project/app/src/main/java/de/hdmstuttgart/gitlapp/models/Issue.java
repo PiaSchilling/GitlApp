@@ -5,6 +5,8 @@ import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity(tableName = "issues")
@@ -17,6 +19,8 @@ public class Issue {
     private int weight;
     private String title;
     private String description;
+    @Ignore
+    private List<Label> labels = new ArrayList<>();
 
     @Ignore
     private User author;
@@ -179,6 +183,14 @@ public class Issue {
 
     public void setState(State state) {
         this.state = state;
+    }
+
+    public List<Label> getLabels() {
+        return labels;
+    }
+
+    public void setLabels(List<Label> labels) {
+        this.labels = labels;
     }
 }
 

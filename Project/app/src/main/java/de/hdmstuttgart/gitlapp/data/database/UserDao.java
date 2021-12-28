@@ -19,7 +19,7 @@ public interface UserDao {
     @Insert
     void insertUsers(User ... users);
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE) //todo implement more efficent method
     void insertUsers(List<User> users);
 
     @Update
