@@ -9,6 +9,7 @@ import de.hdmstuttgart.gitlapp.data.database.AppDatabase;
 import de.hdmstuttgart.gitlapp.data.network.GitLabClient;
 import de.hdmstuttgart.gitlapp.data.network.ServiceGenerator;
 import de.hdmstuttgart.gitlapp.data.repositories.IssueRepository;
+import de.hdmstuttgart.gitlapp.data.repositories.ProjectRepository;
 
 //Container of objects shared across the whole app (dependency injection)
 public class AppContainer {
@@ -28,6 +29,7 @@ public class AppContainer {
 
     // - - - - - - Repositories - - - - - - - - - - - - -
     public IssueRepository issueRepository;
+    public ProjectRepository projectRepository;
 
     // - - - - - - Background threading - - - - - - - - -
     public ExecutorService executorService = Executors.newFixedThreadPool(2);
@@ -37,6 +39,7 @@ public class AppContainer {
 
         appDatabase = AppDatabase.getDatabaseInstance(applicationContext); //needs the context this is why its instanced in the constructor
         issueRepository = new IssueRepository(appDatabase, gitLabClient);
+        projectRepository = new ProjectRepository(appDatabase,gitLabClient);
     }
 
 

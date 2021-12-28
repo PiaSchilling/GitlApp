@@ -12,9 +12,11 @@ import de.hdmstuttgart.gitlapp.models.Milestone;
 import de.hdmstuttgart.gitlapp.models.Note;
 import de.hdmstuttgart.gitlapp.models.Profile;
 import de.hdmstuttgart.gitlapp.models.Project;*/
+import de.hdmstuttgart.gitlapp.models.Label;
+import de.hdmstuttgart.gitlapp.models.Project;
 import de.hdmstuttgart.gitlapp.models.User;
 
-@Database(entities = {Issue.class,/* Label.class, Milestone.class, Note.class, Profile.class, Project.class,*/ User.class}, version = 1,exportSchema = false)
+@Database(entities = {Issue.class, Label.class, /*Milestone.class, Note.class, Profile.class, */ Project.class, User.class}, version = 1,exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
 
     private static AppDatabase INSTANCE;
@@ -34,10 +36,10 @@ public abstract class AppDatabase extends RoomDatabase {
     }
 
     public abstract IssueDao issueDao();
-    /*public abstract LabelDao labelDao();
-    public abstract MilestoneDao milestoneDao();
+    public abstract LabelDao labelDao();
+    /*public abstract MilestoneDao milestoneDao();
     public abstract NoteDao noteDao();
-    public abstract ProfileDao profileDao();
-    public abstract ProjectDao projectDao();*/
+    public abstract ProfileDao profileDao();*/
+    public abstract ProjectDao projectDao();
     public abstract UserDao userDao();
 }

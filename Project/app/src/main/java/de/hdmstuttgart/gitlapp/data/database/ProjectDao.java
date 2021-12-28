@@ -3,6 +3,7 @@ package de.hdmstuttgart.gitlapp.data.database;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
+import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Update;
 
@@ -13,8 +14,11 @@ import de.hdmstuttgart.gitlapp.models.Project;
 @Dao
 public interface ProjectDao {
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE) //todo check for changes
     void insertProjects(Project ... projects);
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE) //todo check for changes
+    void insertProjects(List<Project> projects);
 
     @Update
     int updateProjects(Project ... projects);

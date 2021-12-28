@@ -9,13 +9,13 @@ import android.widget.TextView;
 
 import java.util.Arrays;
 
-import de.hdmstuttgart.gitlapp.data.database.AppDatabase;
-import de.hdmstuttgart.gitlapp.data.repositories.IssueRepository;
 import de.hdmstuttgart.gitlapp.viewmodels.IssueViewModel;
+import de.hdmstuttgart.gitlapp.viewmodels.ProjectViewModel;
 
 public class MainActivity extends AppCompatActivity {
 
     private IssueViewModel issueViewModel;
+    private ProjectViewModel projectViewModel;
     private Button button;
     private TextView textView;
 
@@ -30,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
 
         // - - - - - - instance view model - - - - - - - -
         this.issueViewModel = new IssueViewModel(container.issueRepository);
+        this.projectViewModel = new ProjectViewModel(container.projectRepository);
 
         button = findViewById(R.id.button);
         textView = findViewById(R.id.textView);
@@ -37,14 +38,20 @@ public class MainActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                clickAction();
+                //clickActionIssue();
+                clickActionProject();
             }
         });
     }
 
-    private void clickAction(){
+    private void clickActionIssue(){
         issueViewModel.refresh();
-        textView.setText(Arrays.toString(issueViewModel.showList().toArray()));
+       textView.setText(Arrays.toString(issueViewModel.showList().toArray()));
+    }
+
+    public void clickActionProject(){
+        projectViewModel.refresh();
+        textView.setText(Arrays.toString(projectViewModel.showList().getValue().toArray()));
     }
 
 

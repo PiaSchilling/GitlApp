@@ -1,0 +1,37 @@
+
+- - - - - - - Project Object - - -
+
+Project{
+String: title
+List<Label>: Labels
+List<Milestones>: Milestones
+}
+
+** no issues list bc those are handeled by a different view model
+
+
+Issue view model needs to know in which project currently in!
+
+- - - - - - - Repos - - - - - - -
+
+ProjectRepo
+    fetching projects for project viewModel
+IssueRepo
+    fetching issues by a certain project for issue ViewModel
+
+- - - - - - - Repostructure - - -
+refresh data {
+    on response (success)
+        set live data from response body
+        update data in database
+    on response (error)
+        set live data from database
+    on failure
+        set live data from database
+}
+
+set data from database {
+    build objects by querying multible tables or create views
+    set those objects to the live data
+}
+
