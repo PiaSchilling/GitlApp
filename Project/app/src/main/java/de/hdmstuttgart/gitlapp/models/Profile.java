@@ -20,6 +20,7 @@ public class Profile {
     @ColumnInfo(name = "access_token")
     private String accessToken;
 
+    @Ignore
     public Profile(int loggedInUserId, String accessToken) {
         this.loggedInUserId = loggedInUserId;
         this.accessToken = accessToken;

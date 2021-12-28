@@ -18,6 +18,7 @@ public class Note {
     private String body;
     private int issueId;
 
+    @Ignore
     public Note(int id, int authorId, String body, int issueId) {
         this.id = id;
         this.authorId = authorId;

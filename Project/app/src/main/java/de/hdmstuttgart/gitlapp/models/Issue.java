@@ -35,6 +35,9 @@ public class Issue {
     @Ignore
     private State state;
 
+    //todo add milestone
+    //todo add comments (notes)
+
 
     @Ignore
     public Issue(int id, int iid, int weight, String title, String description, User author, int author_id, int project_id, int thumbs_up, int thumbs_down, int hashcode, State state) {

@@ -3,6 +3,7 @@ package de.hdmstuttgart.gitlapp.models;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 import java.util.Date;
@@ -17,12 +18,16 @@ public class Milestone {
     private int projectId;
     private String title;
 
-
+    @Ignore
     public Milestone(int id, int iid, int projectId, String title, String description, State state, Date createDate, Date dueDate) {
         this.id = id;
         this.iid = iid;
         this.projectId = projectId;
         this.title = title;
+    }
+
+    public Milestone(){
+
     }
 
     public int getId() {
