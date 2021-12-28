@@ -3,6 +3,7 @@ package de.hdmstuttgart.gitlapp.data.database;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
+import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Update;
 
@@ -13,7 +14,7 @@ import de.hdmstuttgart.gitlapp.models.Note;
 @Dao
 public interface NoteDao {
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertNotes(Note ... notes);
 
     @Update

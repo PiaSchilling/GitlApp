@@ -4,6 +4,7 @@ package de.hdmstuttgart.gitlapp.data.database;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
+import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Update;
 
@@ -14,7 +15,7 @@ import de.hdmstuttgart.gitlapp.models.Milestone;
 @Dao
 public interface MilestoneDao {
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertMilestones(Milestone ... milestones);
 
     @Update
