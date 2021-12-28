@@ -1,12 +1,9 @@
 package de.hdmstuttgart.gitlapp.data.repositories;
 
-import android.accounts.NetworkErrorException;
 import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
 
-import java.net.SocketTimeoutException;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,11 +16,14 @@ import retrofit2.Response;
 
 public class ProjectRepository {
 
+    // - - - - -  Sources - - - - - -
     private AppDatabase appDatabase;
     private GitLabClient gitLabClient;
 
+    //holding response of api call or when this fails the "response" of the db
     private List<Project> responseList = new ArrayList<>();
-    private MutableLiveData<List<Project>> liveData = new MutableLiveData<>();
+    //present data to the view model
+    private MutableLiveData<List<Project>> projectsLiveData = new MutableLiveData<>();
 
     public ProjectRepository(AppDatabase appDatabase, GitLabClient gitLabClient){
         this.appDatabase = appDatabase;
@@ -47,21 +47,14 @@ public class ProjectRepository {
 
             @Override
             public void onFailure(Call<List<Project>> call, Throwable t) {
-                if(t instanceof UnknownHostException){
-                    Log.d("Api","Check wifi connection");
-                }
-                Log.d("Api","Oh no " + t.getMessage() + ", loading data form database");//todo make toast
+                Log.d("Api","Oh no " + t.getMessage() + ", loading data form database");//todo make toast (make refresh data throw exception)
                 responseList = appDatabase.projectDao().getAllProjects();
             }
         });
-        liveData.setValue(responseList);
-    }
-
-    public List<Project> getResponseList(){
-        return this.responseList;
+        projectsLiveData.setValue(responseList);
     }
 
     public MutableLiveData<List<Project>> getProjectLiveData(){
-        return this.liveData;
+        return this.projectsLiveData;
     }
 }

@@ -17,7 +17,9 @@ public class MainActivity extends AppCompatActivity {
     private IssueViewModel issueViewModel;
     private ProjectViewModel projectViewModel;
     private Button button;
+    private Button button2;
     private TextView textView;
+    private TextView textView2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,19 +36,27 @@ public class MainActivity extends AppCompatActivity {
 
         button = findViewById(R.id.button);
         textView = findViewById(R.id.textView);
+        button2 = findViewById(R.id.button2);
+        textView2 = findViewById(R.id.textView2);
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //clickActionIssue();
                 clickActionProject();
+            }
+        });
+
+        button2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                clickActionIssue();
             }
         });
     }
 
     private void clickActionIssue(){
         issueViewModel.refresh();
-       textView.setText(Arrays.toString(issueViewModel.showList().toArray()));
+       textView2.setText(Arrays.toString(issueViewModel.showList().getValue().toArray()));
     }
 
     public void clickActionProject(){

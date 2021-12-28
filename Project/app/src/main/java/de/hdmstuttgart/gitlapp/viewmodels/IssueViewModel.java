@@ -1,5 +1,7 @@
 package de.hdmstuttgart.gitlapp.viewmodels;
 
+import androidx.lifecycle.MutableLiveData;
+
 import java.util.List;
 
 import de.hdmstuttgart.gitlapp.data.repositories.IssueRepository;
@@ -17,7 +19,7 @@ public class IssueViewModel {
         issueRepository.refreshData();
     }
 
-    public List<Issue> showList(){
-        return issueRepository.getIssues();
+    public MutableLiveData<List<Issue>> showList(){
+        return issueRepository.getIssueLiveData();
     }
 }

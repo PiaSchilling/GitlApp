@@ -18,26 +18,25 @@ import retrofit2.Response;
 public class IssueRepository {
 
     // - - - - - Sources - - - - - - - -
-    private final AppDatabase database;
+    private final AppDatabase appDatabase;
     private final GitLabClient gitLabClient;
 
-    // - - - - - holding temp data - - - - -
+    //holding response of api call or when this fails the "response" of the db
     private List<Issue> responseList = new ArrayList<>();
-    private List<Issue> issues = new ArrayList<>();
-    private List<Issue> issuesAPI = new ArrayList<>();
 
-    // - - - - - present data to the viewModel - - - - - - - - - -
+    //present data to the viewModel
     private MutableLiveData<List<Issue>> issuesLiveData = new MutableLiveData<>();
 
-    public IssueRepository(AppDatabase database, GitLabClient gitLabClient){
-        this.database = database;
+    public IssueRepository(AppDatabase appDatabase, GitLabClient gitLabClient){
+        this.appDatabase = appDatabase;
         this.gitLabClient = gitLabClient;
     }
 
     /**
-     * refresh the data saved in the room db by making an api call and insert the result in the room db
+     * reloads the data by making api calls
+     * if call fails, data from the local database will be loaded
      */
-    public void refreshData(){ //todo cleanup
+    public void refreshData(){
         //todo make background thread for this (threadpool)
         //todo implement a callback
 
@@ -46,53 +45,22 @@ public class IssueRepository {
             @Override
             public void onResponse(Call<List<Issue>> call, Response<List<Issue>> response) {
                 responseList = response.body();
-                Log.d("Api","Success" + responseList.toString());
-
-                issuesAPI.addAll(responseList);
+                Log.d("Api","IssueCall SUCCESS " + responseList.toString());
+                ORM.mapAndInsertIssues(responseList,appDatabase);
             }
 
             @Override
             public void onFailure(Call<List<Issue>> call, Throwable t) {
-                Log.d("Api","FAIL");
+                Log.d("Api","Oh no " + t.getMessage() + ", loading data form database");//todo make toast (make refresh data throw exception)
+                responseList = ORM.mapIssueObjectsFromDb(6414,appDatabase);
+                Log.d("Api","Loaded: " + responseList.toString());
             }
         });
-
-        //issuesAPI = dummyAPI.getIssues();                                   //1. fetch data from network
-        //database.issueDao().insertIssues(issuesAPI.toArray(new Issue[0]));  //2. save them into room
-
-        splitResult();
-        updateDatabase();
-        issues = database.issueDao().getAllIssues();//3. get all issues from room
-
-        issuesLiveData.setValue(issues);                                    //3. set them to the live data object
-
+        issuesLiveData.setValue(responseList);
     }
 
-    public List<Issue> getIssues(){
-        return this.issues;
+    public MutableLiveData<List<Issue>> getIssueLiveData(){
+        return this.issuesLiveData;
     }
 
-    private void updateDatabase(){
-        database.issueDao().insertOrUpdate(issuesAPI);
-    }
-
-    private void splitResult(){
-       /* List<User> authors = new ArrayList<>();
-
-        for(Issue issue : responseList){
-            User author = issue.getAuthor();
-            Log.d("Api","LOOP" + author.toString());
-            authors.add(author);
-            issue.setAuthor_id(author.getId());
-        }
-
-        database.userDao().insertUsers(authors);
-
-        Log.d("Api","AUTHORS " + authors.toString());
-        Log.d("Api","DATABSE USER " + database.userDao().getAllUsers());*/
-
-        IssueMapper issueMapper = new IssueMapper(database);
-        issueMapper.mapIssues(responseList);
-
-    }
 }
