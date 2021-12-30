@@ -26,6 +26,10 @@ public class IssueRepository {
 
     //present data to the viewModel
     private MutableLiveData<List<Issue>> issuesLiveData = new MutableLiveData<>();
+    private MutableLiveData<String> networkCallMessage = new MutableLiveData<>();
+
+    //true when connection failed, so a exception can be thrown for displaying an error toast to the user
+    private boolean fail = false;
 
     public IssueRepository(AppDatabase appDatabase, GitLabClient gitLabClient){
         this.appDatabase = appDatabase;
@@ -36,31 +40,43 @@ public class IssueRepository {
      * reloads the data by making api calls
      * if call fails, data from the local database will be loaded
      */
-    public void refreshData(){
+    public void refreshData(int projectId) {
         //todo make background thread for this (threadpool)
         //todo implement a callback
+        Log.d("Api","Called refresh data");
 
-        Call<List<Issue>> call = gitLabClient.getProjectIssues("glpat-im7xUxYLmQv1LnKnvesr"); //todo make access token not hardcoded
+        Call<List<Issue>> call = gitLabClient.getProjectIssues(projectId, "Bearer glpat-im7xUxYLmQv1LnKnvesr"); //todo make access token not hardcoded
         call.enqueue(new Callback<List<Issue>>() {
             @Override
             public void onResponse(Call<List<Issue>> call, Response<List<Issue>> response) {
-                responseList = response.body();
-                Log.d("Api","IssueCall SUCCESS " + responseList.toString());
-                ORM.mapAndInsertIssues(responseList,appDatabase);
+                if(response.isSuccessful()){
+                    responseList = response.body();
+                    Log.d("Api","IssueCall SUCCESS " + responseList.toString());
+                    ORM.mapAndInsertIssues(responseList,appDatabase);
+                    //issuesLiveData.setValue(responseList);
+                    networkCallMessage.setValue("Update successful");
+                }else{
+                    Log.d("Api", "IssueCall FAIL, code " + response.code());
+                }
             }
 
             @Override
-            public void onFailure(Call<List<Issue>> call, Throwable t) {
-                Log.d("Api","Oh no " + t.getMessage() + ", loading data form database");//todo make toast (make refresh data throw exception)
-                responseList = ORM.mapIssueObjectsFromDb(6414,appDatabase);
+            public void onFailure(Call<List<Issue>> call, Throwable t)  {
+                Log.d("Api","Oh no " + t.getMessage() + ", loading data form database ISSUE");//todo make toast (make refresh data throw exception)
+                responseList = ORM.completeIssueObjects(projectId,appDatabase);
                 Log.d("Api","Loaded: " + responseList.toString());
+                networkCallMessage.setValue("Oh no, check your wifi connection");
             }
         });
         issuesLiveData.setValue(responseList);
     }
 
     public MutableLiveData<List<Issue>> getIssueLiveData(){
+        Log.d("Api","Called get issueLiveData" + issuesLiveData.getValue());
         return this.issuesLiveData;
     }
 
+    public MutableLiveData<String> getNetworkCallMessage() {
+        return networkCallMessage;
+    }
 }

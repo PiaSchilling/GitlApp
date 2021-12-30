@@ -43,14 +43,14 @@ public class ORM {
     }
 
     /**
-     * selects objects from db and inserts them to issueObjects as nested objects
-     * @param projectID the id of the project which the issues should be builded for
+     * queries all related data tables and inserts this data into (incomplete) issueObjects as nested objects
+     * @param projectID the id of the project which the issues should be completed for
      * @param appDatabase the database which contains the according tables
-     * @return a list of completely built issues
+     * @return a list of completely built issue objects (contains nested objects now)
      */
-    public static List<Issue> mapIssueObjectsFromDb(int projectID, AppDatabase appDatabase){
+    public static List<Issue> completeIssueObjects(int projectID, AppDatabase appDatabase){
         List<Issue> projectIssues = appDatabase.issueDao().getProjectIssues(projectID);
-        List<Issue> completeIssueObjects = new ArrayList<>();
+        List<Issue> completedIssueObjects = new ArrayList<>();
 
         for (Issue issue : projectIssues){
 
@@ -60,8 +60,8 @@ public class ORM {
             issue.setAuthor(author);
             issue.setLabels(issueLabels);
 
-            completeIssueObjects.add(issue);
+            completedIssueObjects.add(issue);
         }
-        return completeIssueObjects;
+        return completedIssueObjects;
     }
 }

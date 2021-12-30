@@ -30,7 +30,7 @@ public class Issue {
     private int thumbs_up;
     private int thumbs_down;
 
-    private int hashcode;
+    private int hashcode = this.hashCode(); //remove
 
     @Ignore
     private State state;
@@ -51,12 +51,11 @@ public class Issue {
         this.project_id = project_id;
         this.thumbs_up = thumbs_up;
         this.thumbs_down = thumbs_down;
-        this.hashcode = hashcode;
+        this.hashcode = this.hashCode();
         this.state = state;
     }
 
     public Issue() {
-
     }
 
     @Override
@@ -87,7 +86,7 @@ public class Issue {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, weight, title, description, thumbs_up, thumbs_down, project_id, author_id, state);
+        return Objects.hash(id, weight, title, description, thumbs_up, thumbs_down, state);
     }
 
     // - - - - - - getter and setter(for room) - - - - - -

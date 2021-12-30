@@ -1,11 +1,13 @@
 package de.hdmstuttgart.gitlapp;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
 
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.Arrays;
 
@@ -52,14 +54,24 @@ public class MainActivity extends AppCompatActivity {
                 clickActionIssue();
             }
         });
+
+        //make a toast to inform user if update was successful
+        Observer<String> toastObserver = new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+                Toast.makeText(getApplicationContext(), issueViewModel.getMessage().getValue(), Toast.LENGTH_SHORT).show();
+            }
+        };
+
+        issueViewModel.getMessage().observe(this, toastObserver);
     }
 
-    private void clickActionIssue(){
+    private void clickActionIssue() {
         issueViewModel.refresh();
-       textView2.setText(Arrays.toString(issueViewModel.showList().getValue().toArray()));
+        textView2.setText(Arrays.toString(issueViewModel.showList().getValue().toArray()));
     }
 
-    public void clickActionProject(){
+    public void clickActionProject() {
         projectViewModel.refresh();
         textView.setText(Arrays.toString(projectViewModel.showList().getValue().toArray()));
     }

@@ -15,11 +15,15 @@ public class IssueViewModel {
         this.issueRepository = issueRepository;
     }
 
-    public void refresh(){
-        issueRepository.refreshData();
+    public void refresh() {
+        issueRepository.refreshData(7124);
     }
 
     public MutableLiveData<List<Issue>> showList(){
         return issueRepository.getIssueLiveData();
+    }
+
+    public MutableLiveData<String> getMessage(){
+        return issueRepository.getNetworkCallMessage();
     }
 }

@@ -40,9 +40,14 @@ public class ProjectRepository {
         call.enqueue(new Callback<List<Project>>() {
             @Override
             public void onResponse(Call<List<Project>> call, Response<List<Project>> response) {
-                responseList = response.body();
-                Log.d("Api","ProjectCall SUCCESS " + responseList.toString());
-                appDatabase.projectDao().insertProjects(responseList);
+                if(response.isSuccessful()){
+                    responseList = response.body();
+                    Log.d("Api","ProjectCall SUCCESS " + responseList.toString());
+                    appDatabase.projectDao().insertProjects(responseList);
+                }else{
+                    Log.d("Api", "ProjectCall FAIL, code " + response.code());
+                }
+
             }
 
             @Override
