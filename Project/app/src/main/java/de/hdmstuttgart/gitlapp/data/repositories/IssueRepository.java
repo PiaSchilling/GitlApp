@@ -29,7 +29,7 @@ public class IssueRepository {
     private MutableLiveData<String> networkCallMessage = new MutableLiveData<>();
 
     //true when connection failed, so a exception can be thrown for displaying an error toast to the user
-    private boolean fail = false;
+    //private boolean fail = false;
 
     public IssueRepository(AppDatabase appDatabase, GitLabClient gitLabClient){
         this.appDatabase = appDatabase;

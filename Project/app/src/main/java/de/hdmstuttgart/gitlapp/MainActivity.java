@@ -10,7 +10,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
 
+import de.hdmstuttgart.gitlapp.models.Issue;
 import de.hdmstuttgart.gitlapp.viewmodels.IssueViewModel;
 import de.hdmstuttgart.gitlapp.viewmodels.ProjectViewModel;
 
@@ -62,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), issueViewModel.getMessage().getValue(), Toast.LENGTH_SHORT).show();
             }
         };
+
 
         issueViewModel.getMessage().observe(this, toastObserver);
     }
