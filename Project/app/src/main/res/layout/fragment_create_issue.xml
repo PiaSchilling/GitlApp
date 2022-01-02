@@ -79,7 +79,7 @@
         android:id="@+id/milestone_spinner"
         style="@style/OutlineSpinner"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="50dp"
         android:layout_marginTop="20dp"
         android:spinnerMode="dropdown"
         app:layout_constraintTop_toBottomOf="@+id/input_issue_weight"
@@ -89,13 +89,14 @@
         android:id="@+id/label_spinner"
         style="@style/OutlineSpinner"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="50dp"
         android:layout_marginTop="20dp"
         android:spinnerMode="dropdown"
         app:layout_constraintTop_toBottomOf="@+id/milestone_spinner"
         tools:layout_editor_absoluteX="15dp" />
 
     <com.google.android.material.button.MaterialButton
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         android:id="@+id/create_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

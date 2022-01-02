@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/gradient_background"
+    android:padding="15dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/issue_title"
+        android:text="Issue Name"
+        style="@style/Widget.MaterialComponents.TextView"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
+        android:textColor="@color/white"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/issue_title"
+        android:id="@+id/due_date"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Overline"
+        android:textColor="@color/lightOrange"
+        android:text="DUE TO NOV, 23 ,2021"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignBaseline="@id/due_date"
+        android:id="@+id/milestone_title"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Overline"
+        android:textColor="@color/lightGrey"
+        android:text="milestone name"/>
+
+    <com.google.android.material.chip.Chip
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/status_chip"
+        app:chipSurfaceColor="@color/red"
+        android:text="closed"
+        android:layout_toStartOf="@id/weight_chip"
+        android:layout_below="@id/milestone_title"
+        android:layout_marginHorizontal="5dp"/>
+
+    <com.google.android.material.chip.Chip
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/weight_chip"
+        app:chipSurfaceColor="@android:color/transparent"
+        android:text="4"
+        android:textColor="@color/lightGrey"
+        android:layout_below="@id/milestone_title"
+        android:layout_alignParentEnd="true"
+        app:chipIcon="@drawable/ic_weight"/>
+
+    <View
+        android:id="@+id/dividerOne"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_below="@id/weight_chip"
+        android:background="?android:attr/listDivider"
+        android:backgroundTint="@color/lightGrey"
+        android:layout_marginVertical="10dp"/>
+
+    <include
+        android:id="@+id/author_card"
+        layout="@layout/view_icon_card"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/dividerOne" />
+
+    <View
+        android:id="@+id/dividerTwo"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_below="@id/author_card"
+        android:background="?android:attr/listDivider"
+        android:backgroundTint="@color/lightGrey"
+        android:layout_marginVertical="10dp"/>
+
+    <TextView
+        android:id="@+id/issue_description_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/dividerTwo"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+        android:text="slfjkasfkjlsadfaöldsfkösldfköslkdföaldfköaskföaskföaösdfköasdfk"
+        android:textColor="@color/white"/>
+
+    <TextView
+        android:id="@+id/show_all_text_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/issue_description_content"
+        android:layout_alignParentEnd="true"
+        android:text="@string/show_all_text_button"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Overline"
+        android:textColor="@color/lightGrey"/>
+
+    <View
+        android:id="@+id/dividerThree"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_below="@id/show_all_text_button"
+        android:background="?android:attr/listDivider"
+        android:backgroundTint="@color/lightGrey"
+        android:layout_marginVertical="10dp"/>
+
+    <include
+        android:id="@+id/thumbs_up"
+        layout="@layout/view_thumbs_up"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/dividerThree"/>
+
+    <include
+        android:id="@+id/thumbs_down"
+        layout="@layout/view_thumbs_down"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/dividerThree"
+        android:layout_toEndOf="@id/thumbs_up"
+        android:layout_marginLeft="10dp"/>
+
+    <View
+        android:id="@+id/dividerFour"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_below="@id/thumbs_down"
+        android:background="?android:attr/listDivider"
+        android:backgroundTint="@color/lightGrey"
+        android:layout_marginVertical="10dp"/>
+
+    <include
+        android:id="@+id/comment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        layout="@layout/view_comment"
+        android:layout_below="@id/dividerFour"/>
+
+
+    <View
+        android:id="@+id/dividerFive"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_below="@id/comment"
+        android:background="?android:attr/listDivider"
+        android:backgroundTint="@color/lightGrey"
+        android:layout_marginVertical="10dp"/>
+
+    <LinearLayout
+        android:id="@+id/label_container"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/dividerFive">
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/ic_labels"/>
+
+    </LinearLayout>
+
+    <View
+        android:id="@+id/dividerSix"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_below="@id/label_container"
+        android:background="?android:attr/listDivider"
+        android:backgroundTint="@color/lightGrey"
+        android:layout_marginVertical="10dp"/>
+
+    <Button
+        android:id="@+id/close_issue_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/dividerSix"
+        android:layout_centerHorizontal="true"
+        android:text="close issue"
+        style="@style/Widget.MaterialComponents.Button"/>
+
+
+
+
+
+</RelativeLayout>
