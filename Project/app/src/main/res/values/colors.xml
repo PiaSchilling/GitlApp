@@ -10,4 +10,7 @@
 
     <color name="lightGreyGradient">#4F4F4F</color>
     <color name="darkGreyGradient">#2E2E2E</color>
+
+    <color name="transparent">#00000000</color>
+    <color name="mtrl_textinput_default_box_stroke_color">#606060</color>
 </resources>

@@ -6,4 +6,13 @@
     <string name="hint_due_date">Due date</string>
     <string name="button_create_issue">create issue</string>
     <string name="show_all_text_button">show all</string>
+    <string name="log_in">LogIn</string>
+    <string name="label_host_url">Host URL</string>
+    <string name="label_mail">Mail</string>
+    <string name="label_access_token">Access Token</string>
+    <string name="hint_host_URL">https://...</string>
+    <string name="hint_mail">max.mustermann@gmail.com</string>
+    <string name="hint_access_token">Put your GitLab token here</string>
+    <string name="label_loggedInAs">Logged in as</string>
+    <string name="button_remove">Remove</string>
 </resources>

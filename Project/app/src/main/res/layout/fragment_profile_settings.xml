@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/gradient_background"
+    android:padding="15dp">
+
+
+    <include
+        android:id="@+id/user_card"
+        layout="@layout/view_user_card"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <View
+        android:id="@+id/dividerOne"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_below="@id/user_card"
+        android:layout_marginVertical="15dp"
+        android:background="?android:attr/listDivider"
+        android:backgroundTint="@color/lightGrey" />
+
+    <TextView
+        android:id="@+id/hostUrl_label"
+        style="@style/TextViewSubtitle1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/dividerOne"
+        android:layout_marginTop="15dp"
+        android:text="@string/label_host_url" />
+
+
+    <TextView
+        android:id="@+id/hostUrl_Link_label"
+        style="@style/TextBody2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/hostUrl_label"
+        android:layout_marginTop="10dp"
+        android:text="https:// ...." />
+
+    <ImageView
+        android:id="@+id/url_edit_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/hostUrl_label"
+        android:layout_alignEnd="@+id/dividerOne"
+        android:layout_marginTop="10dp"
+        android:src="@drawable/ic_thumb_down" />
+
+    <View
+        android:id="@+id/dividerTwo"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_below="@id/url_edit_button"
+        android:layout_marginVertical="15dp"
+        android:background="?android:attr/listDivider"
+        android:backgroundTint="@color/lightGrey" />
+
+
+    <TextView
+        android:id="@+id/mail_label"
+        style="@style/TextViewSubtitle1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/dividerTwo"
+        android:layout_marginTop="15dp"
+        android:text="@string/label_mail" />
+
+
+    <TextView
+        android:id="@+id/mail_adress_label"
+        style="@style/TextBody2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/mail_label"
+        android:layout_marginTop="10dp"
+        android:text="email@sonnenschein.de" />
+
+    <ImageView
+        android:id="@+id/mail_edit_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/mail_label"
+        android:layout_alignEnd="@id/dividerTwo"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="5dp"
+        android:src="@drawable/ic_thumb_down" />
+
+    <View
+        android:id="@+id/dividerThree"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_below="@id/mail_edit_button"
+        android:layout_marginVertical="15dp"
+        android:background="?android:attr/listDivider"
+        android:backgroundTint="@color/lightGrey" />
+
+
+    <TextView
+        android:id="@+id/accessToken_label"
+        style="@style/TextViewSubtitle1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/dividerThree"
+        android:layout_marginTop="15dp"
+        android:text="@string/label_access_token" />
+
+
+    <TextView
+        android:id="@+id/accessToken_date_label"
+        style="@style/TextBody2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/accessToken_label"
+        android:layout_marginTop="10dp"
+        android:text="Nov 28, 2023" />
+
+
+    <Button
+        android:id="@+id/remove_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/accessToken_label"
+        android:layout_alignEnd="@id/dividerThree"
+        android:text="@string/button_remove"
+
+        app:strokeColor="@color/lightGrey"
+        app:strokeWidth="1dp"
+        style="@style/OutlinedButton"
+        />
+
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/remove_button"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="288dp"
+        android:text="Log out" />
+
+</RelativeLayout>

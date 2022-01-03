@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/gradient_background"
+    android:padding="15dp">
+
+    <LinearLayout
+        android:id="@+id/header_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="80dp"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_gitlab_icon"></ImageView>
+
+        <TextView
+            android:id="@+id/gitlab_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:text="@string/app_name"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline2"
+            android:textColor="@color/white" />
+
+        <TextView
+            android:id="@+id/logIn_label"
+            android:layout_width="74dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="@string/log_in"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+            android:textColor="@color/lightOrange" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/hostUrl_label"
+        style="@style/TextViewSubtitle1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/header_container"
+        android:layout_marginTop="40dp"
+        android:text="@string/label_host_url" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/hostUrl_textField"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/hostUrl_label"
+        android:hint="@string/hint_host_URL"
+        android:paddingTop="15dp"
+        style="@style/TextInput"
+        >
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/mail_label"
+        style="@style/TextViewSubtitle1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/hostUrl_textField"
+        android:layout_marginTop="40dp"
+        android:text="@string/label_mail" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/mail_textField"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/mail_label"
+        android:hint="@string/hint_mail"
+        android:paddingTop="15dp"
+        style="@style/TextInput">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/accessToken_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/mail_textField"
+        android:layout_marginTop="40dp"
+        android:text="@string/label_access_token"
+        style="@style/TextViewSubtitle1" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/accessToken_textField"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/accessToken_label"
+        android:hint="@string/hint_access_token"
+        android:paddingTop="15dp"
+        style="@style/TextInput">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
+    </com.google.android.material.textfield.TextInputLayout>
+
+</RelativeLayout>
