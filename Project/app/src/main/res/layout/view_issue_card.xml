@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/gradient_background"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+        android:id="@+id/issue_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:text="Issue name"
+        style="@style/Body2WhiteBold"
+
+        />
+
+
+    <TextView
+        android:id="@+id/time_string"
+        style="@style/Body2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/issue_name"
+        android:text="x days ago by" />
+
+        <TextView
+            style="@style/Body2WhiteBold"
+            android:id="@+id/author_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/issue_name"
+            android:layout_marginStart="10dp"
+            android:layout_toEndOf="@+id/time_string"
+            android:text="Gitti Galosche" />
+
+    <ImageView
+        android:id="@+id/calendear_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/issue_name"
+        android:layout_toStartOf="@id/date_posted"
+        android:layout_marginEnd="15dp"
+        android:src="@drawable/ic_calendar" />
+
+
+    <TextView
+        android:id="@+id/date_posted"
+        style="@style/Body2WhiteBold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/issue_name"
+        android:layout_marginTop="0dp"
+    android:layout_alignRight="@id/dividerThree"
+     android:text="Nov 23, 2021"
+        android:textAlignment="textEnd" />
+
+    <View
+        android:id="@+id/dividerThree"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_below="@id/date_posted"
+        android:layout_marginTop="15dp"
+        android:background="?android:attr/listDivider"
+        android:backgroundTint="@color/lightGrey" />
+
+
+
+
+</RelativeLayout>
+
+
+
+

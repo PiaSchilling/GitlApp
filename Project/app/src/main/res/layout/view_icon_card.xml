@@ -9,7 +9,7 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         app:shapeAppearance="@style/roundedImageViewRounded"
-        android:layout_marginEnd="10dp"/>
+        android:layout_marginRight="10dp"/>
 
     <TextView
         android:id="@+id/author_name"
@@ -30,7 +30,6 @@
         android:text="two weeks ago"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
         android:textColor="@color/lightGrey"
-        android:layout_marginStart="10dp"
-        android:maxLength="13"/>
+        android:layout_marginLeft="10dp"/>
 
 </RelativeLayout>
