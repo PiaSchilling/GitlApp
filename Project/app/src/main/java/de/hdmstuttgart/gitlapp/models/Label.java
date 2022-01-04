@@ -2,28 +2,32 @@ package de.hdmstuttgart.gitlapp.models;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
-import androidx.room.PrimaryKey;
+import androidx.room.Ignore;
 
-@Entity(tableName = "labels")
+@Entity(tableName = "labels" , primaryKeys = {"id", "issue_id"})
 public class Label {
 
-    @PrimaryKey
+    //@PrimaryKey
     private int id;
     private String name;
     private String color;
 
-    @ColumnInfo(name = "issue_id")
-    private int issueId;
+
+    private int issue_id;
     @ColumnInfo(name = "project_id")
     private int projectId;
 
-    public Label(int id, String name, String color, int issueId, int projectId) {
+   @Ignore
+    public Label(int id, String name, String color, int issue_id, int projectId) {
         this.id = id;
         this.name = name;
         this.color = color;
 
-        this.issueId = issueId;
+        this.issue_id = issue_id;
         this.projectId = projectId;
+    }
+
+    public Label(){
     }
 
     public int getId() {
@@ -50,12 +54,12 @@ public class Label {
         this.color = color;
     }
 
-    public int getIssueId() {
-        return issueId;
+    public int getIssue_id() {
+        return issue_id;
     }
 
-    public void setIssueId(int issueId) {
-        this.issueId = issueId;
+    public void setIssue_id(int issue_id) {
+        this.issue_id = issue_id;
     }
 
     public int getProjectId() {

@@ -1,6 +1,7 @@
 package de.hdmstuttgart.gitlapp.fragments;
 
 import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -15,12 +16,21 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
+import com.google.android.material.chip.Chip;
+
+import java.util.List;
 
 import de.hdmstuttgart.gitlapp.AppContainer;
 import de.hdmstuttgart.gitlapp.CustomApplication;
 import de.hdmstuttgart.gitlapp.R;
 import de.hdmstuttgart.gitlapp.databinding.FragmentIssueDetailBinding;
 import de.hdmstuttgart.gitlapp.models.Issue;
+import de.hdmstuttgart.gitlapp.models.Label;
 import de.hdmstuttgart.gitlapp.viewmodels.IssueDetailViewModel;
 import de.hdmstuttgart.gitlapp.viewmodels.IssueDetailViewModelFactory;
 
@@ -99,20 +109,8 @@ public class IssueDetailFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         initViewData();
-        binding.issueTitle.setText(issueLiveData.getValue().getTitle());
-        binding.issueDescriptionContent.setText(issueLiveData.getValue().getDescription());
-        binding.weightChip.setText(String.valueOf(issueLiveData.getValue().getWeight()));
-        binding.dueDate.setText(getString(R.string.issue_due_date,issueLiveData.getValue().getDue_date()));
-        binding.milestoneTitle.setText(issueLiveData.getValue().getMilestone().getTitle());
-        binding.authorCard.authorName.setText(issueLiveData.getValue().getAuthor().getName());
-        binding.authorCard.createDate.setText(getString(R.string.issue_create_date,issueLiveData.getValue().getCreated_at()));
-        binding.thumbsUp.thumbsUpCount.setText(String.valueOf(issueLiveData.getValue().getThumbs_up()));
-        binding.thumbsDown.thumbsDownCount.setText(String.valueOf(issueLiveData.getValue().getThumbs_down()));
+        setDataToViews();
 
-        if(issueLiveData.getValue().getState().equals("opened")){
-            binding.statusChip.setChipBackgroundColor(ColorStateList.valueOf(ContextCompat.getColor(getActivity(),R.color.green)));
-        }
-        binding.statusChip.setText(issueLiveData.getValue().getState()); //todo green when opened
 
 
     }
@@ -122,5 +120,59 @@ public class IssueDetailFragment extends Fragment {
         Log.d("Api","InitViewModel for issueId " + issueId);
         this.issueLiveData = viewModel.getIssueDetailLiveData(issueId);
         Log.d("Api","initViewModel, loaded Data " + issueLiveData.getValue().toString());
+    }
+
+
+    private void setDataToViews(){
+
+        try{
+            // - - - - set simple views - - - -
+            binding.issueTitle.setText(issueLiveData.getValue().getTitle());
+            binding.issueDescriptionContent.setText(issueLiveData.getValue().getDescription());
+            binding.weightChip.setText(String.valueOf(issueLiveData.getValue().getWeight()));
+            binding.dueDate.setText(getString(R.string.issue_due_date,issueLiveData.getValue().getDue_date()));
+            binding.milestoneTitle.setText(issueLiveData.getValue().getMilestone().getTitle());
+            binding.authorCard.authorName.setText(issueLiveData.getValue().getAuthor().getName());
+            binding.authorCard.createDate.setText(getString(R.string.issue_create_date,issueLiveData.getValue().getCreated_at()));
+            binding.thumbsUp.thumbsUpCount.setText(String.valueOf(issueLiveData.getValue().getThumbs_up()));
+            binding.thumbsDown.thumbsDownCount.setText(String.valueOf(issueLiveData.getValue().getThumbs_down()));
+            binding.issueIid.setText(getString(R.string.issue_iid,issueLiveData.getValue().getIid()));
+
+            // - - - - set state chip - - - -
+            if(issueLiveData.getValue().getState().equals("opened")){
+                binding.statusChip.setChipBackgroundColor(ColorStateList.valueOf(ContextCompat.getColor(getActivity(),R.color.green)));
+            }
+            binding.statusChip.setText(issueLiveData.getValue().getState());
+
+
+            // - - - - set label list - - - -
+            List<Label> labels = issueLiveData.getValue().getLabels();
+
+            for (Label label: labels){
+
+                Chip labelChip = new Chip(getActivity());
+
+                labelChip.setLayoutParams(new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.WRAP_CONTENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT
+                ));
+
+                labelChip.setText(label.getName());
+                labelChip.setChipBackgroundColor(ColorStateList.valueOf(Color.parseColor(label.getColor())));
+                binding.labelContainer.addView(labelChip);
+            }
+
+            // - - - - set author avatar - - - -
+            Glide.with(this)
+                    .load(issueLiveData.getValue().getAuthor().getAvatar_url())
+                    .error(R.drawable.ic_gitlab_icon)
+                    .into(binding.authorCard.avatar);
+
+
+        }catch (NullPointerException e){
+            Log.d("Api",e.getMessage());
+        }
+
+
     }
 }

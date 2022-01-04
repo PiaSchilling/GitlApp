@@ -1,8 +1,6 @@
 package de.hdmstuttgart.gitlapp.data.repositories;
 
 
-import android.util.Log;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,7 +31,7 @@ public class ORM {
             Milestone milestone = issue.getMilestone();
 
             for(Label issueLabel : issueLabels){
-                issueLabel.setIssueId(issue.getId()); //set the issue id for all labels
+                issueLabel.setIssue_id(issue.getId()); //set the issue id for all labels
             }
             labels.addAll(issueLabels);
 
