@@ -36,15 +36,19 @@ public class IssueDetailViewModel extends ViewModel {
      * if the issue with the issue id does not exist a fall back issue will be returned to prevent the app from crashing
      * @return the issue with the issueId or a fall back issue with dummy values
      */
-    public MutableLiveData<Issue> getIssueDetailLiveData() {
+    public MutableLiveData<Issue> getIssueDetailLiveData(int issueId) {
         try {
             return issueRepository.getSingleIssueLiveData(issueId);
         } catch (Exception e) {
             Log.e("Api",e.getMessage() + " | returning fallBackIssue");
-            Issue fallBackIssue = new Issue(0,0,0,"-","-",new User(),0,0,0,0,0, State.CLOSED);
+            Issue fallBackIssue = new Issue(0,0,0,"-","-",new User(),0,0,0,0,0, "closed");
             MutableLiveData<Issue> fallBackLiveData = new MutableLiveData<>();
             fallBackLiveData.setValue(fallBackIssue);
             return fallBackLiveData;
         }
+    }
+
+    public void refreshData(){
+        issueRepository.refreshProjectIssues(7124);
     }
 }
