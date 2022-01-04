@@ -22,6 +22,8 @@ public class IssueRepository {
     private final AppDatabase appDatabase;
     private final GitLabClient gitLabClient;
 
+    private String accessToken;
+
     //holding response of api call or when this fails the "response" of the db
     private List<Issue> responseList = new ArrayList<>();
 
@@ -33,6 +35,12 @@ public class IssueRepository {
     public IssueRepository(AppDatabase appDatabase, GitLabClient gitLabClient) {
         this.appDatabase = appDatabase;
         this.gitLabClient = gitLabClient;
+
+        this.accessToken = appDatabase.profileDao().getProfile().getAccessToken();
+        if(accessToken == null || accessToken.isEmpty()){
+            Log.e("Api","Access token is null or empty");
+            this.accessToken = "token"; // to prevent the app from crashing (maybe find a better solution)
+        }
     }
 
     /**
@@ -55,7 +63,7 @@ public class IssueRepository {
         //todo implement a callback
         Log.d("Api", "Called refresh data");
 
-        Call<List<Issue>> call = gitLabClient.getProjectIssues(projectId, "Bearer glpat-im7xUxYLmQv1LnKnvesr"); //todo make access token not hardcoded
+        Call<List<Issue>> call = gitLabClient.getProjectIssues(projectId, accessToken); //todo make access token not hardcoded
         call.enqueue(new Callback<List<Issue>>() {
             @Override
             public void onResponse(Call<List<Issue>> call, Response<List<Issue>> response) {
@@ -66,7 +74,14 @@ public class IssueRepository {
                     issuesLiveData.setValue(responseList);
                     networkCallMessage.postValue("Update successful");
                 } else {
-                    Log.d("Api", "IssueCall FAIL, code " + response.code());
+                    if(response.code() == 401){
+                        networkCallMessage.setValue("Problem with authentication");
+                    }else if(response.code() == 404){
+                        networkCallMessage.setValue("Project with id " + projectId + " not found");
+                    }else{
+                        networkCallMessage.setValue("Error, code " + response.code());
+                    }
+                    Log.e("Api", "IssueCall FAIL, code " + response.code());
                 }
             }
 

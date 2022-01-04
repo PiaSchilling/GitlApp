@@ -21,7 +21,7 @@ public interface ProfileDao {
     @Delete
     int deleteProfile(Profile profile);
 
-    @Query("SELECT * FROM profile") //todo refactor so its only returning one profile
+    @Query("SELECT * FROM profile")
     Profile getProfile();
 }
 

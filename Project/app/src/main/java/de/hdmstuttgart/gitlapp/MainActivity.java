@@ -26,15 +26,24 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // - - - - - get the di container for getting the global dependencies - - - - - - - (for now the container could be stored in the mainActivity but there might me more activities in the future)
-
+        // - - - - - get the di container  - - - - - - -
         AppContainer container = ((CustomApplication) getApplication()).getContainer(getApplicationContext());
 
-        // - - - - - - instance view model - - - - - - - -
+        // - - - - - check if a profile is saved if so no login screen will be showed - - - - -
+        try {
+            Log.d("Login", "Profile saved, show no login screen");
+            String accessToken = container.appDatabase.profileDao().getProfile().getAccessToken();
+            String baseUrl = container.appDatabase.profileDao().getProfile().getHostUrl();
 
-        if(savedInstanceState == null){
+            container.setBaseUrl(baseUrl);
+        } catch (NullPointerException e) {
+            Log.d("Login", "No profile saved, show login screen");
+            //todo show login screen
+        }
+
+        if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.fragment_container, LoginFragment.class,null)
+                    .add(R.id.fragment_container, LoginFragment.class, null)
                     .commit();
         }
 
