@@ -30,7 +30,6 @@
         android:text="two weeks ago"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
         android:textColor="@color/lightGrey"
-        android:layout_marginLeft="10dp"
-        android:maxLength="13"/>
+        android:layout_marginLeft="10dp"/>
 
 </RelativeLayout>
