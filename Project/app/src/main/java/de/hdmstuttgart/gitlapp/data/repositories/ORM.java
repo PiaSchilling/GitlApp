@@ -1,6 +1,8 @@
 package de.hdmstuttgart.gitlapp.data.repositories;
 
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,23 +25,30 @@ public class ORM {
     public static void mapAndInsertIssues(List<Issue> issues, AppDatabase appDatabase){
         List<User> authors = new ArrayList<>();
         List<Label> labels = new ArrayList<>();
+        List<Milestone> milestones = new ArrayList<>();
 
         for (Issue issue : issues){
             User author = issue.getAuthor();
             List<Label> issueLabels = issue.getLabels();
+            Milestone milestone = issue.getMilestone();
 
             for(Label issueLabel : issueLabels){
                 issueLabel.setIssueId(issue.getId()); //set the issue id for all labels
             }
-
-            authors.add(author);
             labels.addAll(issueLabels);
 
+            authors.add(author);
             issue.setAuthor_id(author.getId());
+
+            if(milestone != null){
+                milestones.add(milestone);
+                issue.setMilestone_id(milestone.getId());
+            }
         }
         appDatabase.issueDao().insertOrUpdate(issues);
         appDatabase.userDao().insertUsers(authors);
         appDatabase.labelDao().insertLabels(labels);
+        appDatabase.milestoneDao().insertMilestones(milestones);
     }
 
     /**
@@ -56,9 +65,11 @@ public class ORM {
 
             User author = appDatabase.userDao().getUserById(issue.getAuthor_id());
             List<Label> issueLabels = appDatabase.labelDao().getIssueLabels(issue.getId());
+            Milestone milestone = appDatabase.milestoneDao().getMilestoneById(issue.getMilestone_id());
 
             issue.setAuthor(author);
             issue.setLabels(issueLabels);
+            issue.setMilestone(milestone);
 
             completedIssueObjects.add(issue);
         }

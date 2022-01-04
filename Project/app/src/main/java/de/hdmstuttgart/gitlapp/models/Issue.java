@@ -5,6 +5,7 @@ import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -32,15 +33,20 @@ public class Issue {
 
     private int hashcode = this.hashCode(); //remove
 
-    @Ignore
-    private State state;
+    private String state;
 
-    //todo add milestone
+    private String created_at;
+    private String due_date;
+
+    @Ignore
+    private Milestone milestone;
+    private int milestone_id;
+
     //todo add comments (notes)
 
 
     @Ignore
-    public Issue(int id, int iid, int weight, String title, String description, User author, int author_id, int project_id, int thumbs_up, int thumbs_down, int hashcode, State state) {
+    public Issue(int id, int iid, int weight, String title, String description, User author, int author_id, int project_id, int thumbs_up, int thumbs_down, int hashcode, String state) {
         this.id = id;
         this.iid = iid;
         this.weight = weight;
@@ -60,20 +66,25 @@ public class Issue {
 
     @Override
     public String toString() {
-        return "--- Issue{" +
+        return "Issue{" +
                 "id=" + id +
                 ", iid=" + iid +
                 ", weight=" + weight +
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
+                ", labels=" + labels +
                 ", author=" + author +
                 ", author_id=" + author_id +
                 ", project_id=" + project_id +
                 ", thumbs_up=" + thumbs_up +
                 ", thumbs_down=" + thumbs_down +
                 ", hashcode=" + hashcode +
-                ", state=" + state +
-                "} --- ";
+                ", state='" + state + '\'' +
+                ", created_at='" + created_at + '\'' +
+                ", due_date='" + due_date + '\'' +
+                ", milestone=" + milestone +
+                ", milestone_id=" + milestone_id +
+                '}';
     }
 
     @Override//todo recreate for real issue implementation
@@ -179,11 +190,11 @@ public class Issue {
         this.hashcode = hashcode;
     }
 
-    public State getState() {
+    public String getState() {
         return state;
     }
 
-    public void setState(State state) {
+    public void setState(String state) {
         this.state = state;
     }
 
@@ -193,6 +204,38 @@ public class Issue {
 
     public void setLabels(List<Label> labels) {
         this.labels = labels;
+    }
+
+    public String getCreated_at() {
+        return created_at;
+    }
+
+    public void setCreated_at(String created_at) {
+        this.created_at = created_at;
+    }
+
+    public String getDue_date() {
+        return due_date;
+    }
+
+    public void setDue_date(String due_date) {
+        this.due_date = due_date;
+    }
+
+    public Milestone getMilestone() {
+        return milestone;
+    }
+
+    public void setMilestone(Milestone milestone) {
+        this.milestone = milestone;
+    }
+
+    public int getMilestone_id() {
+        return milestone_id;
+    }
+
+    public void setMilestone_id(int milestone_id) {
+        this.milestone_id = milestone_id;
     }
 }
 

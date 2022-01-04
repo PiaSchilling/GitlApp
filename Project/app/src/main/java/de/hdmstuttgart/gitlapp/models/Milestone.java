@@ -14,20 +14,29 @@ public class Milestone {
     @PrimaryKey
     private int id;
     private int iid;
-    @ColumnInfo(name = "project_id")
-    private int projectId;
+    private int project_id;
     private String title;
 
     @Ignore
     public Milestone(int id, int iid, int projectId, String title, String description, State state, Date createDate, Date dueDate) {
         this.id = id;
         this.iid = iid;
-        this.projectId = projectId;
+        this.project_id = projectId;
         this.title = title;
     }
 
     public Milestone(){
 
+    }
+
+    @Override
+    public String toString() {
+        return "Milestone{" +
+                "id=" + id +
+                ", iid=" + iid +
+                ", project_id=" + project_id +
+                ", title='" + title + '\'' +
+                '}';
     }
 
     public int getId() {
@@ -46,12 +55,12 @@ public class Milestone {
         this.iid = iid;
     }
 
-    public int getProjectId() {
-        return projectId;
+    public int getProject_id() {
+        return project_id;
     }
 
-    public void setProjectId(int projectId) {
-        this.projectId = projectId;
+    public void setProject_id(int project_id) {
+        this.project_id = project_id;
     }
 
     public String getTitle() {

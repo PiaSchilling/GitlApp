@@ -10,6 +10,7 @@ import de.hdmstuttgart.gitlapp.data.network.GitLabClient;
 import de.hdmstuttgart.gitlapp.data.network.ServiceGenerator;
 import de.hdmstuttgart.gitlapp.data.repositories.IssueRepository;
 import de.hdmstuttgart.gitlapp.data.repositories.ProjectRepository;
+import de.hdmstuttgart.gitlapp.viewmodels.IssueDetailViewModelFactory;
 
 //Container of objects shared across the whole app (dependency injection)
 public class AppContainer {

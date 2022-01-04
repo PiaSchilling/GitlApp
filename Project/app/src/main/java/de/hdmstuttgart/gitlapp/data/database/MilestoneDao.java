@@ -18,6 +18,9 @@ public interface MilestoneDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertMilestones(Milestone ... milestones);
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insertMilestones(List<Milestone> milestones);
+
     @Update
     int updateMilestones(Milestone ... milestones);
 
@@ -29,4 +32,7 @@ public interface MilestoneDao {
 
     @Query("SELECT * FROM milestones WHERE project_id = :projectId")
     List<Milestone> getProjectMilestones(int projectId);
+
+    @Query("SELECT * FROM milestones WHERE id = :milestoneId")
+    Milestone getMilestoneById(int milestoneId);
 }
