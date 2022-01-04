@@ -16,7 +16,7 @@ import de.hdmstuttgart.gitlapp.models.User;
 @Dao
 public interface UserDao {
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE) //todo implement more efficent method
     void insertUsers(User ... users);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE) //todo implement more efficent method

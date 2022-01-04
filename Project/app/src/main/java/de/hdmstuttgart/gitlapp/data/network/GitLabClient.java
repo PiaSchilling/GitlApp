@@ -4,6 +4,7 @@ import java.util.List;
 
 import de.hdmstuttgart.gitlapp.models.Issue;
 import de.hdmstuttgart.gitlapp.models.Project;
+import de.hdmstuttgart.gitlapp.models.User;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
@@ -18,6 +19,9 @@ public interface GitLabClient {
 
     @GET("projects?membership=true")
     Call<List<Project>> getMemberProjects(@Header("Authorization") String auth);
+
+    @GET("users/{id}")
+    Call<User> getSingleUser(@Path ("id") int userId, @Header("Authorization") String auth);
 
 
 }

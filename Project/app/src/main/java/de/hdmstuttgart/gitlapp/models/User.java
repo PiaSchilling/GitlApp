@@ -13,6 +13,7 @@ public class User {
     private String name;
     private String avatar_url;
     private String email;
+    private boolean loggedInUser = false;
 
     @Ignore
     public User(int id, String username, String name, String avatar_url, String email) {
@@ -76,5 +77,13 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public boolean isLoggedInUser() {
+        return loggedInUser;
+    }
+
+    public void setLoggedInUser(boolean loggedInUser) {
+        this.loggedInUser = loggedInUser;
     }
 }

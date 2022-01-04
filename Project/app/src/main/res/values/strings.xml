@@ -11,7 +11,7 @@
     <string name="label_mail">Mail</string>
     <string name="label_access_token">Access Token</string>
     <string name="hint_host_URL">https://...</string>
-    <string name="hint_mail">max.mustermann@gmail.com</string>
+    <string name="hint_user_id">2312</string>
     <string name="hint_access_token">Put your GitLab token here</string>
     <string name="label_loggedInAs">Logged in as</string>
     <string name="button_remove">Remove</string>
@@ -19,5 +19,16 @@
     <string name="issue_due_date">Due to %1$s</string>
     <string name="issue_create_date">on %1$s</string>
     <string name="issue_iid"># %1$d</string>
+    <!-- Strings related to login -->
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="welcome">"Welcome!"</string>
+    <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="login_failed">"Login failed"</string>
+    <string name="login_button">login</string>
+    <string name="user_id_label">User Id</string>
 
 </resources>

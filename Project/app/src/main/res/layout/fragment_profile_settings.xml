@@ -61,7 +61,7 @@
 
 
     <TextView
-        android:id="@+id/mail_label"
+        android:id="@+id/userId_label"
         style="@style/TextViewSubtitle1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -75,7 +75,7 @@
         style="@style/TextBody2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/mail_label"
+        android:layout_below="@id/userId_label"
         android:layout_marginTop="10dp"
         android:text="email@sonnenschein.de" />
 
@@ -83,7 +83,7 @@
         android:id="@+id/mail_edit_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/mail_label"
+        android:layout_below="@id/userId_label"
         android:layout_alignEnd="@id/dividerTwo"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="5dp"

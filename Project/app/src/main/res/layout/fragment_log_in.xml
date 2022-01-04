@@ -62,34 +62,34 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
-        android:id="@+id/mail_label"
+        android:id="@+id/userId_label"
         style="@style/TextViewSubtitle1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/hostUrl_textField"
         android:layout_marginTop="40dp"
-        android:text="@string/label_mail" />
+        android:text="@string/user_id_label" />
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/mail_textField"
+        android:id="@+id/userId_textField"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/mail_label"
-        android:hint="@string/hint_mail"
+        android:layout_below="@id/userId_label"
+        android:hint="@string/hint_user_id"
         android:paddingTop="15dp"
         style="@style/TextInput">
 
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            />
+            android:inputType="number" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
         android:id="@+id/accessToken_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/mail_textField"
+        android:layout_below="@+id/userId_textField"
         android:layout_marginTop="40dp"
         android:text="@string/label_access_token"
         style="@style/TextViewSubtitle1" />
@@ -108,5 +108,26 @@
             android:layout_height="wrap_content"
             />
     </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.button.MaterialButton
+        android:layout_below="@+id/accessToken_textField"
+        android:layout_centerHorizontal="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/login_button"
+        android:text="@string/login_button"
+        android:layout_marginTop="40dp" />
+
+    <ProgressBar
+        android:id="@+id/progress_spinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/Widget.MaterialComponents.CircularProgressIndicator"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:indeterminate="true"
+        android:visibility="gone"/>
+
+
 
 </RelativeLayout>

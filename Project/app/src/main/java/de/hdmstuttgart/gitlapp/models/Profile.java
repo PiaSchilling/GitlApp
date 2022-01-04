@@ -19,11 +19,13 @@ public class Profile {
     private int loggedInUserId;
     @ColumnInfo(name = "access_token")
     private String accessToken;
+    private String hostUrl;
 
     @Ignore
-    public Profile(int loggedInUserId, String accessToken) {
+    public Profile(int loggedInUserId, String accessToken, String hostUrl) {
         this.loggedInUserId = loggedInUserId;
         this.accessToken = accessToken;
+        this.hostUrl = hostUrl;
     }
 
     public Profile(){
@@ -52,6 +54,14 @@ public class Profile {
 
     public void setAccessToken(String accessToken) {
         this.accessToken = accessToken;
+    }
+
+    public String getHostUrl() {
+        return hostUrl;
+    }
+
+    public void setHostUrl(String hostUrl) {
+        this.hostUrl = hostUrl;
     }
 }
 
