@@ -8,7 +8,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -16,9 +15,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.chip.Chip;
@@ -48,9 +46,9 @@ public class IssueDetailFragment extends Fragment {
 
     private MutableLiveData<Issue> issueLiveData = new MutableLiveData<>();
     private IssueDetailViewModel viewModel;
-    public IssueDetailViewModelFactory issueDetailViewModelFactory;
 
-    FragmentIssueDetailBinding binding;
+
+    private FragmentIssueDetailBinding binding;
 
     public IssueDetailFragment() {
         // Required empty public constructor
@@ -79,58 +77,52 @@ public class IssueDetailFragment extends Fragment {
             issueId = getArguments().getInt(ISSUE_ID);
         }
 
-        //- - - get the view model - - -
-
+        //- - - - get the view model and init data - - - -
         AppContainer appContainer = ((CustomApplication) getActivity().getApplication())
                 .getContainer(getActivity().getApplicationContext());
 
-        appContainer.issueRepository.initData(7124);//todo remove
+        appContainer.issueRepository.initProjectIssues(7124);//todo remove
 
-        issueDetailViewModelFactory = new IssueDetailViewModelFactory(appContainer.issueRepository,issueId);
+        IssueDetailViewModelFactory issueDetailViewModelFactory = new IssueDetailViewModelFactory(appContainer.issueRepository);
 
         viewModel = new ViewModelProvider(this, issueDetailViewModelFactory)
                 .get(IssueDetailViewModel.class);
 
+        setLiveData();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
         binding = FragmentIssueDetailBinding.inflate(inflater, container, false);
-        View view = binding.getRoot();
-        // Inflate the layout for this fragment
-        //return inflater.inflate(R.layout.fragment_issue_detail, container, false);
-        return view;
+        return binding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        initViewData();
-        setDataToViews();
-
-
-
+        bindDataToViews();
     }
 
-    private void initViewData() {
-        viewModel.refreshData();//todo remove
-        Log.d("Api","InitViewModel for issueId " + issueId);
+    /**
+     * call method from viewModel to init the data related with this view/fragment
+     */
+    private void setLiveData() {
+        viewModel.refreshData();//todo remove (will be made by issueOverviewDetail)
         this.issueLiveData = viewModel.getIssueDetailLiveData(issueId);
-        Log.d("Api","initViewModel, loaded Data " + issueLiveData.getValue().toString());
     }
 
 
-    private void setDataToViews(){
+    private void bindDataToViews(){
+
+        //todo add show all screen
 
         try{
-            // - - - - set simple views - - - -
+
+            // - - - - set simple views (text views) - - - -
             binding.issueTitle.setText(issueLiveData.getValue().getTitle());
             binding.issueDescriptionContent.setText(issueLiveData.getValue().getDescription());
             binding.weightChip.setText(String.valueOf(issueLiveData.getValue().getWeight()));
-            binding.dueDate.setText(getString(R.string.issue_due_date,issueLiveData.getValue().getDue_date()));
             binding.milestoneTitle.setText(issueLiveData.getValue().getMilestone().getTitle());
             binding.authorCard.authorName.setText(issueLiveData.getValue().getAuthor().getName());
             binding.authorCard.createDate.setText(getString(R.string.issue_create_date,issueLiveData.getValue().getCreated_at()));
@@ -138,7 +130,14 @@ public class IssueDetailFragment extends Fragment {
             binding.thumbsDown.thumbsDownCount.setText(String.valueOf(issueLiveData.getValue().getThumbs_down()));
             binding.issueIid.setText(getString(R.string.issue_iid,issueLiveData.getValue().getIid()));
 
-            // - - - - set state chip - - - -
+            // - - - -  set due date if not null - - - -
+            if(issueLiveData.getValue().getDue_date() == null){
+                binding.dueDate.setText(getString(R.string.issue_due_date,"not set"));
+            }else{
+                binding.dueDate.setText(getString(R.string.issue_due_date,issueLiveData.getValue().getDue_date()));
+            }
+
+            // - - - - set state chip text and color- - - -
             if(issueLiveData.getValue().getState().equals("opened")){
                 binding.statusChip.setChipBackgroundColor(ColorStateList.valueOf(ContextCompat.getColor(getActivity(),R.color.green)));
             }
@@ -171,8 +170,7 @@ public class IssueDetailFragment extends Fragment {
 
         }catch (NullPointerException e){
             Log.d("Api",e.getMessage());
+            Toast.makeText(getActivity(),"Error loading data",Toast.LENGTH_SHORT).show();
         }
-
-
     }
 }

@@ -5,11 +5,9 @@ import android.util.Log;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import java.util.List;
 
 import de.hdmstuttgart.gitlapp.data.repositories.IssueRepository;
 import de.hdmstuttgart.gitlapp.models.Issue;
-import de.hdmstuttgart.gitlapp.models.State;
 import de.hdmstuttgart.gitlapp.models.User;
 
 /**
@@ -19,16 +17,14 @@ public class IssueDetailViewModel extends ViewModel {
 
     private final IssueRepository issueRepository;
     private final MutableLiveData<Issue> issueMutableLiveData = new MutableLiveData<>();
-    private final int issueId;
+
 
     /**
      * view model is always instanced for a specific issueId
      * @param issueRepository for fetching data
-     * @param issueId fetching data for a specific issue
      */
-    public IssueDetailViewModel(IssueRepository issueRepository, int issueId){
+    public IssueDetailViewModel(IssueRepository issueRepository){
         this.issueRepository = issueRepository;
-        this.issueId = issueId;
     }
 
     /**

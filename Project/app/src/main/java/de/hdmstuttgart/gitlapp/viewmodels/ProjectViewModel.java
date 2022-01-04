@@ -1,13 +1,14 @@
 package de.hdmstuttgart.gitlapp.viewmodels;
 
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
 
 import java.util.List;
 
 import de.hdmstuttgart.gitlapp.data.repositories.ProjectRepository;
 import de.hdmstuttgart.gitlapp.models.Project;
 
-public class ProjectViewModel {
+public class ProjectViewModel extends ViewModel {
 
     ProjectRepository projectRepository;
 
@@ -15,11 +16,14 @@ public class ProjectViewModel {
         this.projectRepository = projectRepository;
     }
 
-    public void refresh(){
+    /**
+     * make an api call to update the data
+     */
+    public void updateProjectIssues(){
         projectRepository.refreshData();
     }
 
-    public MutableLiveData<List<Project>> showList(){
+    public MutableLiveData<List<Project>> getProjectIssueLiveData(){
         return projectRepository.getProjectLiveData();
     }
 }

@@ -19,7 +19,7 @@ public class IssuesViewModel extends ViewModel {
     public IssuesViewModel(IssueRepository issueRepository, int projectId) {
         this.issueRepository = issueRepository;
         this.projectId = projectId;
-        issueRepository.initData(projectId);
+        issueRepository.initProjectIssues(projectId);
     }
 
     /**

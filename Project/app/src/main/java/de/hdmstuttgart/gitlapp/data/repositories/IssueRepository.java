@@ -40,7 +40,7 @@ public class IssueRepository {
      *
      * @param projectId the id of the project the issues should be loaded for
      */
-    public void initData(int projectId) {
+    public void initProjectIssues(int projectId) {
         responseList = ORM.completeIssueObjects(projectId, appDatabase);
         issuesLiveData.setValue(responseList);
         Log.d("Api", "Loaded local data " + responseList.toString());
@@ -72,11 +72,11 @@ public class IssueRepository {
 
             @Override
             public void onFailure(Call<List<Issue>> call, Throwable t) {
-                Log.d("Api", "Oh no " + t.getMessage() + ", loading data form database ISSUE");//todo make toast (make refresh data throw exception)
-                responseList = ORM.completeIssueObjects(projectId, appDatabase); //todo remove (is not necessary bc of initData method)
-                Log.d("Api", "Loaded: " + responseList.toString());
+                Log.d("Api", "Oh no " + t.getMessage() + ", data not updated");//todo make toast
+               // responseList = ORM.completeIssueObjects(projectId, appDatabase); //todo remove (is not necessary bc of initData method)
+                //Log.d("Api", "Loaded: " + responseList.toString());
                 networkCallMessage.setValue("Oh no, check your wifi connection");
-                issuesLiveData.postValue(responseList);
+                //issuesLiveData.postValue(responseList);
             }
         });
         //issuesLiveData.setValue(responseList);
