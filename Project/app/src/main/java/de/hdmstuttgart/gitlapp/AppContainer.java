@@ -2,6 +2,7 @@ package de.hdmstuttgart.gitlapp;
 
 import android.content.Context;
 
+import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -22,9 +23,11 @@ public class AppContainer {
     public AppDatabase appDatabase;
 
     // - - - - - - Retrofit api - - - - - - - - - - - - -
-    private String baseUrl = ""; //todo make not hardcoded
+    private String baseUrl = "https://gitlab.mi.hdm-stuttgart.de/api/v4/"; //todo make not hardcoded
+    ServiceGenerator serviceGenerator = new ServiceGenerator(this.baseUrl); //can only be instanced after the base url is set
+    public GitLabClient gitLabClient = serviceGenerator.getGitLabClient();
 
-    public GitLabClient gitLabClient;
+
 
     // - - - - - - Repositories - - - - - - - - - - - - -
     public IssueRepository issueRepository;
@@ -38,16 +41,14 @@ public class AppContainer {
         this.applicationContext = context;
 
         appDatabase = AppDatabase.getDatabaseInstance(applicationContext); //needs the context this is why its instanced in the constructor
-        issueRepository = new IssueRepository(appDatabase, gitLabClient);
-        projectRepository = new ProjectRepository(appDatabase, gitLabClient);
-        profileRepository = new ProfileRepository(appDatabase, gitLabClient);
+        issueRepository = new IssueRepository(Objects.requireNonNull(appDatabase),Objects.requireNonNull(gitLabClient));
+        projectRepository = new ProjectRepository(Objects.requireNonNull(appDatabase),Objects.requireNonNull(gitLabClient));
+        profileRepository = new ProfileRepository(Objects.requireNonNull(appDatabase), Objects.requireNonNull(gitLabClient));
     }
 
     public void setBaseUrl(String baseUrl) {
         this.baseUrl = baseUrl + "/api/v4/";
 
-        ServiceGenerator serviceGenerator = new ServiceGenerator(this.baseUrl); //can only be instanced after the base url is set
-        gitLabClient = serviceGenerator.getGitLabClient();
     }
 
 }

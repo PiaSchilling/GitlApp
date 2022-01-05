@@ -1,5 +1,10 @@
 package de.hdmstuttgart.gitlapp.data.network;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -12,9 +17,19 @@ public class ServiceGenerator {
 
     public ServiceGenerator(String baseUrl){
 
+        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
+        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+        OkHttpClient client = new OkHttpClient.Builder()
+                .addInterceptor(interceptor).build();
+
+        Gson gson = new GsonBuilder()
+                .setLenient()
+                .create();
+
         Retrofit.Builder retrofitBuilder = new Retrofit.Builder()
+                .client(client)
                 .baseUrl(baseUrl)
-                .addConverterFactory(GsonConverterFactory.create());
+                .addConverterFactory(GsonConverterFactory.create(gson));
 
         Retrofit retrofit = retrofitBuilder.build();
         gitLabClient = retrofit.create(GitLabClient.class);

@@ -16,7 +16,7 @@
     <string name="label_loggedInAs">Logged in as</string>
     <string name="button_remove">Remove</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="issue_due_date">Due to %1$s</string>
+    <string name="issue_due_date">due to %1$s</string>
     <string name="issue_create_date">on %1$s</string>
     <string name="issue_iid"># %1$d</string>
     <!-- Strings related to login -->
@@ -30,5 +30,10 @@
     <string name="login_failed">"Login failed"</string>
     <string name="login_button">login</string>
     <string name="user_id_label">User Id</string>
+    <string name="bar_title">%1$s</string>
+    <string name="tab_open">open</string>
+    <string name="tab_closed">closed</string>
+    <string name="tab_all">all</string>
+    <string name="add_new_issue">Add new issue</string>
 
 </resources>

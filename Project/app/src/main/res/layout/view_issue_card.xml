@@ -3,16 +3,16 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:background="@drawable/gradient_background"
+    android:id="@+id/card_layout"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <TextView
         android:id="@+id/issue_name"
-        android:layout_width="match_parent"
+        android:layout_width="350dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
         android:text="Issue name"
         style="@style/Body2WhiteBold"
-
         />
 
 
@@ -22,7 +22,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/issue_name"
-        android:text="x days ago by" />
+        android:text="@string/issue_create_date"
+        android:maxLength="13"/>
 
         <TextView
             style="@style/Body2WhiteBold"
@@ -35,24 +36,26 @@
             android:text="Gitti Galosche" />
 
     <ImageView
-        android:id="@+id/calendear_icon"
+        android:id="@+id/calendar_icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/issue_name"
         android:layout_toStartOf="@id/date_posted"
         android:layout_marginEnd="15dp"
-        android:src="@drawable/ic_calendar" />
+        android:src="@drawable/ic_calendar"
+        android:visibility="gone"/>
 
 
     <TextView
         android:id="@+id/date_posted"
         style="@style/Body2WhiteBold"
+        android:textColor="@color/lightOrange"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/issue_name"
         android:layout_marginTop="0dp"
-    android:layout_alignRight="@id/dividerThree"
-     android:text="Nov 23, 2021"
+        android:layout_alignParentEnd="true"
+        android:text="@string/issue_due_date"
         android:textAlignment="textEnd" />
 
     <View

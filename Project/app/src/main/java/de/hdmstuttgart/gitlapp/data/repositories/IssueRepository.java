@@ -36,11 +36,13 @@ public class IssueRepository {
         this.appDatabase = appDatabase;
         this.gitLabClient = gitLabClient;
 
-        this.accessToken = appDatabase.profileDao().getProfile().getAccessToken();
-        if(accessToken == null || accessToken.isEmpty()){
+        try{
+            this.accessToken = appDatabase.profileDao().getProfile().getAccessToken();
+        }catch (NullPointerException e){
             Log.e("Api","Access token is null or empty");
-            this.accessToken = "token"; // to prevent the app from crashing (maybe find a better solution)
+            this.accessToken = "Bearer glpat-im7xUxYLmQv1LnKnvesr"; // to prevent the app from crashing (maybe find a better solution)
         }
+
     }
 
     /**
@@ -62,8 +64,10 @@ public class IssueRepository {
         //todo make background thread for this (threadpool)
         //todo implement a callback
         Log.d("Api", "Called refresh data");
+        Log.d("Api","Accesstoken " + accessToken);
+        Log.d("Api",  "ProjectId " + projectId);
 
-        Call<List<Issue>> call = gitLabClient.getProjectIssues(projectId, accessToken); //todo make access token not hardcoded
+        Call<List<Issue>> call = gitLabClient.getProjectIssues(7124, accessToken); //todo make access token not hardcoded
         call.enqueue(new Callback<List<Issue>>() {
             @Override
             public void onResponse(Call<List<Issue>> call, Response<List<Issue>> response) {
@@ -71,7 +75,7 @@ public class IssueRepository {
                     responseList = response.body();
                     Log.d("Api", "IssueCall SUCCESS " + responseList.toString());
                     ORM.mapAndInsertIssues(responseList, appDatabase);
-                    issuesLiveData.setValue(responseList);
+                    issuesLiveData.postValue(responseList);
                     networkCallMessage.postValue("Update successful");
                 } else {
                     if(response.code() == 401){
@@ -82,12 +86,18 @@ public class IssueRepository {
                         networkCallMessage.setValue("Error, code " + response.code());
                     }
                     Log.e("Api", "IssueCall FAIL, code " + response.code());
+                    Log.d("Api",accessToken);
+                    Log.d("Api",projectId+"");
+                    Log.d("Api",response.errorBody()+"");
+                    Log.d("Api",response.message());
                 }
             }
 
             @Override
             public void onFailure(Call<List<Issue>> call, Throwable t) {
                 Log.d("Api", "Oh no " + t.getMessage() + ", data not updated");//todo make toast
+                Log.d("Api",t.toString());
+                t.printStackTrace();
                // responseList = ORM.completeIssueObjects(projectId, appDatabase); //todo remove (is not necessary bc of initData method)
                 //Log.d("Api", "Loaded: " + responseList.toString());
                 networkCallMessage.setValue("Oh no, check your wifi connection");

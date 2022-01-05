@@ -12,6 +12,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import de.hdmstuttgart.gitlapp.fragments.IssueDetailFragment;
+import de.hdmstuttgart.gitlapp.fragments.IssueOverviewFragment;
 import de.hdmstuttgart.gitlapp.fragments.LoginFragment;
 import de.hdmstuttgart.gitlapp.models.Issue;
 import de.hdmstuttgart.gitlapp.viewmodels.IssueDetailViewModel;
@@ -39,11 +40,15 @@ public class MainActivity extends AppCompatActivity {
         } catch (NullPointerException e) {
             Log.d("Login", "No profile saved, show login screen");
             //todo show login screen
+            //container.setBaseUrl("https://gitlab.mi.hdm-stuttgart.de");
         }
 
         if (savedInstanceState == null) {
+            Bundle bundle = new Bundle();
+            bundle.putInt("projectId",7124);
+            bundle.putString("projectName","GitLapp");
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.fragment_container, LoginFragment.class, null)
+                    .add(R.id.fragment_container, IssueOverviewFragment.class, bundle)
                     .commit();
         }
 
