@@ -12,7 +12,6 @@ import android.widget.TextView;
 import java.util.List;
 
 import de.hdmstuttgart.gitlapp.fragments.IssueDetailFragment;
-import de.hdmstuttgart.gitlapp.fragments.LoginFragment;
 import de.hdmstuttgart.gitlapp.models.Issue;
 import de.hdmstuttgart.gitlapp.viewmodels.IssueDetailViewModel;
 import de.hdmstuttgart.gitlapp.viewmodels.IssueDetailViewModelFactory;
@@ -34,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
 
         if(savedInstanceState == null){
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.fragment_container, LoginFragment.class,null)
+                    .add(R.id.fragment_container, IssueDetailFragment.newInstance(12655),null)
                     .commit();
         }
 
