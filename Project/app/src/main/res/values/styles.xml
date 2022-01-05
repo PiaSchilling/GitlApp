@@ -51,8 +51,6 @@
     </style>
 
 
-
-
  --- Button style ---
     <style name="OutlinedButton" >
         <item name="backgroundTint"> @color/transparent</item>
