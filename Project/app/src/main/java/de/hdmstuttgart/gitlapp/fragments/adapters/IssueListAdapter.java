@@ -35,7 +35,8 @@ public class IssueListAdapter extends RecyclerView.Adapter<IssueListAdapter.View
         private final TextView authorTextView;
         private final TextView dueDateTextView;
         private final ImageView calendarIcon;
-        private final RelativeLayout relativeLayout;
+        private final TextView iidTextView;
+        private final ImageView statusBar;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -45,7 +46,10 @@ public class IssueListAdapter extends RecyclerView.Adapter<IssueListAdapter.View
             authorTextView = itemView.findViewById(R.id.author_name);
             dueDateTextView = itemView.findViewById(R.id.date_posted);
             calendarIcon = itemView.findViewById(R.id.calendar_icon);
-            relativeLayout = itemView.findViewById(R.id.card_layout);
+            iidTextView = itemView.findViewById(R.id.issue_iid_card);
+            statusBar = itemView.findViewById(R.id.status_bar);
+
+
         }
 
         public TextView getIssueTitleTextView() {
@@ -68,8 +72,12 @@ public class IssueListAdapter extends RecyclerView.Adapter<IssueListAdapter.View
             return calendarIcon;
         }
 
-        public RelativeLayout getRelativeLayout() {
-            return relativeLayout;
+        public TextView getIidTextView() {
+            return iidTextView;
+        }
+
+        public ImageView getStatusBar() {
+            return statusBar;
         }
     }
 
@@ -97,17 +105,25 @@ public class IssueListAdapter extends RecyclerView.Adapter<IssueListAdapter.View
         String createdDate = issueOnPosition.getCreated_at();
         String authorName = issueOnPosition.getAuthor().getName();
         String dueDate = issueOnPosition.getDue_date();
+        int iid = issueOnPosition.getIid();
 
         holder.getIssueTitleTextView().setText(issueTitle);
         holder.getCreatedDateTextView().setText(context.getString(R.string.issue_create_date,createdDate));
         holder.getAuthorTextView().setText(authorName);
         holder.getDueDateTextView().setText(context.getString(R.string.issue_due_date,dueDate));
+        holder.getIidTextView().setText(context.getString(R.string.issue_iid,iid));
 
         if(dueDate == null || dueDate.isEmpty()){
-            holder.getDueDateTextView().setText("");
+            holder.getDueDateTextView().setText(""); //todo remove due date
         }
 
+        if(issueOnPosition.getState().equals("opened")){
+            holder.getStatusBar().setBackgroundColor(ContextCompat.getColor(context,R.color.green));
+        }else{
+            holder.getStatusBar().setBackgroundColor(ContextCompat.getColor(context,R.color.red));
+        }
 
+        //onclick on listview item
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

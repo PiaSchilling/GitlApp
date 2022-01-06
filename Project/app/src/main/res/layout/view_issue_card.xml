@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/card_layout"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:background="@drawable/gradient_background"
-    android:id="@+id/card_layout"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:paddingStart="10dp"
+    android:paddingTop="10dp">
+
 
     <TextView
         android:id="@+id/issue_name"
-        android:layout_width="350dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:text="Issue name"
         style="@style/Body2WhiteBold"
-        />
-
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Issue name" />
 
     <TextView
         android:id="@+id/time_string"
@@ -22,41 +22,51 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/issue_name"
-        android:text="@string/issue_create_date"
-        android:maxLength="13"/>
+        android:maxLength="13"
+        android:text="@string/issue_create_date" />
 
-        <TextView
-            style="@style/Body2WhiteBold"
-            android:id="@+id/author_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/issue_name"
-            android:layout_marginStart="10dp"
-            android:layout_toEndOf="@+id/time_string"
-            android:text="Gitti Galosche" />
+    <TextView
+        android:id="@+id/author_name"
+        style="@style/Body2WhiteBold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/issue_name"
+        android:layout_marginStart="10dp"
+        android:layout_toEndOf="@+id/time_string"
+        android:text="Gitti Galosche" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/issue_iid_card"
+        style="@style/Body2"
+        android:layout_toEndOf="@id/author_name"
+        android:layout_alignBaseline="@id/author_name"
+        android:text="#4"
+        android:layout_marginStart="10dp"
+        />
 
     <ImageView
         android:id="@+id/calendar_icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/issue_name"
-        android:layout_toStartOf="@id/date_posted"
         android:layout_marginEnd="15dp"
+        android:layout_toStartOf="@id/date_posted"
         android:src="@drawable/ic_calendar"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
 
     <TextView
         android:id="@+id/date_posted"
         style="@style/Body2WhiteBold"
-        android:textColor="@color/lightOrange"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/issue_name"
-        android:layout_marginTop="0dp"
-        android:layout_alignParentEnd="true"
+        android:layout_alignBaseline="@id/issue_iid_card"
+        android:layout_toEndOf="@id/issue_iid_card"
         android:text="@string/issue_due_date"
-        android:textAlignment="textEnd" />
+        android:textColor="@color/lightOrange"
+        android:layout_marginStart="10dp"/>
 
     <View
         android:id="@+id/dividerThree"
@@ -67,7 +77,13 @@
         android:background="?android:attr/listDivider"
         android:backgroundTint="@color/lightGrey" />
 
-
+    <ImageView
+        android:id="@+id/status_bar"
+        android:layout_width="5dp"
+        android:layout_height="50dp"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:background="@color/lightOrange" />
 
 
 </RelativeLayout>

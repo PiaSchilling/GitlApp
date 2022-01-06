@@ -25,8 +25,8 @@ public class IssueOverviewViewModel extends ViewModel {
     public IssueOverviewViewModel(IssueRepository issueRepository, int projectId) {
         this.issueRepository = issueRepository;
         this.projectId = projectId;
-        issueRepository.initProjectIssues(projectId);
 
+        initIssueLiveData();
         this.mutableLiveData.setValue(issueRepository.getIssueListLiveData().getValue());
     }
 
@@ -37,34 +37,49 @@ public class IssueOverviewViewModel extends ViewModel {
         issueRepository.refreshProjectIssues(projectId);
     }
 
-    public MutableLiveData<List<Issue>> getIssueListLiveData(){
-        Log.d("Api","ProjectId in viewModel " + projectId);
-        issueRepository.initProjectIssues(projectId);//todo remove
-        issueRepository.refreshProjectIssues(projectId);//todo remove
+    public MutableLiveData<List<Issue>> getIssueListLiveData() {
+        Log.d("Api", "ProjectId in viewModel " + projectId);
         return this.mutableLiveData;
     }
 
-    public void clearIssueFilter(){
-        this.mutableLiveData.setValue(issueRepository.getIssueListLiveData().getValue());
-        Log.d("WAAS","clear filter " + mutableLiveData.getValue().toString());
-        Log.d("WAAS", "issue repo " + issueRepository.getIssueListLiveData());
+    /**
+     * calls repo to load local data (if present)
+     * then tries to update data from network
+     */
+    public void initIssueLiveData() {
+        issueRepository.initProjectIssues(projectId);
+        issueRepository.refreshProjectIssues(projectId);
+        mutableLiveData.setValue(issueRepository.getIssueListLiveData().getValue());
     }
 
-    public void filterIssuesByState(String state){
+    /**
+     * tries to update data from network
+     */
+    public void updateIssueLiveData() {
+        Log.d("Api2","ViewModel after update " + mutableLiveData.getValue().toString());
+        issueRepository.refreshProjectIssues(projectId);
+        mutableLiveData.setValue(issueRepository.getIssueListLiveData().getValue());
+    }
+
+    public void clearIssueFilter() {
+        this.mutableLiveData.setValue(issueRepository.getIssueListLiveData().getValue());
+    }
+
+    public void filterIssuesByState(String state) {
         List<Issue> temp = issueRepository.getIssueListLiveData().getValue();
 
-        try{
+        try {
             List<Issue> result = Objects.requireNonNull(temp)
                     .stream()
                     .filter(issue -> issue.getState().equals(state))
                     .collect(Collectors.toList());
             mutableLiveData.setValue(result);
-        }catch (NullPointerException e){
-            Log.e("Api","Issue list empty");
+        } catch (NullPointerException e) {
+            Log.e("Api", "Issue list empty");
         }
     }
 
-    public MutableLiveData<String> getMessage(){
+    public MutableLiveData<String> getMessage() {
         return issueRepository.getNetworkCallMessage();
     }
 

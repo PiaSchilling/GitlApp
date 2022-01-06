@@ -7,6 +7,9 @@
     <color name="lightOrange">#E09C41</color>
     <color name="red">#AC6666</color>
     <color name="green">#5B8361</color>
+    <color name="green_transparent">#265B8361</color>
+    <color name="red_transparent">#26AC6666</color>
+
 
     <color name="lightGreyGradient">#4F4F4F</color>
     <color name="darkGreyGradient">#2E2E2E</color>

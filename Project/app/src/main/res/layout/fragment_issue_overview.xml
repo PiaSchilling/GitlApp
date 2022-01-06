@@ -29,7 +29,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@color/white"
-            android:text="@string/tab_open" />
+            android:text="@string/tab_all"/>
 
         <com.google.android.material.tabs.TabItem
             android:layout_width="wrap_content"
@@ -39,16 +39,27 @@
         <com.google.android.material.tabs.TabItem
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/tab_all" />
+            android:text="@string/tab_open" />
+
     </com.google.android.material.tabs.TabLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:layout_width="match_parent"
+        android:layout_below="@+id/tab_layout"
         android:layout_height="wrap_content"
-        android:layout_below="@id/tab_layout"
-        android:layout_marginTop="10dp"
-        android:layout_marginHorizontal="10dp"/>
+        android:id="@+id/swipe_refresh">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tab_layout"
+            android:layout_marginTop="10dp"
+
+            />
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/add_issue_button"
