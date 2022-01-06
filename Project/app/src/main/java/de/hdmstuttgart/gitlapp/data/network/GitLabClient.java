@@ -10,6 +10,7 @@ import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
+import retrofit2.http.Url;
 
 //all the requests for the api
 public interface GitLabClient {
@@ -22,6 +23,9 @@ public interface GitLabClient {
 
     @GET("users/{id}")
     Call<User> getSingleUser(@Path ("id") int userId, @Header("Authorization") String auth);
+
+    @GET
+    Call<User> getSingleUserWithWholeUrl(@Url String url,@Header("Authorization") String auth);
 
 
 }

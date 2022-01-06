@@ -21,6 +21,7 @@ import de.hdmstuttgart.gitlapp.viewmodels.ProjectViewModel;
 
 public class MainActivity extends AppCompatActivity {
 
+    public String baseUrl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,24 +32,30 @@ public class MainActivity extends AppCompatActivity {
         AppContainer container = ((CustomApplication) getApplication()).getContainer(getApplicationContext());
 
         // - - - - - check if a profile is saved if so no login screen will be showed - - - - -
-        try {
+       /* try {
             Log.d("Login", "Profile saved, show no login screen");
             String accessToken = container.appDatabase.profileDao().getProfile().getAccessToken();
             String baseUrl = container.appDatabase.profileDao().getProfile().getHostUrl();
-
             container.setBaseUrl(baseUrl);
         } catch (NullPointerException e) {
             Log.d("Login", "No profile saved, show login screen");
             //todo show login screen
+
+            if (savedInstanceState == null) {
+                getSupportFragmentManager().beginTransaction()
+                        .add(R.id.fragment_container, LoginFragment.class, null)
+                        .commit();
+            }
+
             //container.setBaseUrl("https://gitlab.mi.hdm-stuttgart.de");
-        }
+        }*/
 
         if (savedInstanceState == null) {
             Bundle bundle = new Bundle();
             bundle.putInt("projectId",7124);
             bundle.putString("projectName","GitLapp");
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.fragment_container, IssueOverviewFragment.class, bundle)
+                    .add(R.id.fragment_container, LoginFragment.class, null)
                     .commit();
         }
 

@@ -40,11 +40,11 @@ public class ProfileRepository {
         appDatabase.profileDao().insertProfile(profile);
     }
 
-    private void fetchUser(int userId){
+    private void fetchUser(String url){
 
         Log.d("ProfileRepo","FetchUser called");
 
-        Call<User> call = gitLabClient.getSingleUser(userId, this.accessToken);
+        Call<User> call = gitLabClient.getSingleUserWithWholeUrl(url, this.accessToken);
         call.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
@@ -84,7 +84,9 @@ public class ProfileRepository {
         this.accessToken = "Bearer " + accessToken;
         this.hostUrl = hostUrl;
 
-        fetchUser(userId);
+        String url = hostUrl + "/api/v4/users/" + userId;
+
+        fetchUser(url);
     }
 
     public MutableLiveData<String> getMessageLiveData() {
