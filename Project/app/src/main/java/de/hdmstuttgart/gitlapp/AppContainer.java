@@ -23,7 +23,7 @@ public class AppContainer {
     public AppDatabase appDatabase;
 
     // - - - - - - Retrofit api - - - - - - - - - - - - -
-    private String baseUrl = "https://gitlab.com"; //todo make not hardcoded
+    private String baseUrl = "https://gitlab.mi.hdm-stuttgart.de/api/v4/"; //todo make not hardcoded
     ServiceGenerator serviceGenerator = new ServiceGenerator(this.baseUrl); //can only be instanced after the base url is set
     public GitLabClient gitLabClient = serviceGenerator.getGitLabClient();
 

@@ -115,22 +115,32 @@ public class IssueDetailFragment extends Fragment {
 
     private void bindDataToViews(){
 
-        //todo add show all screen
+        //todo add "show all" screen
 
         try{
 
-            // - - - - set simple views (text views) - - - -
+            // - - - - set views which can not be null - - - -
+            binding.issueIid.setText(getString(R.string.issue_iid,issueLiveData.getValue().getIid()));
             binding.issueTitle.setText(issueLiveData.getValue().getTitle());
-            binding.issueDescriptionContent.setText(issueLiveData.getValue().getDescription());
-            binding.weightChip.setText(String.valueOf(issueLiveData.getValue().getWeight()));
-            binding.milestoneTitle.setText(issueLiveData.getValue().getMilestone().getTitle());
-            binding.authorCard.authorName.setText(issueLiveData.getValue().getAuthor().getName());
             binding.authorCard.createDate.setText(getString(R.string.issue_create_date,issueLiveData.getValue().getCreated_at()));
             binding.thumbsUp.thumbsUpCount.setText(String.valueOf(issueLiveData.getValue().getThumbs_up()));
             binding.thumbsDown.thumbsDownCount.setText(String.valueOf(issueLiveData.getValue().getThumbs_down()));
-            binding.issueIid.setText(getString(R.string.issue_iid,issueLiveData.getValue().getIid()));
+            binding.weightChip.setText(String.valueOf(issueLiveData.getValue().getWeight()));
+            binding.authorCard.authorName.setText(issueLiveData.getValue().getAuthor().getName());
 
-            // - - - -  set due date if not null - - - -
+            // - - - - set view which can be null or empty (if null set default value) - - - -
+            if(issueLiveData.getValue().getDescription() == null || issueLiveData.getValue().getDescription().isEmpty()){
+                binding.issueDescriptionContent.setText("no description");
+            }else{
+                binding.issueDescriptionContent.setText(issueLiveData.getValue().getDescription());
+            }
+
+            if(issueLiveData.getValue().getMilestone() == null){
+                binding.milestoneTitle.setText("milestone name not set");
+            }else{
+                binding.milestoneTitle.setText(issueLiveData.getValue().getMilestone().getTitle());
+            }
+
             if(issueLiveData.getValue().getDue_date() == null){
                 binding.dueDate.setText(getString(R.string.issue_due_date,"not set"));
             }else{
@@ -169,7 +179,7 @@ public class IssueDetailFragment extends Fragment {
 
 
         }catch (NullPointerException e){
-            Log.d("Api",e.getMessage());
+            Log.e("Api",e.getMessage());
             Toast.makeText(getActivity(),"Error loading data",Toast.LENGTH_SHORT).show();
         }
     }

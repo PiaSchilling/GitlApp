@@ -23,6 +23,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
@@ -140,6 +141,7 @@ public class IssueOverviewFragment extends Fragment {
         issueListLiveData.observe(getViewLifecycleOwner(), changeList -> {
             issueList.clear();
             issueList.addAll(changeList);
+            issueList.sort(Comparator.comparingInt(Issue::getIid).reversed());
             adapter.notifyDataSetChanged(); //todo replace with more efficient
         });
 

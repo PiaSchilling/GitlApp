@@ -40,7 +40,7 @@ public class IssueRepository {
             this.accessToken = appDatabase.profileDao().getProfile().getAccessToken();
         }catch (NullPointerException e){
             Log.e("Api","Access token is null or empty");
-            this.accessToken = "Bearer glpat-im7xUxYLmQv1LnKnvesr"; // to prevent the app from crashing (maybe find a better solution)
+            this.accessToken = "Bearer glpat-im7xUxYLmQv1LnKnvesr"; // to prevent the app from crashing (maybe find a better solution) //todo remove
         }
 
     }
