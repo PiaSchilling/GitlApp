@@ -18,55 +18,54 @@ import de.hdmstuttgart.gitlapp.models.Issue;
 public class IssueOverviewViewModel extends ViewModel {
 
     IssueRepository issueRepository;
-    int projectId;
 
     MutableLiveData<List<Issue>> mutableLiveData = new MutableLiveData<>();
 
-    public IssueOverviewViewModel(IssueRepository issueRepository, int projectId) {
+    public IssueOverviewViewModel(IssueRepository issueRepository) {
         this.issueRepository = issueRepository;
-        this.projectId = projectId;
-
-        initIssueLiveData();
-        this.mutableLiveData.setValue(issueRepository.getIssueListLiveData().getValue());
     }
 
     /**
      * triggers refresh method in repo for re-fetching data from api (if possible)
      */
-    public void refreshProjectIssues() {
+    public void refreshProjectIssues(int projectId) {
         issueRepository.refreshProjectIssues(projectId);
     }
 
     public MutableLiveData<List<Issue>> getIssueListLiveData() {
-        Log.d("Api", "ProjectId in viewModel " + projectId);
+        Log.d("Api", "ProjectId in viewModel ");
         return this.mutableLiveData;
     }
 
     /**
      * calls repo to load local data (if present)
      * then tries to update data from network
+     * @return
      */
-    public void initIssueLiveData() {
+    public MutableLiveData<List<Issue>> initIssueLiveData(int projectId) {
         issueRepository.initProjectIssues(projectId);
         issueRepository.refreshProjectIssues(projectId);
-        mutableLiveData.setValue(issueRepository.getIssueListLiveData().getValue());
+       // mutableLiveData.setValue(issueRepository.getIssueListLiveData().getValue());
+        return issueRepository.getIssueListLiveData();
     }
 
     /**
      * tries to update data from network
+     * @return
      */
-    public void updateIssueLiveData() {
-        Log.d("Api2","ViewModel after update " + mutableLiveData.getValue().toString());
+    public MutableLiveData<List<Issue>> updateIssueLiveData(int projectId) {
         issueRepository.refreshProjectIssues(projectId);
-        mutableLiveData.setValue(issueRepository.getIssueListLiveData().getValue());
+       // mutableLiveData.setValue(issueRepository.getIssueListLiveData().getValue());
+        return issueRepository.getIssueListLiveData();
     }
 
-    public void clearIssueFilter() {
-        this.mutableLiveData.setValue(issueRepository.getIssueListLiveData().getValue());
+    public MutableLiveData<List<Issue>> clearIssueFilter() {
+        //this.mutableLiveData.setValue(issueRepository.getIssueListLiveData().getValue());
+        return issueRepository.getIssueListLiveData();
     }
 
-    public void filterIssuesByState(String state) {
-        List<Issue> temp = issueRepository.getIssueListLiveData().getValue();
+    public List<Issue> filterIssuesByState(String state) {
+       /* List<Issue> temp = issueRepository.getIssueListLiveData().getValue();
 
         try {
             List<Issue> result = Objects.requireNonNull(temp)
@@ -76,7 +75,13 @@ public class IssueOverviewViewModel extends ViewModel {
             mutableLiveData.setValue(result);
         } catch (NullPointerException e) {
             Log.e("Api", "Issue list empty");
-        }
+        }*/
+        List<Issue> temp = issueRepository.getIssueListLiveData().getValue();
+        List<Issue> result = Objects.requireNonNull(temp)
+                .stream()
+                .filter(issue -> issue.getState().equals(state))
+                .collect(Collectors.toList());
+        return result;
     }
 
     public MutableLiveData<String> getMessage() {
@@ -84,6 +89,6 @@ public class IssueOverviewViewModel extends ViewModel {
     }
 
     public MutableLiveData<List<Issue>> getMutableLiveData() {
-        return mutableLiveData;
+        return issueRepository.getIssueListLiveData();
     }
 }

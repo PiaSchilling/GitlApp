@@ -30,6 +30,12 @@ public class AppContainer {
     // - - - - - - Repositories - - - - - - - - - - - - -
     public IssueRepository issueRepository;
     public ProjectRepository projectRepository;
+    public ProfileRepository profileRepository;
+
+
+    // - - - - - - view model provider factories - - - - -
+    public IssueDetailViewModelFactory issueDetailViewModelFactory;
+
 
     // - - - - - - Background threading - - - - - - - - -
     public ExecutorService executorService = Executors.newFixedThreadPool(2);
@@ -39,16 +45,21 @@ public class AppContainer {
         SharedPreferences sharedPref = context.getSharedPreferences("profileInformation", Context.MODE_PRIVATE);
         baseUrl = sharedPref.getString("baseUrl", "default");
 
-        if(!baseUrl.equals("default")){
+        if (!baseUrl.equals("default")) {
             //can only be instanced after the base url is set
             ServiceGenerator serviceGenerator = new ServiceGenerator(Objects.requireNonNull(this.baseUrl)); //can only be instanced after the base url is set
             gitLabClient = serviceGenerator.getGitLabClient();
 
             appDatabase = AppDatabase.getDatabaseInstance(context); //needs the context this is why its instanced in the constructor
+
             issueRepository = new IssueRepository(Objects.requireNonNull(appDatabase), Objects.requireNonNull(gitLabClient));
             projectRepository = new ProjectRepository(Objects.requireNonNull(appDatabase), Objects.requireNonNull(gitLabClient));
-        }else{
-            Log.e("Api","Can not find base url in shard preferences"); //can never happen
+            profileRepository = new ProfileRepository(Objects.requireNonNull(appDatabase), Objects.requireNonNull(gitLabClient));
+
+            issueDetailViewModelFactory = new IssueDetailViewModelFactory(issueRepository);
+
+        } else {
+            Log.e("Api", "Can not find base url in shard preferences"); //can never happen
         }
 
     }

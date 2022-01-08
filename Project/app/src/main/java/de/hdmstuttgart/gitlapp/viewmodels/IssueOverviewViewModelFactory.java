@@ -9,18 +9,16 @@ import de.hdmstuttgart.gitlapp.data.repositories.IssueRepository;
 public class IssueOverviewViewModelFactory implements ViewModelProvider.Factory {
 
     private final IssueRepository issueRepository;
-    private final int projectId;
 
-    public IssueOverviewViewModelFactory(IssueRepository issueRepository, int projectId){
+    public IssueOverviewViewModelFactory(IssueRepository issueRepository){
         this.issueRepository = issueRepository;
-        this.projectId = projectId;
     }
 
     @NonNull
     @Override
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
         if(modelClass.isAssignableFrom(IssueOverviewViewModel.class)){
-            IssueOverviewViewModel issueOverviewViewModel = new IssueOverviewViewModel(issueRepository,projectId);
+            IssueOverviewViewModel issueOverviewViewModel = new IssueOverviewViewModel(issueRepository);
             return (T) issueOverviewViewModel;
         }
         throw new IllegalArgumentException("ViewModel class not found");

@@ -1,5 +1,6 @@
 package de.hdmstuttgart.gitlapp.fragments;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -63,7 +64,7 @@ public class IssueOverviewFragment extends Fragment {
     //data
     private MutableLiveData<List<Issue>> issueListLiveData;
     private MutableLiveData<String> networkCallMessage; //inform the user of update fail/success
-    List<Issue> issueList = new ArrayList<>();
+    private final List<Issue> issueList = new ArrayList<>();
 
 
 
@@ -101,15 +102,17 @@ public class IssueOverviewFragment extends Fragment {
         AppContainer container = ((CustomApplication) getActivity().getApplication())
                 .getAppContainer(getActivity().getApplicationContext());
 
-        IssueOverviewViewModelFactory factory = new IssueOverviewViewModelFactory(container.issueRepository, projectId);
+        IssueOverviewViewModelFactory factory = new IssueOverviewViewModelFactory(container.issueRepository); //todo remove new
 
         viewModel = new ViewModelProvider(this, factory)
                 .get(IssueOverviewViewModel.class);
 
-        //  - - - - get data from view model - - - -
-        issueListLiveData = viewModel.getMutableLiveData();
-        networkCallMessage = viewModel.getMessage();
+        // - - - - -  init and update data
+        viewModel.initIssueLiveData(projectId);
+        this.issueListLiveData = viewModel.updateIssueLiveData(projectId);
 
+        //  - - - - get data from view model - - - -
+        networkCallMessage = viewModel.getMessage();
     }
 
     @Override // Inflate the layout for this fragment
@@ -154,33 +157,37 @@ public class IssueOverviewFragment extends Fragment {
             @Override
             public void onRefresh() {
                 Toast.makeText(getActivity(),"try to update",Toast.LENGTH_SHORT).show();
-                viewModel.updateIssueLiveData();
+                viewModel.updateIssueLiveData(projectId);
                 adapter.notifyDataSetChanged();
             }
         });
 
         // define action when tabs are changed (sort list)
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 try{
                     String state = Objects.requireNonNull(tab.getText()).toString();
 
                     if (state.equals("open")) {
-                        viewModel.filterIssuesByState("opened");
+                        issueList.removeAll(viewModel.filterIssuesByState("closed"));
+                        adapter.notifyDataSetChanged();
                     }else if(state.equals("closed")){
-                        viewModel.filterIssuesByState("closed");
-                    }else{
-                        viewModel.clearIssueFilter();
+                        issueList.removeAll(viewModel.filterIssuesByState("opened"));
+                        adapter.notifyDataSetChanged();
                     }
                 }catch (NullPointerException e){
                     Log.e("Api",e.getMessage());
                 }
             }
 
+            @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
-                //not needed for now
+                issueList.clear();
+                issueList.addAll(issueListLiveData.getValue());
+                adapter.notifyDataSetChanged();
             }
 
             @Override

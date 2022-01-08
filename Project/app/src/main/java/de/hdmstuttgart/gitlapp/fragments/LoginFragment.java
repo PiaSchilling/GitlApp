@@ -35,7 +35,7 @@ import de.hdmstuttgart.gitlapp.viewmodels.LoginViewModelFactory;
  */
 public class LoginFragment extends Fragment {
 
-    LoginContainer container;
+    private LoginContainer container;
 
     private FragmentLogInBinding binding;
     private LoginViewModel viewModel;
@@ -45,6 +45,8 @@ public class LoginFragment extends Fragment {
     private TextInputLayout accessTokenTextField;
     private Button loginButton;
     private ProgressBar spinner;
+
+    private String baseUrl;
 
     private MutableLiveData<String> messageLiveData;
 
@@ -107,8 +109,16 @@ public class LoginFragment extends Fragment {
 
                 //fragment transaction when profile was successfully created
                 if (s.equals("Call successful, profile created")) {
+
+                    //write profile info to shared preferences only if login was successful
+                    String url = baseUrl + "/api/v4/";
+                    SharedPreferences sharedPreferences = getActivity().getSharedPreferences("profileInformation", Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putString("baseUrl", url);
+                    editor.apply();
+
                     getActivity().getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.fragment_container, IssueOverviewFragment.class, null)
+                            .replace(R.id.fragment_container, IssueOverviewFragment.class, null) //todo replace to project overview fragment
                             .addToBackStack(null)
                             .commit();
                 }
@@ -118,7 +128,7 @@ public class LoginFragment extends Fragment {
         loginButton.setOnClickListener(view1 -> {
 
             try {
-                String baseUrl = baseUrlTextField.getEditText().getText().toString();
+                baseUrl = baseUrlTextField.getEditText().getText().toString();
                 String userIdString = userIdTextField.getEditText().getText().toString();
                 String accessToken = accessTokenTextField.getEditText().getText().toString();
 
@@ -127,13 +137,6 @@ public class LoginFragment extends Fragment {
                 } else {
 
                     int userId = Integer.parseInt(userIdString);
-
-                    //write profile info to shared preferences
-                    String url = baseUrl + "/api/v4/";
-                    SharedPreferences sharedPreferences = getActivity().getSharedPreferences("profileInformation", Context.MODE_PRIVATE);
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putString("baseUrl", url);
-                    editor.apply();
 
                     viewModel.createUserProfile(baseUrl, userId, accessToken); //create user profile
                     spinner.setVisibility(View.VISIBLE);
