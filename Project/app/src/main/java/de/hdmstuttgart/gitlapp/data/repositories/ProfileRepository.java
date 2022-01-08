@@ -51,7 +51,6 @@ public class ProfileRepository {
                 if(response.isSuccessful()){
                     if(response.body() != null){
                         loggedIdUser = response.body();
-                        loggedIdUser.setLoggedInUser(true);
                         appDatabase.userDao().insertUsers(loggedIdUser);
                         initProfile();
 
@@ -87,6 +86,15 @@ public class ProfileRepository {
         String url = hostUrl + "/api/v4/users/" + userId;
 
         fetchUser(url);
+    }
+
+    public User getLoggedIdUser(){
+        int userId = appDatabase.profileDao().getProfile().getId();
+        return appDatabase.userDao().getUserById(userId);
+    }
+
+    public Profile getUserProfile(){
+        return appDatabase.profileDao().getProfile();
     }
 
     public MutableLiveData<String> getMessageLiveData() {
