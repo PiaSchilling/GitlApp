@@ -1,5 +1,7 @@
 package de.hdmstuttgart.gitlapp.fragments;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -19,8 +21,9 @@ import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputLayout;
 
-import de.hdmstuttgart.gitlapp.AppContainer;
 import de.hdmstuttgart.gitlapp.CustomApplication;
+import de.hdmstuttgart.gitlapp.LoginContainer;
+import de.hdmstuttgart.gitlapp.R;
 import de.hdmstuttgart.gitlapp.databinding.FragmentLogInBinding;
 import de.hdmstuttgart.gitlapp.viewmodels.LoginViewModel;
 import de.hdmstuttgart.gitlapp.viewmodels.LoginViewModelFactory;
@@ -31,6 +34,8 @@ import de.hdmstuttgart.gitlapp.viewmodels.LoginViewModelFactory;
  * create an instance of this fragment.
  */
 public class LoginFragment extends Fragment {
+
+    LoginContainer container;
 
     private FragmentLogInBinding binding;
     private LoginViewModel viewModel;
@@ -53,8 +58,7 @@ public class LoginFragment extends Fragment {
      *
      * @return A new instance of fragment LoginFragment.
      */
-    // TODO: Rename and change types and number of parameters
-    public static LoginFragment newInstance() {
+    public static LoginFragment newInstance() { //todo needed ?
         LoginFragment fragment = new LoginFragment();
         Bundle args = new Bundle();//todo remove
         fragment.setArguments(args);
@@ -66,10 +70,10 @@ public class LoginFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         // - - - - get the related view model - - - -
-        AppContainer container = ((CustomApplication) getActivity().getApplication())
-                .getContainer(getActivity().getApplicationContext());
+        container = ((CustomApplication) getActivity().getApplication())
+                .getLoginContainer(getActivity().getApplicationContext());
 
-        LoginViewModelFactory loginViewModelFactory = new LoginViewModelFactory(container.profileRepository);
+        LoginViewModelFactory loginViewModelFactory = container.loginViewModelFactory;
 
         viewModel = new ViewModelProvider(this, loginViewModelFactory)
                 .get(LoginViewModel.class);
@@ -79,7 +83,7 @@ public class LoginFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        binding = FragmentLogInBinding.inflate(inflater,container,false);
+        binding = FragmentLogInBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
 
@@ -97,32 +101,52 @@ public class LoginFragment extends Fragment {
         messageLiveData.observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(String s) {
-                Toast.makeText(getActivity(),messageLiveData.getValue(),Toast.LENGTH_LONG).show();
+                //inform the user if login failed etc
+                Toast.makeText(getActivity(), messageLiveData.getValue(), Toast.LENGTH_LONG).show();
                 spinner.setVisibility(View.GONE);
+
+                //fragment transaction when profile was successfully created
+                if (s.equals("Call successful, profile created")) {
+                    getActivity().getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.fragment_container, IssueOverviewFragment.class, null)
+                            .addToBackStack(null)
+                            .commit();
+                }
             }
         });
 
         loginButton.setOnClickListener(view1 -> {
 
-            try{
+            try {
                 String baseUrl = baseUrlTextField.getEditText().getText().toString();
                 String userIdString = userIdTextField.getEditText().getText().toString();
                 String accessToken = accessTokenTextField.getEditText().getText().toString();
 
-                if(baseUrl.isEmpty() || userIdString.isEmpty() || accessToken.isEmpty()){
-                    Toast.makeText(getActivity(),"Please fill in all fields",Toast.LENGTH_LONG).show();
-                }else{
+                if (baseUrl.isEmpty() || userIdString.isEmpty() || accessToken.isEmpty()) {
+                    Toast.makeText(getActivity(), "Please fill in all fields", Toast.LENGTH_LONG).show();
+                } else {
+
                     int userId = Integer.parseInt(userIdString);
-                    viewModel.createUserProfile(baseUrl,userId,accessToken);
+
+                    //write profile info to shared preferences
+                    String url = baseUrl + "/api/v4/";
+                    SharedPreferences sharedPreferences = getActivity().getSharedPreferences("profileInformation", Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putString("baseUrl", url);
+                    editor.apply();
+
+                    viewModel.createUserProfile(baseUrl, userId, accessToken); //create user profile
                     spinner.setVisibility(View.VISIBLE);
                 }
-            }catch (NullPointerException exception){
-                Log.e("Api",exception.getMessage());
+            } catch (NullPointerException exception) {
+                Log.e("Api", exception.getMessage());
             }
-            //todo fragment transaction
         });
+    }
 
-
-
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        container = null; //container will not be needed anymore after login is completed
     }
 }

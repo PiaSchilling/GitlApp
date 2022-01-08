@@ -1,6 +1,8 @@
 package de.hdmstuttgart.gitlapp;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.util.Log;
 
 import java.util.Objects;
 import java.util.concurrent.ExecutorService;
@@ -14,41 +16,40 @@ import de.hdmstuttgart.gitlapp.data.repositories.ProfileRepository;
 import de.hdmstuttgart.gitlapp.data.repositories.ProjectRepository;
 import de.hdmstuttgart.gitlapp.viewmodels.IssueDetailViewModelFactory;
 
+
 //Container of objects shared across the whole app (dependency injection)
 public class AppContainer {
-
-    private final Context applicationContext;
 
     // - - - - - -  Room local database - - - - - - - - -
     public AppDatabase appDatabase;
 
     // - - - - - - Retrofit api - - - - - - - - - - - - -
-    private String baseUrl = "https://gitlab.mi.hdm-stuttgart.de/api/v4/"; //todo make not hardcoded
-    ServiceGenerator serviceGenerator = new ServiceGenerator(this.baseUrl); //can only be instanced after the base url is set
-    public GitLabClient gitLabClient = serviceGenerator.getGitLabClient();
-
-
+    private final String baseUrl;
+    public GitLabClient gitLabClient;
 
     // - - - - - - Repositories - - - - - - - - - - - - -
     public IssueRepository issueRepository;
     public ProjectRepository projectRepository;
-    public ProfileRepository profileRepository;
 
     // - - - - - - Background threading - - - - - - - - -
     public ExecutorService executorService = Executors.newFixedThreadPool(2);
 
+
     public AppContainer(Context context) {
-        this.applicationContext = context;
+        SharedPreferences sharedPref = context.getSharedPreferences("profileInformation", Context.MODE_PRIVATE);
+        baseUrl = sharedPref.getString("baseUrl", "default");
 
-        appDatabase = AppDatabase.getDatabaseInstance(applicationContext); //needs the context this is why its instanced in the constructor
-        issueRepository = new IssueRepository(Objects.requireNonNull(appDatabase),Objects.requireNonNull(gitLabClient));
-        projectRepository = new ProjectRepository(Objects.requireNonNull(appDatabase),Objects.requireNonNull(gitLabClient));
-        profileRepository = new ProfileRepository(Objects.requireNonNull(appDatabase), Objects.requireNonNull(gitLabClient));
+        if(!baseUrl.equals("default")){
+            //can only be instanced after the base url is set
+            ServiceGenerator serviceGenerator = new ServiceGenerator(Objects.requireNonNull(this.baseUrl)); //can only be instanced after the base url is set
+            gitLabClient = serviceGenerator.getGitLabClient();
+
+            appDatabase = AppDatabase.getDatabaseInstance(context); //needs the context this is why its instanced in the constructor
+            issueRepository = new IssueRepository(Objects.requireNonNull(appDatabase), Objects.requireNonNull(gitLabClient));
+            projectRepository = new ProjectRepository(Objects.requireNonNull(appDatabase), Objects.requireNonNull(gitLabClient));
+        }else{
+            Log.e("Api","Can not find base url in shard preferences"); //can never happen
+        }
+
     }
-
-    public void setBaseUrl(String baseUrl) {
-        this.baseUrl = baseUrl + "/api/v4/";
-
-    }
-
 }

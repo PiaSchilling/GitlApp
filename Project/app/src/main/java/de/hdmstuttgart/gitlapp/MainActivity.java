@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
@@ -28,36 +30,30 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // - - - - - get the di container  - - - - - - -
-        AppContainer container = ((CustomApplication) getApplication()).getContainer(getApplicationContext());
+        // show login screen if no profile info is saved otherwise show no login screen
+        SharedPreferences sharedPref = getApplicationContext().getSharedPreferences("profileInformation", Context.MODE_PRIVATE);
+        baseUrl = sharedPref.getString("baseUrl", "default");
 
-        // - - - - - check if a profile is saved if so no login screen will be showed - - - - -
-       /* try {
-            Log.d("Login", "Profile saved, show no login screen");
-            String accessToken = container.appDatabase.profileDao().getProfile().getAccessToken();
-            String baseUrl = container.appDatabase.profileDao().getProfile().getHostUrl();
-            container.setBaseUrl(baseUrl);
-        } catch (NullPointerException e) {
+        Log.d("Base", baseUrl);
+
+        if (baseUrl.equals("default")) {
             Log.d("Login", "No profile saved, show login screen");
-            //todo show login screen
-
             if (savedInstanceState == null) {
                 getSupportFragmentManager().beginTransaction()
                         .add(R.id.fragment_container, LoginFragment.class, null)
                         .commit();
             }
-
-            //container.setBaseUrl("https://gitlab.mi.hdm-stuttgart.de");
-        }*/
-
-        if (savedInstanceState == null) {
-            Bundle bundle = new Bundle();
-            bundle.putInt("projectId",7124);
-            bundle.putString("projectName","GitLapp");
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.fragment_container, LoginFragment.class, null)
-                    .commit();
+        }else{
+            Log.d("Login", "Base url " + baseUrl);
+            Log.d("Login", "Profile saved, show login screen");
+            if (savedInstanceState == null) {
+                Bundle bundle = new Bundle();
+                bundle.putInt("projectId",7124);
+                bundle.putString("projectName","GitLapp");
+                getSupportFragmentManager().beginTransaction()
+                        .add(R.id.fragment_container, IssueOverviewFragment.class, bundle)
+                        .commit();
+            }
         }
-
     }
 }

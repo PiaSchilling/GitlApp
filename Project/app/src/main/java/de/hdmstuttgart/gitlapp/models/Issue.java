@@ -72,18 +72,6 @@ public class Issue {
                 ", weight=" + weight +
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
-                ", labels=" + labels +
-                ", author=" + author +
-                ", author_id=" + author_id +
-                ", project_id=" + project_id +
-                ", thumbs_up=" + thumbs_up +
-                ", thumbs_down=" + thumbs_down +
-                ", hashcode=" + hashcode +
-                ", state='" + state + '\'' +
-                ", created_at='" + created_at + '\'' +
-                ", due_date='" + due_date + '\'' +
-                ", milestone=" + milestone +
-                ", milestone_id=" + milestone_id +
                 '}';
     }
 

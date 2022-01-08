@@ -6,7 +6,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -100,7 +99,7 @@ public class IssueOverviewFragment extends Fragment {
 
         // - - - -  get the related view model - - - -
         AppContainer container = ((CustomApplication) getActivity().getApplication())
-                .getContainer(getActivity().getApplicationContext());
+                .getAppContainer(getActivity().getApplicationContext());
 
         IssueOverviewViewModelFactory factory = new IssueOverviewViewModelFactory(container.issueRepository, projectId);
 

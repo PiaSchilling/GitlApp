@@ -79,7 +79,7 @@ public class IssueDetailFragment extends Fragment {
 
         //- - - - get the view model and init data - - - -
         AppContainer appContainer = ((CustomApplication) getActivity().getApplication())
-                .getContainer(getActivity().getApplicationContext());
+                .getAppContainer(getActivity().getApplicationContext());
 
         appContainer.issueRepository.initProjectIssues(7124);//todo remove
 
