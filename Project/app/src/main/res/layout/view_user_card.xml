@@ -28,10 +28,11 @@
 
         <TextView
             style="@style/Body2WhiteBold"
+            android:id="@+id/userNameLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:text="Gitti Galosche" />
+            android:text="User Name" />
 
     </LinearLayout>
 
