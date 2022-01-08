@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,17 +24,13 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.hdmstuttgart.gitlapp.AppContainer;
+import de.hdmstuttgart.gitlapp.dependencies.AppContainer;
 import de.hdmstuttgart.gitlapp.CustomApplication;
-import de.hdmstuttgart.gitlapp.R;
-import de.hdmstuttgart.gitlapp.databinding.FragmentIssueOverviewBinding;
 import de.hdmstuttgart.gitlapp.databinding.FragmentProjectsBinding;
-import de.hdmstuttgart.gitlapp.fragments.adapters.IssueListAdapter;
 import de.hdmstuttgart.gitlapp.fragments.adapters.ProjectListAdapter;
-import de.hdmstuttgart.gitlapp.models.Issue;
 import de.hdmstuttgart.gitlapp.models.Project;
 import de.hdmstuttgart.gitlapp.viewmodels.ProjectsViewModel;
-import de.hdmstuttgart.gitlapp.viewmodels.ProjectsViewModelFactory;
+import de.hdmstuttgart.gitlapp.viewmodels.vmpFactories.ProjectsViewModelFactory;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -100,7 +95,7 @@ public class ProjectsFragment extends Fragment {
 
 
         AppContainer container = ((CustomApplication) getActivity().getApplication())
-                .getContainer(getActivity().getApplicationContext());
+                .getAppContainer(getActivity().getApplicationContext());
 
         // --- get related view model
 

@@ -1,4 +1,4 @@
-package de.hdmstuttgart.gitlapp;
+package de.hdmstuttgart.gitlapp.dependencies;
 
 import android.content.Context;
 
@@ -8,7 +8,7 @@ import de.hdmstuttgart.gitlapp.data.database.AppDatabase;
 import de.hdmstuttgart.gitlapp.data.network.GitLabClient;
 import de.hdmstuttgart.gitlapp.data.network.ServiceGenerator;
 import de.hdmstuttgart.gitlapp.data.repositories.ProfileRepository;
-import de.hdmstuttgart.gitlapp.viewmodels.LoginViewModelFactory;
+import de.hdmstuttgart.gitlapp.viewmodels.vmpFactories.LoginViewModelFactory;
 
 public class LoginContainer {
 

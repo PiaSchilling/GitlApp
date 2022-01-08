@@ -22,11 +22,11 @@ import android.widget.Toast;
 import com.google.android.material.textfield.TextInputLayout;
 
 import de.hdmstuttgart.gitlapp.CustomApplication;
-import de.hdmstuttgart.gitlapp.LoginContainer;
+import de.hdmstuttgart.gitlapp.dependencies.LoginContainer;
 import de.hdmstuttgart.gitlapp.R;
 import de.hdmstuttgart.gitlapp.databinding.FragmentLogInBinding;
 import de.hdmstuttgart.gitlapp.viewmodels.LoginViewModel;
-import de.hdmstuttgart.gitlapp.viewmodels.LoginViewModelFactory;
+import de.hdmstuttgart.gitlapp.viewmodels.vmpFactories.LoginViewModelFactory;
 
 /**
  * A simple {@link Fragment} subclass.

@@ -1,25 +1,15 @@
 package de.hdmstuttgart.gitlapp;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.Button;
-import android.widget.TextView;
 
-import java.util.List;
-
-import de.hdmstuttgart.gitlapp.fragments.IssueDetailFragment;
 import de.hdmstuttgart.gitlapp.fragments.IssueOverviewFragment;
 import de.hdmstuttgart.gitlapp.fragments.LoginFragment;
-import de.hdmstuttgart.gitlapp.models.Issue;
-import de.hdmstuttgart.gitlapp.viewmodels.IssueDetailViewModel;
-import de.hdmstuttgart.gitlapp.viewmodels.IssueDetailViewModelFactory;
-import de.hdmstuttgart.gitlapp.viewmodels.ProjectViewModel;
+import de.hdmstuttgart.gitlapp.fragments.ProjectsFragment;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -43,15 +33,13 @@ public class MainActivity extends AppCompatActivity {
                         .add(R.id.fragment_container, LoginFragment.class, null)
                         .commit();
             }
-        }else{
+        } else {
             Log.d("Login", "Base url " + baseUrl);
             Log.d("Login", "Profile saved, show login screen");
             if (savedInstanceState == null) {
-                Bundle bundle = new Bundle();
-                bundle.putInt("projectId",7124);
-                bundle.putString("projectName","GitLapp");
+
                 getSupportFragmentManager().beginTransaction()
-                        .add(R.id.fragment_container, IssueOverviewFragment.class, bundle)
+                        .add(R.id.fragment_container, ProjectsFragment.class, null)
                         .commit();
             }
         }

@@ -4,8 +4,8 @@ package de.hdmstuttgart.gitlapp;
 import android.app.Application;
 import android.content.Context;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import de.hdmstuttgart.gitlapp.dependencies.AppContainer;
+import de.hdmstuttgart.gitlapp.dependencies.LoginContainer;
 
 public class CustomApplication extends Application {
 

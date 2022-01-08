@@ -23,14 +23,14 @@ import com.google.android.material.chip.Chip;
 
 import java.util.List;
 
-import de.hdmstuttgart.gitlapp.AppContainer;
+import de.hdmstuttgart.gitlapp.dependencies.AppContainer;
 import de.hdmstuttgart.gitlapp.CustomApplication;
 import de.hdmstuttgart.gitlapp.R;
 import de.hdmstuttgart.gitlapp.databinding.FragmentIssueDetailBinding;
 import de.hdmstuttgart.gitlapp.models.Issue;
 import de.hdmstuttgart.gitlapp.models.Label;
 import de.hdmstuttgart.gitlapp.viewmodels.IssueDetailViewModel;
-import de.hdmstuttgart.gitlapp.viewmodels.IssueDetailViewModelFactory;
+import de.hdmstuttgart.gitlapp.viewmodels.vmpFactories.IssueDetailViewModelFactory;
 
 /**
  * A simple {@link Fragment} subclass.

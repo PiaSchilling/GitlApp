@@ -27,14 +27,14 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
-import de.hdmstuttgart.gitlapp.AppContainer;
+import de.hdmstuttgart.gitlapp.dependencies.AppContainer;
 import de.hdmstuttgart.gitlapp.CustomApplication;
 import de.hdmstuttgart.gitlapp.R;
 import de.hdmstuttgart.gitlapp.databinding.FragmentIssueOverviewBinding;
 import de.hdmstuttgart.gitlapp.fragments.adapters.IssueListAdapter;
 import de.hdmstuttgart.gitlapp.models.Issue;
 import de.hdmstuttgart.gitlapp.viewmodels.IssueOverviewViewModel;
-import de.hdmstuttgart.gitlapp.viewmodels.IssueOverviewViewModelFactory;
+import de.hdmstuttgart.gitlapp.viewmodels.vmpFactories.IssueOverviewViewModelFactory;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -102,7 +102,7 @@ public class IssueOverviewFragment extends Fragment {
         AppContainer container = ((CustomApplication) getActivity().getApplication())
                 .getAppContainer(getActivity().getApplicationContext());
 
-        IssueOverviewViewModelFactory factory = new IssueOverviewViewModelFactory(container.issueRepository); //todo remove new
+        IssueOverviewViewModelFactory factory = container.issueOverviewViewModelFactory;
 
         viewModel = new ViewModelProvider(this, factory)
                 .get(IssueOverviewViewModel.class);

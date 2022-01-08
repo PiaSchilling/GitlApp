@@ -1,4 +1,4 @@
-package de.hdmstuttgart.gitlapp;
+package de.hdmstuttgart.gitlapp.dependencies;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -14,7 +14,10 @@ import de.hdmstuttgart.gitlapp.data.network.ServiceGenerator;
 import de.hdmstuttgart.gitlapp.data.repositories.IssueRepository;
 import de.hdmstuttgart.gitlapp.data.repositories.ProfileRepository;
 import de.hdmstuttgart.gitlapp.data.repositories.ProjectRepository;
-import de.hdmstuttgart.gitlapp.viewmodels.IssueDetailViewModelFactory;
+import de.hdmstuttgart.gitlapp.viewmodels.vmpFactories.IssueDetailViewModelFactory;
+import de.hdmstuttgart.gitlapp.viewmodels.vmpFactories.IssueOverviewViewModelFactory;
+import de.hdmstuttgart.gitlapp.viewmodels.vmpFactories.LoginViewModelFactory;
+import de.hdmstuttgart.gitlapp.viewmodels.vmpFactories.ProjectsViewModelFactory;
 
 
 //Container of objects shared across the whole app (dependency injection)
@@ -35,6 +38,9 @@ public class AppContainer {
 
     // - - - - - - view model provider factories - - - - -
     public IssueDetailViewModelFactory issueDetailViewModelFactory;
+    public IssueOverviewViewModelFactory issueOverviewViewModelFactory;
+    public LoginViewModelFactory loginViewModelFactory;
+    public ProjectsViewModelFactory projectsViewModelFactory;
 
 
     // - - - - - - Background threading - - - - - - - - -
@@ -57,6 +63,9 @@ public class AppContainer {
             profileRepository = new ProfileRepository(Objects.requireNonNull(appDatabase), Objects.requireNonNull(gitLabClient));
 
             issueDetailViewModelFactory = new IssueDetailViewModelFactory(issueRepository);
+            issueOverviewViewModelFactory = new IssueOverviewViewModelFactory(issueRepository);
+            loginViewModelFactory = new LoginViewModelFactory(profileRepository);
+            projectsViewModelFactory = new ProjectsViewModelFactory(projectRepository);
 
         } else {
             Log.e("Api", "Can not find base url in shard preferences"); //can never happen

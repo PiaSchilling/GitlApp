@@ -1,10 +1,11 @@
-package de.hdmstuttgart.gitlapp.viewmodels;
+package de.hdmstuttgart.gitlapp.viewmodels.vmpFactories;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
 import de.hdmstuttgart.gitlapp.data.repositories.IssueRepository;
+import de.hdmstuttgart.gitlapp.viewmodels.IssueOverviewViewModel;
 
 public class IssueOverviewViewModelFactory implements ViewModelProvider.Factory {
 
