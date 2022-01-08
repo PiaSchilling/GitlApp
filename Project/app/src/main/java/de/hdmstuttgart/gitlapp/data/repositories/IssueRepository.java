@@ -67,7 +67,7 @@ public class IssueRepository {
         Log.d("Api","Accesstoken " + accessToken);
         Log.d("Api",  "ProjectId " + projectId);
 
-        Call<List<Issue>> call = gitLabClient.getProjectIssues(7124, accessToken); //todo make access token not hardcoded
+        Call<List<Issue>> call = gitLabClient.getProjectIssues(projectId, accessToken); //todo make access token not hardcoded
         call.enqueue(new Callback<List<Issue>>() {
             @Override
             public void onResponse(Call<List<Issue>> call, Response<List<Issue>> response) {
