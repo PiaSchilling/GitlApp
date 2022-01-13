@@ -59,7 +59,8 @@
             android:layout_marginHorizontal="5dp"
             android:layout_toStartOf="@id/weight_chip"
             android:text="closed"
-            app:chipSurfaceColor="@color/red" />
+            app:chipSurfaceColor="@color/red"
+            android:textColor="@color/white"/>
 
         <com.google.android.material.chip.Chip
             android:id="@+id/weight_chip"

@@ -168,6 +168,7 @@ public class IssueDetailFragment extends Fragment {
 
                 labelChip.setText(label.getName());
                 labelChip.setChipBackgroundColor(ColorStateList.valueOf(Color.parseColor(label.getColor())));
+                labelChip.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(getActivity(),R.color.white)));
                 binding.labelContainer.addView(labelChip);
             }
 
