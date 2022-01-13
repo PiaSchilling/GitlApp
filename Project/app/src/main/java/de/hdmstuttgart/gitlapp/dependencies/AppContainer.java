@@ -65,7 +65,7 @@ public class AppContainer {
             issueDetailViewModelFactory = new IssueDetailViewModelFactory(issueRepository);
             issueOverviewViewModelFactory = new IssueOverviewViewModelFactory(issueRepository);
             loginViewModelFactory = new LoginViewModelFactory(profileRepository);
-            projectsViewModelFactory = new ProjectsViewModelFactory(projectRepository);
+            projectsViewModelFactory = new ProjectsViewModelFactory(projectRepository, profileRepository);
 
         } else {
             Log.e("Api", "Can not find base url in shard preferences"); //can never happen

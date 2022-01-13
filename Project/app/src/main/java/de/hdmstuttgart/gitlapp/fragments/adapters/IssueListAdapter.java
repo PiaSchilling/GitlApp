@@ -48,8 +48,6 @@ public class IssueListAdapter extends RecyclerView.Adapter<IssueListAdapter.View
             calendarIcon = itemView.findViewById(R.id.calendar_icon);
             iidTextView = itemView.findViewById(R.id.issue_iid_card);
             statusBar = itemView.findViewById(R.id.status_bar);
-
-
         }
 
         public TextView getIssueTitleTextView() {

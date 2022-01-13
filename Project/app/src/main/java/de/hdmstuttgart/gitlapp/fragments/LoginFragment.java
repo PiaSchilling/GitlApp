@@ -118,7 +118,7 @@ public class LoginFragment extends Fragment {
                     editor.apply();
 
                     getActivity().getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.fragment_container, IssueOverviewFragment.class, null) //todo replace to project overview fragment
+                            .replace(R.id.fragment_container, ProjectsFragment.class, null)
                             .addToBackStack(null)
                             .commit();
                 }

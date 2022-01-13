@@ -89,8 +89,9 @@ public class ProfileRepository {
     }
 
     public User getLoggedIdUser(){
-        int userId = appDatabase.profileDao().getProfile().getId();
-        return appDatabase.userDao().getUserById(userId);
+        int localUserId = appDatabase.profileDao().getProfile().getLoggedInUserId();
+        Log.e("ST-", "localUserId " + localUserId);
+        return appDatabase.userDao().getUserById(localUserId);
     }
 
     public Profile getUserProfile(){

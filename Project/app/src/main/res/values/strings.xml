@@ -35,5 +35,6 @@
     <string name="tab_closed">closed</string>
     <string name="tab_all">all</string>
     <string name="add_new_issue">Add new issue</string>
+    <string name="project_toolbarTitle">Projects Overview</string>
 
 </resources>

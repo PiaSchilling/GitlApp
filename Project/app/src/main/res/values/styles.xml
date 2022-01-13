@@ -20,6 +20,12 @@
         <item name="cornerSize">50%</item>
     </style>
 
+    <style name="roundedImageViewProject">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+        <item name="strokeWidth">2dp</item>
+    </style>
+
 
     --- Text input ---
     <style name="TextInput" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
@@ -31,6 +37,14 @@
     --- Text styles ---
     <style name="TextViewSubtitle1">
         <item name="android:textSize">12dp</item>
+        <item name="textAllCaps">true</item>
+        <item name="android:textAppearance">@style/TextAppearance.MaterialComponents.Subtitle1
+        </item>
+        <item name="android:textColor">@color/lightGrey</item>
+    </style>
+
+    <style name="TextViewIntitals">
+        <item name="android:textSize">20dp</item>
         <item name="textAllCaps">true</item>
         <item name="android:textAppearance">@style/TextAppearance.MaterialComponents.Subtitle1
         </item>

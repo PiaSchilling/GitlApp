@@ -21,6 +21,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,6 +31,7 @@ import de.hdmstuttgart.gitlapp.CustomApplication;
 import de.hdmstuttgart.gitlapp.databinding.FragmentProjectsBinding;
 import de.hdmstuttgart.gitlapp.fragments.adapters.ProjectListAdapter;
 import de.hdmstuttgart.gitlapp.models.Project;
+import de.hdmstuttgart.gitlapp.models.User;
 import de.hdmstuttgart.gitlapp.viewmodels.ProjectsViewModel;
 import de.hdmstuttgart.gitlapp.viewmodels.vmpFactories.ProjectsViewModelFactory;
 
@@ -99,8 +102,8 @@ public class ProjectsFragment extends Fragment {
 
         // --- get related view model
 
-        // wird noch ausgetaucht zu container.getFactory()
-        ProjectsViewModelFactory factory = new ProjectsViewModelFactory(container.projectRepository);
+        // wird noch ausgetauscht zu container.getFactory()
+        ProjectsViewModelFactory factory = new ProjectsViewModelFactory(container.projectRepository, container.profileRepository);
         projectsViewModel = new ViewModelProvider(this, factory).get(ProjectsViewModel.class);
 
         // --- get data from view model
@@ -126,15 +129,19 @@ public class ProjectsFragment extends Fragment {
 
         recyclerView = binding.projectsRecyclerView;
 
-
         // create and add adapter
         addListAdapter();
 
         // user Card
-        imageView = binding.userCard.avatar;
+        imageView = binding.userCard.projectAvatar;
         user = binding.userCard.userNameLabel;
 
-        user.setText("hello");
+        user.setText(projectsViewModel.getLoggedInUserName());
+
+        Glide.with(getContext())
+                .load(projectsViewModel.getLoggedInUserAvatar())
+                .into(imageView);
+
 
         // swipe to refresh
         swipeRefresh = binding.swipeRefreshProject;

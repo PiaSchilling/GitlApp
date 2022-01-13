@@ -37,7 +37,7 @@ public class ProjectRepository {
             this.accessToken = appDatabase.profileDao().getProfile().getAccessToken();
         }catch (NullPointerException e){
             Log.e("Api","Access token is null or empty");
-            this.accessToken = "Bearer glpat-im7xUxYLmQv1LnKnvesr"; // to prevent the app from crashing (maybe find a better solution)
+           // this.accessToken = "Bearer glpat-im7xUxYLmQv1LnKnvesr"; // to prevent the app from crashing (maybe find a better solution)
         }
     }
 
@@ -59,7 +59,7 @@ public class ProjectRepository {
      */
     public void refreshProjects(){
 
-        Call<List<Project>> call = gitLabClient.getMemberProjects("Bearer glpat-im7xUxYLmQv1LnKnvesr");
+        Call<List<Project>> call = gitLabClient.getMemberProjects(accessToken);
         call.enqueue(new Callback<List<Project>>() {
             @Override
             public void onResponse(Call<List<Project>> call, Response<List<Project>> response) {
