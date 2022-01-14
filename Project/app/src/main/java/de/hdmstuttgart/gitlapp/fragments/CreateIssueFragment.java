@@ -1,5 +1,7 @@
 package de.hdmstuttgart.gitlapp.fragments;
 
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -8,12 +10,19 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.CompoundButton;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
+
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -80,23 +89,43 @@ public class CreateIssueFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // - - - - - fill the spinner widgets with content - - - - -
-        Spinner milestoneSpinner = binding.milestoneSpinner;
-        Spinner labelSpinner = binding.labelSpinner; //todo make it possible to select no milestone or label
+        // - - - - - label selection - - - - -
+        ChipGroup labelGroup = binding.labelChipGroup;
+        final List<String> selectedLabels = new ArrayList<>();
 
-        List<String> projectMilestones = viewModel.getProjectMilestoneNames(7124); //todo make not hardcoded
-        ArrayAdapter<String> milestoneAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, projectMilestones);
+        // add labels to group
+        List<Label> labels = viewModel.getProjectLabels(7124);
+        for (Label label: labels){
 
-        List<String> projectLabels = viewModel.getProjectLabelsNames(7124);
-        ArrayAdapter<String> labelAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item,projectLabels);
+            Chip labelChip = new Chip(getActivity());
+            labelChip.setLayoutParams(new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+            ));
 
-        milestoneSpinner.setAdapter(milestoneAdapter);
-        labelSpinner.setAdapter(labelAdapter);
+            labelChip.setText(label.getName());
+            labelChip.setChipBackgroundColor(ColorStateList.valueOf(Color.parseColor(label.getColor())));
+            labelChip.setCheckable(true);
+            labelChip.setCheckedIconVisible(true);
+
+            labelChip.setOnCheckedChangeListener((compoundButton, b) -> {
+                if(b){
+                    selectedLabels.add(labelChip.getText().toString());
+                }else{
+                    selectedLabels.remove(labelChip.getText().toString());
+                }
+            });
+            labelGroup.addView(labelChip);
+        }
+
+
 
         // - - - - - action listeners - - - - -
         binding.createButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                Log.d("Label", selectedLabels.toString());
 
                 String title = binding.inputIssueTitle.getEditText().getText().toString();
                 String description = binding.inputIssueDescription.getEditText().getText().toString();
@@ -104,7 +133,7 @@ public class CreateIssueFragment extends Fragment {
                 int weight = Integer.parseInt(binding.inputIssueWeight.getEditText().getText().toString()); //todo number format exception on empty string
 
                 if(!title.isEmpty()){
-                    viewModel.postNewIssue(7124,title,description,null,2,0,null); //todo implement labels and milestones
+                    viewModel.postNewIssue(7124,title,description,null,2,0,selectedLabels); //todo implement labels and milestones
                 }else{
                     Toast.makeText(getActivity(),"Title can not be empty", Toast.LENGTH_SHORT).show();
                 }

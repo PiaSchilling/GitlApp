@@ -101,6 +101,7 @@ public class IssueRepository {
             @Override
             public void onResponse(Call<Issue> call, Response<Issue> response) {
                 if(response.isSuccessful()){
+                    Log.d("Api", response.body().toString());
                     networkCallMessage.setValue("Add issue successful");
                     refreshProjectIssues(projectId); //todo its not efficient to make two network calls!
                 }else{

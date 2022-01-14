@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import de.hdmstuttgart.gitlapp.data.repositories.IssueRepository;
@@ -23,9 +24,13 @@ public class CreateIssueViewModel extends ViewModel {
         this.projectRepository = projectRepository;
     }
 
-    public void postNewIssue(int projectId, String issueTitle, String issueDescription, String dueDate, int weight, int milestoneId, String labels){
-
-        issueRepository.postNewIssue(projectId,issueTitle,issueDescription, dueDate, weight, milestoneId, labels);
+    public void postNewIssue(int projectId, String issueTitle, String issueDescription, String dueDate, int weight, int milestoneId, List<String> labels){
+        StringBuilder labelString = new StringBuilder();
+        for (String label : labels){
+            labelString.append(label).append(",");
+        }
+        Log.d("Label", labelString.toString());
+        issueRepository.postNewIssue(projectId,issueTitle,issueDescription, dueDate, weight, milestoneId, labelString.toString());
     }
 
     /**
@@ -40,6 +45,23 @@ public class CreateIssueViewModel extends ViewModel {
                 .collect(Collectors.toList());
         names.add("-"); //to also provide the option to select no label at all
          return names;
+    }
+
+    public List<Label> getProjectLabels(int projectId){
+        return projectRepository.getProjectLabels(projectId);
+    }
+
+    public Label getLabelByName(int projectId, String name){
+        List<Label> projectLabels = projectRepository.getProjectLabels(projectId);
+
+        Optional<Label> result = projectLabels.stream().filter(label -> label.getName().equals(name)).findAny();
+
+        if(result.isPresent()){
+            return result.get();
+        }else{
+            Log.e("Api","No label with name " + name + " in project " + projectId + " found");
+            return null; //todo dangerous
+        }
     }
 
     /**

@@ -76,25 +76,22 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
-    <Spinner
-        android:id="@+id/milestone_spinner"
-        style="@style/OutlineSpinner"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginTop="20dp"
-        android:spinnerMode="dropdown"
+    <TextView
+        android:id="@+id/select_labels"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Select labels"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/input_issue_weight"
-        tools:layout_editor_absoluteX="15dp" />
+        android:layout_marginTop="20dp"/>
 
-    <Spinner
-        android:id="@+id/label_spinner"
-        style="@style/OutlineSpinner"
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/label_chip_group"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginTop="20dp"
-        android:spinnerMode="dropdown"
-        app:layout_constraintTop_toBottomOf="@+id/milestone_spinner"
-        tools:layout_editor_absoluteX="15dp" />
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/select_labels"
+        tools:layout_editor_absoluteX="15dp"
+        android:layout_marginTop="20dp"/>
 
     <com.google.android.material.button.MaterialButton
         style="@style/OutlinedButton"
@@ -104,8 +101,7 @@
         android:text="@string/button_create_issue"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/label_spinner" />
+        app:layout_constraintStart_toStartOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
