@@ -195,6 +195,16 @@ public class IssueOverviewFragment extends Fragment {
                 //not needed for now
             }
         });
+
+        binding.addIssueButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, CreateIssueFragment.class, null)
+                        .addToBackStack(null)
+                        .commit();
+            }
+        });
     }
 
     //created list adapter and sets it to the recyclerview

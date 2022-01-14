@@ -16,7 +16,6 @@ import de.hdmstuttgart.gitlapp.models.User;
 public class IssueDetailViewModel extends ViewModel {
 
     private final IssueRepository issueRepository;
-    private final MutableLiveData<Issue> issueMutableLiveData = new MutableLiveData<>();
 
 
     /**

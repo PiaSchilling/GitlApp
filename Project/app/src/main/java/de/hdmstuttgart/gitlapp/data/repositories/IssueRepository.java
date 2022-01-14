@@ -40,7 +40,6 @@ public class IssueRepository {
             this.accessToken = appDatabase.profileDao().getProfile().getAccessToken();
         }catch (NullPointerException e){
             Log.e("Api","Access token is null or empty");
-            //this.accessToken = "Bearer glpat-im7xUxYLmQv1LnKnvesr"; // to prevent the app from crashing (maybe find a better solution) //todo remove
         }
 
     }
@@ -63,11 +62,8 @@ public class IssueRepository {
     public void refreshProjectIssues(int projectId) {
         //todo make background thread for this (threadpool)
         //todo implement a callback
-        Log.d("Api", "Called refresh data");
-        Log.d("Api","Accesstoken " + accessToken);
-        Log.d("Api",  "ProjectId " + projectId);
 
-        Call<List<Issue>> call = gitLabClient.getProjectIssues(projectId, accessToken); //todo make access token not hardcoded
+        Call<List<Issue>> call = gitLabClient.getProjectIssues(projectId, accessToken);
         call.enqueue(new Callback<List<Issue>>() {
             @Override
             public void onResponse(Call<List<Issue>> call, Response<List<Issue>> response) {
@@ -86,25 +82,42 @@ public class IssueRepository {
                         networkCallMessage.setValue("Error, code " + response.code());
                     }
                     Log.e("Api", "IssueCall FAIL, code " + response.code());
-                    Log.d("Api",accessToken);
-                    Log.d("Api",projectId+"");
-                    Log.d("Api",response.errorBody()+"");
-                    Log.d("Api",response.message());
                 }
             }
 
             @Override
             public void onFailure(Call<List<Issue>> call, Throwable t) {
-                Log.d("Api", "Oh no " + t.getMessage() + ", data not updated");//todo make toast
+                Log.d("Api", "Oh no " + t.getMessage() + ", data not updated");
                 Log.d("Api",t.toString());
                 t.printStackTrace();
-               // responseList = ORM.completeIssueObjects(projectId, appDatabase); //todo remove (is not necessary bc of initData method)
-                //Log.d("Api", "Loaded: " + responseList.toString());
                 networkCallMessage.setValue("Oh no, check your wifi connection");
-                //issuesLiveData.postValue(responseList);
             }
         });
-        //issuesLiveData.setValue(responseList);
+    }
+
+    public void postNewIssue(int projectId, String issueTitle, String issueDescription, String dueDate, int weight, int milestoneId, String labels){
+        Call<Issue> call = gitLabClient.postNewIssue(projectId,accessToken,issueTitle,issueDescription,dueDate,weight,milestoneId,labels);
+        call.enqueue(new Callback<Issue>() {
+            @Override
+            public void onResponse(Call<Issue> call, Response<Issue> response) {
+                if(response.isSuccessful()){
+                    networkCallMessage.setValue("Add issue successful");
+                    refreshProjectIssues(projectId); //todo its not efficient to make two network calls!
+                }else{
+                    Log.e("Api","IssuePost FAIL, " + response.code());
+                    networkCallMessage.setValue("Add issue failed, " + response.code()); //todo implement more meaningful message
+                    Log.e("Api", String.valueOf(response.errorBody()));
+                    Log.e("Api",response.message());
+                    Log.e("Api",accessToken);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Issue> call, Throwable t) {
+                networkCallMessage.setValue("Add issue failed, check wifi connection");
+                Log.e("Api","IssuePost FAIL, " + t.getMessage());
+            }
+        });
     }
 
     public MutableLiveData<List<Issue>> getIssueListLiveData() {

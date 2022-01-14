@@ -9,6 +9,8 @@ import java.util.List;
 
 import de.hdmstuttgart.gitlapp.data.database.AppDatabase;
 import de.hdmstuttgart.gitlapp.data.network.GitLabClient;
+import de.hdmstuttgart.gitlapp.models.Label;
+import de.hdmstuttgart.gitlapp.models.Milestone;
 import de.hdmstuttgart.gitlapp.models.Project;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -37,7 +39,6 @@ public class ProjectRepository {
             this.accessToken = appDatabase.profileDao().getProfile().getAccessToken();
         }catch (NullPointerException e){
             Log.e("Api","Access token is null or empty");
-           // this.accessToken = "Bearer glpat-im7xUxYLmQv1LnKnvesr"; // to prevent the app from crashing (maybe find a better solution)
         }
     }
 
@@ -91,14 +92,18 @@ public class ProjectRepository {
 
             @Override
             public void onFailure(Call<List<Project>> call, Throwable t) {
-                Log.d("Api","Oh no " + t.getMessage() + ", loading data form database");//todo make toast (make refresh data throw exception)
+                Log.d("Api","Oh no " + t.getMessage() + ", loading data form database");
                 responseList = appDatabase.projectDao().getAllProjects();
             }
         });
-        // projectsLiveData.setValue(responseList);
-        // Log.e("ST-", "projectsLiveData in refreshProjects() " + projectsLiveData.getValue().toString());
-        //  Log.e("ST-", "responselist in refreshProjects() " + responseList.toString());
+    }
 
+    public List<Label> getProjectLabels(int projectId){
+        return appDatabase.labelDao().getProjectLabels(projectId); //todo implement api call, only already by issue used labels are already in the db
+    }
+
+    public List<Milestone> getProjectMilestones(int projectId){
+        return appDatabase.milestoneDao().getProjectMilestones(projectId); //todo implement api call, only already by issue used milestones are already in the db
     }
 
     public MutableLiveData<List<Project>> getProjectLiveData(){

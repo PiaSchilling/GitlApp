@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="15dp">
+    android:padding="15dp"
+    android:background="@drawable/gradient_background">
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/input_issue_title"
@@ -96,7 +97,7 @@
         tools:layout_editor_absoluteX="15dp" />
 
     <com.google.android.material.button.MaterialButton
-        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        style="@style/OutlinedButton"
         android:id="@+id/create_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
