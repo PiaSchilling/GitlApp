@@ -98,7 +98,30 @@ public class ProjectRepository {
         });
     }
 
+    public void fetchProjectLabels(int projectId){
+        Call<List<Label>> call = gitLabClient.getProjectLabels(projectId,accessToken);
+        call.enqueue(new Callback<List<Label>>() {
+            @Override
+            public void onResponse(Call<List<Label>> call, Response<List<Label>> response) {
+
+                if(response.isSuccessful()){
+                    List<Label> temp = response.body();
+                    appDatabase.labelDao().insertLabels(temp);
+                    appDatabase.labelDao().setProjectIdForIssue(projectId);
+                }else{
+                    Log.e("Api","FAIL, code: " + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Label>> call, Throwable t) {
+                Log.e("Api","FAIL, code: " + t.getMessage());
+            }
+        });
+    }
+
     public List<Label> getProjectLabels(int projectId){
+        fetchProjectLabels(projectId);
         return appDatabase.labelDao().getProjectLabels(projectId); //todo implement api call, only already by issue used labels are already in the db
     }
 

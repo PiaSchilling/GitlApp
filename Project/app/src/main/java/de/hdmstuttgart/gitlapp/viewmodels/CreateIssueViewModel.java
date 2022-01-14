@@ -1,5 +1,7 @@
 package de.hdmstuttgart.gitlapp.viewmodels;
 
+import android.util.Log;
+
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
@@ -22,6 +24,7 @@ public class CreateIssueViewModel extends ViewModel {
     }
 
     public void postNewIssue(int projectId, String issueTitle, String issueDescription, String dueDate, int weight, int milestoneId, String labels){
+
         issueRepository.postNewIssue(projectId,issueTitle,issueDescription, dueDate, weight, milestoneId, labels);
     }
 
@@ -31,10 +34,12 @@ public class CreateIssueViewModel extends ViewModel {
      * @return a list of strings containing only the names of the labels
      */
     public List<String> getProjectLabelsNames(int projectId){
-         return projectRepository.getProjectLabels(projectId)
-                 .stream()
-                 .map(Label::getName)
-                 .collect(Collectors.toList());
+        List<String> names = projectRepository.getProjectLabels(projectId)
+                .stream()
+                .map(Label::getName)
+                .collect(Collectors.toList());
+        names.add("-"); //to also provide the option to select no label at all
+         return names;
     }
 
     /**
@@ -43,9 +48,11 @@ public class CreateIssueViewModel extends ViewModel {
      * @return a list of strings containing only the names of the milestones
      */
     public List<String> getProjectMilestoneNames(int projectId){
-        return projectRepository.getProjectMilestones(projectId)
+        List<String> names = projectRepository.getProjectMilestones(projectId)
                 .stream()
                 .map(Milestone::getTitle)
                 .collect(Collectors.toList());
+        names.add("-"); //to also provide the option to select no milestone at all
+        return names;
     }
 }

@@ -3,6 +3,7 @@ package de.hdmstuttgart.gitlapp.data.network;
 import java.util.List;
 
 import de.hdmstuttgart.gitlapp.models.Issue;
+import de.hdmstuttgart.gitlapp.models.Label;
 import de.hdmstuttgart.gitlapp.models.Project;
 import de.hdmstuttgart.gitlapp.models.User;
 import retrofit2.Call;
@@ -40,6 +41,10 @@ public interface GitLabClient {
                                    @Query("weight") int weight,
                                    @Query("milestone_id") int milestoneId,
                                    @Query("labels") String labels);
+
+    @GET("projects/{id}/labels")
+    Call<List<Label>> getProjectLabels(@Path ("id") int projectId,
+                                 @Header("Authorization") String auth);
 
 
 }
