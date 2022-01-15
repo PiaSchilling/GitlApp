@@ -1,7 +1,9 @@
 package de.hdmstuttgart.gitlapp.fragments;
 
+import android.app.DatePickerDialog;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -18,6 +20,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
+import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -26,6 +29,7 @@ import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import de.hdmstuttgart.gitlapp.CustomApplication;
@@ -100,11 +104,15 @@ public class CreateIssueFragment extends Fragment {
             }
         });
 
-        // - - - - - label selection - - - - -
+        // - - - - - label and milestone selection - - - - -
         ChipGroup labelGroup = binding.labelChipGroup;
-        final List<String> selectedLabels = new ArrayList<>();
+        ChipGroup milestoneGroup = binding.milestoneChipGroup;
 
-        // add labels to group
+        List<String> selectedLabels = new ArrayList<>();
+        String selectedMilestone;
+
+        //fill chip groups
+        //label group
         List<Label> labels = viewModel.getProjectLabels(7124);
         for (Label label: labels){
 
@@ -129,27 +137,69 @@ public class CreateIssueFragment extends Fragment {
             labelGroup.addView(labelChip);
         }
 
+        //milestone group
+        List<Milestone> milestones = viewModel.getProjectMilestones(7124);
+        for (Milestone milestone : milestones){
+
+            Chip milestoneChip = new Chip(getActivity());
+            milestoneChip.setLayoutParams(new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+            ));
+
+            milestoneChip.setCheckable(true);
+            milestoneChip.setCheckedIconVisible(true);
+            milestoneChip.setText(milestone.getTitle());
+            milestoneGroup.addView(milestoneChip);
+        }
+
+        // - - - - - date  selection - - - - -
+        DatePickerDialog.OnDateSetListener dateSetListener;
+        final String[] dateString = new String[1]; //needs to be an array bc of lambda onDataSet
+
+        //date picker for issue due date
+        dateSetListener = (datePicker, year, month, day) -> {
+            month += 1;
+            Log.d("Date",year + "-" + month + "-" + day);
+            dateString[0] = year + "-" + month + "-" + day;
+        };
 
 
-        // - - - - - action listeners - - - - -
-        binding.createButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        binding.dueDateButton.setOnClickListener(view1 -> {
+            Calendar cal = Calendar.getInstance();
+            int year = cal.get(Calendar.YEAR);
+            int month = cal.get(Calendar.MONTH);
+            int day = cal.get(Calendar.DAY_OF_MONTH);
 
-                Log.d("Label", selectedLabels.toString());
+            DatePickerDialog dialog = new DatePickerDialog(getActivity(), android.R.style.Theme_Material_Dialog,dateSetListener,year,month,day);
+            dialog.setTitle("Choose issue due date");
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.DKGRAY));
+            dialog.show();
+        });
 
-                String title = binding.inputIssueTitle.getEditText().getText().toString();
-                String description = binding.inputIssueDescription.getEditText().getText().toString();
-                String dueDate = binding.inputIssueDuedate.getEditText().getText().toString();
-                int weight = Integer.parseInt(binding.inputIssueWeight.getEditText().getText().toString()); //todo number format exception on empty string
 
-                if(!title.isEmpty()){
-                    viewModel.postNewIssue(7124,title,description,null,2,selectedLabels); //todo implement labels and milestones
-                }else{
-                    Toast.makeText(getActivity(),"Title can not be empty", Toast.LENGTH_SHORT).show();
-                }
+        // - - - - button listeners - - - -
+        binding.createButton.setOnClickListener(view12 -> {
 
+            Chip chip = milestoneGroup.findViewById(milestoneGroup.getCheckedChipId());
+            String title = binding.inputIssueTitle.getEditText().getText().toString();
+            String description = binding.inputIssueDescription.getEditText().getText().toString();
+            String dueDate = dateString[0];
+            String weight = binding.inputIssueWeight.getEditText().getText().toString();
+            String milestoneName = null;
+
+            if(chip != null){
+                 milestoneName = chip.getText().toString();
             }
+
+            //title may not be empty
+            if(!title.isEmpty()){
+                viewModel.postNewIssue(7124,title,description,dueDate,weight,selectedLabels,milestoneName); //todo implement labels and milestones
+            }else{
+                Toast.makeText(getActivity(),"Title can not be empty", Toast.LENGTH_SHORT).show();
+            }
+
         });
     }
+
 }

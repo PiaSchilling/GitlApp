@@ -4,6 +4,7 @@ import java.util.List;
 
 import de.hdmstuttgart.gitlapp.models.Issue;
 import de.hdmstuttgart.gitlapp.models.Label;
+import de.hdmstuttgart.gitlapp.models.Milestone;
 import de.hdmstuttgart.gitlapp.models.Project;
 import de.hdmstuttgart.gitlapp.models.User;
 import retrofit2.Call;
@@ -39,12 +40,16 @@ public interface GitLabClient {
                                    @Query("description") String issueDescription,
                                    @Query("due_date") String dueDate,
                                    @Query("weight") int weight,
-                            //       @Query("milestone_id") int milestoneId,
+                                   @Query("milestone_id") int milestoneId,
                                    @Query("labels") String labels);
 
     @GET("projects/{id}/labels")
     Call<List<Label>> getProjectLabels(@Path ("id") int projectId,
                                  @Header("Authorization") String auth);
+
+    @GET("projects/{id}/milestones")
+    Call<List<Milestone>> getProjectMilestones(@Path("id") int projectId,
+                                               @Header("Authorization") String auth);
 
 
 }
