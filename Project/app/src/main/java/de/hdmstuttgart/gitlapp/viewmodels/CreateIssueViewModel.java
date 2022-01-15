@@ -24,13 +24,13 @@ public class CreateIssueViewModel extends ViewModel {
         this.projectRepository = projectRepository;
     }
 
-    public void postNewIssue(int projectId, String issueTitle, String issueDescription, String dueDate, int weight, int milestoneId, List<String> labels){
+    public void postNewIssue(int projectId, String issueTitle, String issueDescription, String dueDate, int weight, List<String> labels){
         StringBuilder labelString = new StringBuilder();
         for (String label : labels){
             labelString.append(label).append(",");
         }
         Log.d("Label", labelString.toString());
-        issueRepository.postNewIssue(projectId,issueTitle,issueDescription, dueDate, weight, milestoneId, labelString.toString());
+        issueRepository.postNewIssue(projectId,issueTitle,issueDescription, dueDate, weight, labelString.toString());
     }
 
     /**
@@ -62,6 +62,10 @@ public class CreateIssueViewModel extends ViewModel {
             Log.e("Api","No label with name " + name + " in project " + projectId + " found");
             return null; //todo dangerous
         }
+    }
+
+    public MutableLiveData<String> getMessage() {
+        return issueRepository.getNetworkCallMessage();
     }
 
     /**

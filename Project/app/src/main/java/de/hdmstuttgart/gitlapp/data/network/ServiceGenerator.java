@@ -17,12 +17,18 @@ public class ServiceGenerator {
 
     public ServiceGenerator(String baseUrl){
 
+        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
+        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+        OkHttpClient client = new OkHttpClient.Builder()
+                .addInterceptor(interceptor).build();
+
         Gson gson = new GsonBuilder()
                 .setLenient()
                 .create();
 
         Retrofit.Builder retrofitBuilder = new Retrofit.Builder()
                 .baseUrl(baseUrl)
+                .client(client)
                 .addConverterFactory(GsonConverterFactory.create(gson));
 
         Retrofit retrofit = retrofitBuilder.build();

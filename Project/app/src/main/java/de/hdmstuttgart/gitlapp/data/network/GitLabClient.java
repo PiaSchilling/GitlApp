@@ -33,13 +33,13 @@ public interface GitLabClient {
                                          @Header("Authorization") String auth);
 
     @POST("projects/{id}/issues")
-    Call<Issue> postNewIssue(@Path("id") int projectId,
+    Call<Void> postNewIssue(@Path("id") int projectId,
                                    @Header("Authorization") String auth,
                                    @Query("title") String issueTitle,
                                    @Query("description") String issueDescription,
                                    @Query("due_date") String dueDate,
                                    @Query("weight") int weight,
-                                   @Query("milestone_id") int milestoneId,
+                            //       @Query("milestone_id") int milestoneId,
                                    @Query("labels") String labels);
 
     @GET("projects/{id}/labels")

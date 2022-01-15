@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.util.Log;
@@ -89,6 +90,16 @@ public class CreateIssueFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        // - - - - -  data observation - - - -
+        networkCallMessage = viewModel.getMessage();
+        networkCallMessage.observe(getViewLifecycleOwner(), new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+                Toast.makeText(getActivity(), networkCallMessage.getValue(), Toast.LENGTH_SHORT).show();
+                //todo if successful end fragment
+            }
+        });
+
         // - - - - - label selection - - - - -
         ChipGroup labelGroup = binding.labelChipGroup;
         final List<String> selectedLabels = new ArrayList<>();
@@ -133,7 +144,7 @@ public class CreateIssueFragment extends Fragment {
                 int weight = Integer.parseInt(binding.inputIssueWeight.getEditText().getText().toString()); //todo number format exception on empty string
 
                 if(!title.isEmpty()){
-                    viewModel.postNewIssue(7124,title,description,null,2,0,selectedLabels); //todo implement labels and milestones
+                    viewModel.postNewIssue(7124,title,description,null,2,selectedLabels); //todo implement labels and milestones
                 }else{
                     Toast.makeText(getActivity(),"Title can not be empty", Toast.LENGTH_SHORT).show();
                 }

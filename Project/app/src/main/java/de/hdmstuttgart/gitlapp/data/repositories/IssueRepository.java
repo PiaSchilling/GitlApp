@@ -95,13 +95,13 @@ public class IssueRepository {
         });
     }
 
-    public void postNewIssue(int projectId, String issueTitle, String issueDescription, String dueDate, int weight, int milestoneId, String labels){
-        Call<Issue> call = gitLabClient.postNewIssue(projectId,accessToken,issueTitle,issueDescription,dueDate,weight,milestoneId,labels);
-        call.enqueue(new Callback<Issue>() {
+    public void postNewIssue(int projectId, String issueTitle, String issueDescription, String dueDate, int weight,  String labels){
+        Call<Void> call = gitLabClient.postNewIssue(projectId,accessToken,issueTitle,issueDescription,dueDate,weight,labels);
+        call.enqueue(new Callback<Void>() {
             @Override
-            public void onResponse(Call<Issue> call, Response<Issue> response) {
+            public void onResponse(Call<Void> call, Response<Void> response) {
                 if(response.isSuccessful()){
-                    Log.d("Api", response.body().toString());
+                    Log.d("Api","IssuePost SUCCESS");
                     networkCallMessage.setValue("Add issue successful");
                     refreshProjectIssues(projectId); //todo its not efficient to make two network calls!
                 }else{
@@ -109,12 +109,11 @@ public class IssueRepository {
                     networkCallMessage.setValue("Add issue failed, " + response.code()); //todo implement more meaningful message
                     Log.e("Api", String.valueOf(response.errorBody()));
                     Log.e("Api",response.message());
-                    Log.e("Api",accessToken);
                 }
             }
 
             @Override
-            public void onFailure(Call<Issue> call, Throwable t) {
+            public void onFailure(Call<Void> call, Throwable t) {
                 networkCallMessage.setValue("Add issue failed, check wifi connection");
                 Log.e("Api","IssuePost FAIL, " + t.getMessage());
             }
