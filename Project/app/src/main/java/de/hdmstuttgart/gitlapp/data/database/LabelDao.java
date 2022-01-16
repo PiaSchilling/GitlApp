@@ -28,16 +28,17 @@ public interface LabelDao {
     @Delete
     int deleteLabels(Label... labels); //returns an int to indicate how many rows were been deleted
 
-    //@Query("SELECT * FROM labels")
-    //List<Label> getAllLabels();
+    @Query("SELECT * FROM labels")
+    List<Label> getAllLabels();
 
-    //@Query("SELECT * FROM labels WHERE project_id = :projectId") //get all labels of a specific project
-    //List<Label> getProjectLabels(int projectId);
+    @Query("SELECT * FROM labels WHERE project_id = :projectId") //get all labels of a specific project
+    List<Label> getProjectLabels(int projectId);
 
     @Query("SELECT * FROM labels WHERE issue_id = :issueId") //get all labels of an specific issue
     List<Label> getIssueLabels(int issueId);
 
-    //@Query("SELECT * FROM labels" + "JOIN project ON id = label.project_id")
+    @Query("UPDATE labels SET project_id = :projectId WHERE issue_id = 0 AND project_id = 0")
+    void setProjectIdForIssue(int projectId);
 
 }
 

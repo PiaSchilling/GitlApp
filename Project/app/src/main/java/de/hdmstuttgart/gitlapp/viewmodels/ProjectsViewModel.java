@@ -8,7 +8,6 @@ import java.util.List;
 import de.hdmstuttgart.gitlapp.data.repositories.ProfileRepository;
 import de.hdmstuttgart.gitlapp.data.repositories.ProjectRepository;
 import de.hdmstuttgart.gitlapp.models.Project;
-import de.hdmstuttgart.gitlapp.models.User;
 
 public class ProjectsViewModel extends ViewModel {
 
@@ -33,7 +32,7 @@ public class ProjectsViewModel extends ViewModel {
 
     // reine durch-reiche Methode
     public MutableLiveData<List<Project>> getMutableLiveData(){
-        return projectRepository.getProjectLiveData();
+        return projectRepository.getProjectsLiveData();
     }
 
     
@@ -42,7 +41,6 @@ public class ProjectsViewModel extends ViewModel {
      */
     public void initProjectsLiveData(){
         projectRepository.initProjects();
-        projectRepository.refreshProjects();
     }
 
 

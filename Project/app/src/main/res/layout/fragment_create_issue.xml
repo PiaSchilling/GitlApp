@@ -1,110 +1,130 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<ScrollView
+
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="15dp">
+    android:background="@drawable/gradient_background">
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/input_issue_title"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
 
-        <com.google.android.material.textfield.TextInputEditText
+        android:padding="15dp">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/input_issue_title"
+            style="@style/TextInput"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/hint_issue_title" />
+            android:layout_marginTop="10dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-    </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/hint_issue_title" />
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/input_issue_description"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        app:layout_constraintTop_toBottomOf="@+id/input_issue_title"
-        app:layout_goneMarginTop="20dp"
-        tools:layout_editor_absoluteX="10dp">
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:hint="@string/hint_issue_description"
-            android:inputType="textMultiLine" />
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/input_issue_duedate"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/input_issue_description">
-
-        <com.google.android.material.textfield.TextInputEditText
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/input_issue_description"
+            style="@style/TextInput"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/hint_due_date"
-            android:inputType="date" />
+            android:layout_marginTop="20dp"
+            app:layout_constraintTop_toBottomOf="@+id/input_issue_title">
 
-    </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:hint="@string/hint_issue_description"
+                android:inputType="textMultiLine" />
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/input_issue_weight"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/input_issue_duedate">
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputEditText
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/input_issue_weight"
+            style="@style/TextInput"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/hint_issue_weight"
-            android:inputType="number" />
+            android:layout_marginTop="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/input_issue_description">
 
-    </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/hint_issue_weight"
+                android:inputType="number" />
 
-    <Spinner
-        android:id="@+id/milestone_spinner"
-        style="@style/OutlineSpinner"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginTop="20dp"
-        android:spinnerMode="dropdown"
-        app:layout_constraintTop_toBottomOf="@+id/input_issue_weight"
-        tools:layout_editor_absoluteX="15dp" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-    <Spinner
-        android:id="@+id/label_spinner"
-        style="@style/OutlineSpinner"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginTop="20dp"
-        android:spinnerMode="dropdown"
-        app:layout_constraintTop_toBottomOf="@+id/milestone_spinner"
-        tools:layout_editor_absoluteX="15dp" />
-
-    <com.google.android.material.button.MaterialButton
-        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-        android:id="@+id/create_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/button_create_issue"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/label_spinner" />
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/due_date_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="select due date"
+            app:icon="@drawable/ic_calendar"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/input_issue_weight" />
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/select_labels"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Select labels"
+            android:textColor="@color/lightGrey"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/due_date_button" />
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/label_chip_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            app:layout_constraintTop_toBottomOf="@+id/select_labels"
+            tools:layout_editor_absoluteX="15dp" />
+
+        <TextView
+            android:id="@+id/select_milestone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Select milestone"
+            android:textColor="@color/lightGrey"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/label_chip_group" />
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/milestone_chip_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="20dp"
+            app:layout_constraintTop_toBottomOf="@+id/select_milestone"
+            app:singleSelection="true"
+            tools:layout_editor_absoluteX="15dp" />
+
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/create_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/button_create_issue"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/milestone_chip_group" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
