@@ -73,6 +73,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:text="select due date"
+            style="@style/OutlinedButton"
             app:icon="@drawable/ic_calendar"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/input_issue_weight" />

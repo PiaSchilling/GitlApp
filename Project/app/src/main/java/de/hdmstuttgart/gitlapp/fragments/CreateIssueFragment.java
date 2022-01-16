@@ -8,6 +8,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
@@ -33,6 +34,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import de.hdmstuttgart.gitlapp.CustomApplication;
+import de.hdmstuttgart.gitlapp.R;
 import de.hdmstuttgart.gitlapp.databinding.FragmentCreateIssueBinding;
 import de.hdmstuttgart.gitlapp.dependencies.AppContainer;
 import de.hdmstuttgart.gitlapp.models.Label;
@@ -133,6 +135,7 @@ public class CreateIssueFragment extends Fragment {
 
             labelChip.setText(label.getName());
             labelChip.setChipBackgroundColor(ColorStateList.valueOf(Color.parseColor(label.getColor())));
+            labelChip.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(getActivity(), R.color.white)));
             labelChip.setCheckable(true);
             labelChip.setCheckedIconVisible(true);
 
@@ -171,6 +174,7 @@ public class CreateIssueFragment extends Fragment {
             month += 1;
             Log.d("Date",year + "-" + month + "-" + day);
             dateString[0] = year + "-" + month + "-" + day;
+            binding.dueDateButton.setText(dateString[0]);
         };
 
 
