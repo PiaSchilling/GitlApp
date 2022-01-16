@@ -8,6 +8,10 @@ import de.hdmstuttgart.gitlapp.data.repositories.IssueRepository;
 import de.hdmstuttgart.gitlapp.data.repositories.ProfileRepository;
 import de.hdmstuttgart.gitlapp.viewmodels.LoginViewModel;
 
+/**
+ * needed bc only the profile repo can/should be instanced without the right base url
+ * ViewModelFactory needs all three repos as parameters
+ */
 public class LoginViewModelFactory implements ViewModelProvider.Factory {
 
     private final ProfileRepository profileRepository;
@@ -15,6 +19,7 @@ public class LoginViewModelFactory implements ViewModelProvider.Factory {
     public LoginViewModelFactory(ProfileRepository profileRepository){
         this.profileRepository = profileRepository;
     }
+
     @NonNull
     @Override
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {

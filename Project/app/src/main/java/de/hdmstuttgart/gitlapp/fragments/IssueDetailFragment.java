@@ -30,7 +30,6 @@ import de.hdmstuttgart.gitlapp.databinding.FragmentIssueDetailBinding;
 import de.hdmstuttgart.gitlapp.models.Issue;
 import de.hdmstuttgart.gitlapp.models.Label;
 import de.hdmstuttgart.gitlapp.viewmodels.IssueDetailViewModel;
-import de.hdmstuttgart.gitlapp.viewmodels.vmpFactories.IssueDetailViewModelFactory;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -78,12 +77,10 @@ public class IssueDetailFragment extends Fragment {
         }
 
         //- - - - get the view model and init data - - - -
-        AppContainer appContainer = ((CustomApplication) getActivity().getApplication())
+        AppContainer container = ((CustomApplication) getActivity().getApplication())
                 .getAppContainer(getActivity().getApplicationContext());
 
-        IssueDetailViewModelFactory issueDetailViewModelFactory = new IssueDetailViewModelFactory(appContainer.issueRepository);
-
-        viewModel = new ViewModelProvider(this, issueDetailViewModelFactory)
+        viewModel = new ViewModelProvider(this, container.viewModelFactory)
                 .get(IssueDetailViewModel.class);
 
         setLiveData();

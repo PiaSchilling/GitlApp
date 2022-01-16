@@ -31,9 +31,7 @@ import de.hdmstuttgart.gitlapp.CustomApplication;
 import de.hdmstuttgart.gitlapp.databinding.FragmentProjectsBinding;
 import de.hdmstuttgart.gitlapp.fragments.adapters.ProjectListAdapter;
 import de.hdmstuttgart.gitlapp.models.Project;
-import de.hdmstuttgart.gitlapp.models.User;
 import de.hdmstuttgart.gitlapp.viewmodels.ProjectsViewModel;
-import de.hdmstuttgart.gitlapp.viewmodels.vmpFactories.ProjectsViewModelFactory;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -96,17 +94,14 @@ public class ProjectsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
+        // - - - - get the related view model - - - - -
         AppContainer container = ((CustomApplication) getActivity().getApplication())
                 .getAppContainer(getActivity().getApplicationContext());
 
-        // --- get related view model
+        projectsViewModel = new ViewModelProvider(this, container.viewModelFactory)
+                .get(ProjectsViewModel.class);
 
-        // wird noch ausgetauscht zu container.getFactory()
-        ProjectsViewModelFactory factory = new ProjectsViewModelFactory(container.projectRepository, container.profileRepository);
-        projectsViewModel = new ViewModelProvider(this, factory).get(ProjectsViewModel.class);
-
-        // --- get data from view model
+        // - - - - - get data from view model - - - - -
         projectsViewModel.initProjectsLiveData();
         projectsLiveData = projectsViewModel.getMutableLiveData();
         projectList.addAll(projectsLiveData.getValue());

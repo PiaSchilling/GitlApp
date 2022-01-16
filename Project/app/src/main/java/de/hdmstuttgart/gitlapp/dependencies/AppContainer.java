@@ -14,12 +14,7 @@ import de.hdmstuttgart.gitlapp.data.network.ServiceGenerator;
 import de.hdmstuttgart.gitlapp.data.repositories.IssueRepository;
 import de.hdmstuttgart.gitlapp.data.repositories.ProfileRepository;
 import de.hdmstuttgart.gitlapp.data.repositories.ProjectRepository;
-import de.hdmstuttgart.gitlapp.viewmodels.vmpFactories.CreateIssueViewModelFactory;
-import de.hdmstuttgart.gitlapp.viewmodels.vmpFactories.IssueDetailViewModelFactory;
-import de.hdmstuttgart.gitlapp.viewmodels.vmpFactories.IssueOverviewViewModelFactory;
-import de.hdmstuttgart.gitlapp.viewmodels.vmpFactories.LoginViewModelFactory;
-import de.hdmstuttgart.gitlapp.viewmodels.vmpFactories.ProjectsViewModelFactory;
-
+import de.hdmstuttgart.gitlapp.viewmodels.vmpFactories.ViewModelFactory;
 
 //Container of objects shared across the whole app (dependency injection)
 public class AppContainer {
@@ -38,11 +33,7 @@ public class AppContainer {
 
 
     // - - - - - - view model provider factories - - - - -
-    public IssueDetailViewModelFactory issueDetailViewModelFactory;
-    public IssueOverviewViewModelFactory issueOverviewViewModelFactory;
-    public LoginViewModelFactory loginViewModelFactory;
-    public ProjectsViewModelFactory projectsViewModelFactory;
-    public CreateIssueViewModelFactory createIssueViewModelFactory;
+    public ViewModelFactory viewModelFactory;
 
 
     // - - - - - - Background threading - - - - - - - - -
@@ -64,11 +55,7 @@ public class AppContainer {
             projectRepository = new ProjectRepository(Objects.requireNonNull(appDatabase), Objects.requireNonNull(gitLabClient));
             profileRepository = new ProfileRepository(Objects.requireNonNull(appDatabase), Objects.requireNonNull(gitLabClient));
 
-            issueDetailViewModelFactory = new IssueDetailViewModelFactory(issueRepository);
-            issueOverviewViewModelFactory = new IssueOverviewViewModelFactory(issueRepository);
-            loginViewModelFactory = new LoginViewModelFactory(profileRepository);
-            projectsViewModelFactory = new ProjectsViewModelFactory(projectRepository, profileRepository);
-            createIssueViewModelFactory = new CreateIssueViewModelFactory(issueRepository,projectRepository);
+            viewModelFactory = new ViewModelFactory(issueRepository, projectRepository, profileRepository);
 
         } else {
             Log.e("Api", "Can not find base url in shard preferences"); //can never happen

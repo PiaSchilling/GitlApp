@@ -18,12 +18,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.CompoundButton;
-import android.widget.DatePicker;
 import android.widget.LinearLayout;
-import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.android.material.chip.Chip;
@@ -40,7 +35,6 @@ import de.hdmstuttgart.gitlapp.dependencies.AppContainer;
 import de.hdmstuttgart.gitlapp.models.Label;
 import de.hdmstuttgart.gitlapp.models.Milestone;
 import de.hdmstuttgart.gitlapp.viewmodels.CreateIssueViewModel;
-import de.hdmstuttgart.gitlapp.viewmodels.vmpFactories.CreateIssueViewModelFactory;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -86,9 +80,7 @@ public class CreateIssueFragment extends Fragment {
         AppContainer container = ((CustomApplication) getActivity().getApplication())
                 .getAppContainer(getActivity().getApplicationContext());
 
-        CreateIssueViewModelFactory factory = container.createIssueViewModelFactory;
-
-        viewModel = new ViewModelProvider(this, factory)
+        viewModel = new ViewModelProvider(this, container.viewModelFactory)
                 .get(CreateIssueViewModel.class);
 
 

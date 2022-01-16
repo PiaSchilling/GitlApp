@@ -34,7 +34,6 @@ import de.hdmstuttgart.gitlapp.databinding.FragmentIssueOverviewBinding;
 import de.hdmstuttgart.gitlapp.fragments.adapters.IssueListAdapter;
 import de.hdmstuttgart.gitlapp.models.Issue;
 import de.hdmstuttgart.gitlapp.viewmodels.IssueOverviewViewModel;
-import de.hdmstuttgart.gitlapp.viewmodels.vmpFactories.IssueOverviewViewModelFactory;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -102,9 +101,7 @@ public class IssueOverviewFragment extends Fragment {
         AppContainer container = ((CustomApplication) getActivity().getApplication())
                 .getAppContainer(getActivity().getApplicationContext());
 
-        IssueOverviewViewModelFactory factory = container.issueOverviewViewModelFactory;
-
-        viewModel = new ViewModelProvider(this, factory)
+        viewModel = new ViewModelProvider(this, container.viewModelFactory)
                 .get(IssueOverviewViewModel.class);
 
         // - - - - -  init and update data
