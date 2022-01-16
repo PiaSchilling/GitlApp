@@ -66,8 +66,12 @@
 
 
  --- Button style ---
-    <style name="OutlinedButton" >
+    <style name="OutlinedButton" parent="Widget.MaterialComponents.Button.OutlinedButton">
         <item name="backgroundTint"> @color/transparent</item>
+        <item name="strokeWidth">2dp</item>
+        <item name="strokeColor">@color/middleGrey</item>
+
+
     </style>
 
 
