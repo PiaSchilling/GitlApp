@@ -37,7 +37,7 @@ public interface LabelDao {
     @Query("SELECT * FROM labels WHERE issue_id = :issueId") //get all labels of an specific issue
     List<Label> getIssueLabels(int issueId);
 
-    @Query("UPDATE labels SET project_id = :projectId WHERE issue_id = 0")
+    @Query("UPDATE labels SET project_id = :projectId WHERE issue_id = 0 AND project_id = 0")
     void setProjectIdForIssue(int projectId);
 
 }

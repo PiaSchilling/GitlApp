@@ -6,6 +6,8 @@ import androidx.room.Ignore;
 import androidx.room.Insert;
 import androidx.room.PrimaryKey;
 
+import java.util.List;
+
 
 @Entity(tableName = "projects")
 public class Project {
@@ -16,6 +18,11 @@ public class Project {
     private String description;
     private  int ownerId;
     private String avatar_url;
+
+    @Ignore
+    private List<Label> projectLabels;
+    @Ignore
+    private List<Milestone> projectMilestones;
 
 
     @Ignore

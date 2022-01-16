@@ -42,13 +42,15 @@ public class ProjectRepository {
         }
     }
 
+    // - - - - projects overview - - - - -
 
     /**
-     * loads the locally stored project (local cache)
+     * loads the locally stored project (local cache) and tries to update
      * should be called on app start, in case there is no network connection data is still displayed
      */
     public void initProjects() {
         responseList = appDatabase.projectDao().getAllProjects();
+        refreshProjects();
         projectsLiveData.setValue(responseList);
         Log.d("Api", "Loaded local data " + responseList.toString());
     }
@@ -91,6 +93,16 @@ public class ProjectRepository {
         });
     }
 
+    public MutableLiveData<List<Project>> getProjectsLiveData() {
+        return this.projectsLiveData;
+    }
+
+    public MutableLiveData<String> getNetworkCallMessage() {
+        return networkCallMessage;
+    }
+
+
+    // - - - - - single project detail - - - - - -
 
     /**
      * make an api call to get all labels by a specific project
@@ -131,7 +143,6 @@ public class ProjectRepository {
             public void onResponse(Call<List<Milestone>> call, Response<List<Milestone>> response) {
                 if (response.isSuccessful()) {
                     List<Milestone> temp = response.body();
-                    Log.e("Milestone", temp.toString());
                     appDatabase.milestoneDao().insertMilestones(temp);
                 } else {
                     Log.e("Api", "fetchProjectMilestones call NOT SUCCESSFUL, code: " + response.code());
@@ -168,12 +179,6 @@ public class ProjectRepository {
         return appDatabase.milestoneDao().getProjectMilestones(projectId); //todo implement api call, only already by issue used milestones are already in the db
     }
 
-    public MutableLiveData<List<Project>> getProjectLiveData() {
-        return this.projectsLiveData;
-    }
 
-    public MutableLiveData<String> getNetworkCallMessage() {
-        return networkCallMessage;
-    }
 
 }
