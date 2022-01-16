@@ -81,8 +81,6 @@ public class IssueDetailFragment extends Fragment {
         AppContainer appContainer = ((CustomApplication) getActivity().getApplication())
                 .getAppContainer(getActivity().getApplicationContext());
 
-        appContainer.issueRepository.initProjectIssues(7124);//todo remove
-
         IssueDetailViewModelFactory issueDetailViewModelFactory = new IssueDetailViewModelFactory(appContainer.issueRepository);
 
         viewModel = new ViewModelProvider(this, issueDetailViewModelFactory)
@@ -108,7 +106,6 @@ public class IssueDetailFragment extends Fragment {
      * call method from viewModel to init the data related with this view/fragment
      */
     private void setLiveData() {
-        viewModel.refreshData();//todo remove (will be made by issueOverviewDetail)
         this.issueLiveData = viewModel.getIssueDetailLiveData(issueId);
     }
 

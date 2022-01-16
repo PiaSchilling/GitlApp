@@ -47,10 +47,13 @@ import de.hdmstuttgart.gitlapp.viewmodels.vmpFactories.CreateIssueViewModelFacto
  */
 public class CreateIssueFragment extends Fragment {
 
-    FragmentCreateIssueBinding binding;
-    CreateIssueViewModel viewModel;
+    private static final String ARG_PARAM1 = "projectId";
+    private int projectId;
 
-    MutableLiveData<String> networkCallMessage;
+    private FragmentCreateIssueBinding binding;
+    private CreateIssueViewModel viewModel;
+
+    private MutableLiveData<String> networkCallMessage;
 
     public CreateIssueFragment() {
         // Required empty public constructor
@@ -60,17 +63,23 @@ public class CreateIssueFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
+     * @param projectId the id of the project the issue should be created for
      * @return A new instance of fragment CreateIssueFragment.
      */
-    public static CreateIssueFragment newInstance(String param1, String param2) {
-        return new CreateIssueFragment();
+    public static CreateIssueFragment newInstance(int projectId) {
+        CreateIssueFragment fragment = new CreateIssueFragment();
+        Bundle args = new Bundle();
+        args.putInt(ARG_PARAM1, projectId);
+        fragment.setArguments(args);
+        return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            projectId = getArguments().getInt(ARG_PARAM1);
+        }
 
         AppContainer container = ((CustomApplication) getActivity().getApplication())
                 .getAppContainer(getActivity().getApplicationContext());
@@ -113,7 +122,7 @@ public class CreateIssueFragment extends Fragment {
 
         //fill chip groups
         //label group
-        List<Label> labels = viewModel.getProjectLabels(7124);
+        List<Label> labels = viewModel.getProjectLabels(projectId);
         for (Label label: labels){
 
             Chip labelChip = new Chip(getActivity());
@@ -138,7 +147,7 @@ public class CreateIssueFragment extends Fragment {
         }
 
         //milestone group
-        List<Milestone> milestones = viewModel.getProjectMilestones(7124);
+        List<Milestone> milestones = viewModel.getProjectMilestones(projectId);
         for (Milestone milestone : milestones){
 
             Chip milestoneChip = new Chip(getActivity());
@@ -194,7 +203,7 @@ public class CreateIssueFragment extends Fragment {
 
             //title may not be empty
             if(!title.isEmpty()){
-                viewModel.postNewIssue(7124,title,description,dueDate,weight,selectedLabels,milestoneName); //todo implement labels and milestones
+                viewModel.postNewIssue(projectId,title,description,dueDate,weight,selectedLabels,milestoneName); //todo implement labels and milestones
             }else{
                 Toast.makeText(getActivity(),"Title can not be empty", Toast.LENGTH_SHORT).show();
             }

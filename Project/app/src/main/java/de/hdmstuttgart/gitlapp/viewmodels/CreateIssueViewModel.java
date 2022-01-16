@@ -24,6 +24,9 @@ public class CreateIssueViewModel extends ViewModel {
         this.projectRepository = projectRepository;
     }
 
+    /**
+     * modifies the user input that it fits for the api call
+     */
     public void postNewIssue(int projectId, String issueTitle, String issueDescription, String dueDate, String weight, List<String> labels, String milestoneName){
 
         //build label string
@@ -54,20 +57,6 @@ public class CreateIssueViewModel extends ViewModel {
         issueRepository.postNewIssue(projectId,issueTitle,issueDescription,dueDate,weightInt,labelString.toString(),milestoneId);
     }
 
-    /**
-     * gets the names from all labels of a project and puts them into a list
-     * @param projectId the project to get the labels for
-     * @return a list of strings containing only the names of the labels
-     */
-    public List<String> getProjectLabelsNames(int projectId){
-        List<String> names = projectRepository.getProjectLabels(projectId)
-                .stream()
-                .map(Label::getName)
-                .collect(Collectors.toList());
-        names.add("-"); //to also provide the option to select no label at all
-         return names;
-    }
-
     public List<Label> getProjectLabels(int projectId){
         return projectRepository.getProjectLabels(projectId);
     }
@@ -76,34 +65,7 @@ public class CreateIssueViewModel extends ViewModel {
         return projectRepository.getProjectMilestones(projectId);
     }
 
-    public Label getLabelByName(int projectId, String name){
-        List<Label> projectLabels = projectRepository.getProjectLabels(projectId);
-
-        Optional<Label> result = projectLabels.stream().filter(label -> label.getName().equals(name)).findAny();
-
-        if(result.isPresent()){
-            return result.get();
-        }else{
-            Log.e("Api","No label with name " + name + " in project " + projectId + " found");
-            return null; //todo dangerous
-        }
-    }
-
     public MutableLiveData<String> getMessage() {
         return issueRepository.getNetworkCallMessage();
-    }
-
-    /**
-     * gets the names from all milestones of a project and puts them into a list
-     * @param projectId the project to get the milestones for
-     * @return a list of strings containing only the names of the milestones
-     */
-    public List<String> getProjectMilestoneNames(int projectId){
-        List<String> names = projectRepository.getProjectMilestones(projectId)
-                .stream()
-                .map(Milestone::getTitle)
-                .collect(Collectors.toList());
-        names.add("-"); //to also provide the option to select no milestone at all
-        return names;
     }
 }

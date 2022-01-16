@@ -42,8 +42,4 @@ public class IssueDetailViewModel extends ViewModel {
             return fallBackLiveData;
         }
     }
-
-    public void refreshData(){
-        issueRepository.refreshProjectIssues(7124);
-    }
 }

@@ -199,8 +199,10 @@ public class IssueOverviewFragment extends Fragment {
         binding.addIssueButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Bundle bundle = new Bundle();
+                bundle.putInt("projectId",projectId);
                 getActivity().getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_container, CreateIssueFragment.class, null)
+                        .replace(R.id.fragment_container, CreateIssueFragment.class, bundle)
                         .addToBackStack(null)
                         .commit();
             }
