@@ -11,7 +11,7 @@
     <string name="label_mail">Mail</string>
     <string name="label_access_token">Access Token</string>
     <string name="hint_host_URL">https://...</string>
-    <string name="hint_user_id">2312</string>
+    <string name="hint_user_id">Enter your user id here</string>
     <string name="hint_access_token">Put your GitLab token here</string>
     <string name="label_loggedInAs">Logged in as</string>
     <string name="button_remove">Remove</string>
