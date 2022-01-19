@@ -65,7 +65,7 @@ public class IssueOverviewFragment extends Fragment {
     private MutableLiveData<String> networkCallMessage; //inform the user of update fail/success
     private final List<Issue> issueList = new ArrayList<>();
 
-    //tab filtering
+    //tab filtering, all per default/on fragment start
     private String tabFilter = "all";
 
 
@@ -131,7 +131,6 @@ public class IssueOverviewFragment extends Fragment {
         recyclerView = binding.recyclerView;
         button = binding.addIssueButton;
         swipeRefreshLayout = binding.swipeRefresh;
-
         toolbar.setTitle(getString(R.string.bar_title, projectName));
 
         //create and add adapter
@@ -162,29 +161,18 @@ public class IssueOverviewFragment extends Fragment {
             }
         });
 
-        // define action when tabs are changed (sort list)
+        // define action when tabs are changed (filter list)
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 try {
                     String state = Objects.requireNonNull(tab.getText()).toString();
-
-                    if (state.equals("open")) {
-                        // issueList.removeAll(viewModel.filterIssuesByState("closed"));
-                        //adapter.notifyDataSetChanged();
-                        setFilter("open");
-                    } else if (state.equals("closed")) {
-                        //issueList.removeAll(viewModel.filterIssuesByState("opened"));
-                        //adapter.notifyDataSetChanged();
-                        setFilter("closed");
-                    }else if(state.equals("all")){
-                        setFilter("all");
-                    }
+                    setFilter(state);
+                    applyFilter();
                 } catch (NullPointerException e) {
                     Log.e("Api", e.getMessage());
                 }
-                applyFilter();
             }
 
             @SuppressLint("NotifyDataSetChanged")
@@ -214,7 +202,9 @@ public class IssueOverviewFragment extends Fragment {
         });
     }
 
-    //created list adapter and sets it to the recyclerview
+    /**
+     * creates the list adapter and sets it to the recyclerview
+     */
     private void addListAdapter() {
         adapter = new IssueListAdapter(issueList, getActivity());
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
@@ -222,23 +212,27 @@ public class IssueOverviewFragment extends Fragment {
         recyclerView.setAdapter(adapter);
     }
 
+    /**
+     * @param filterString the string which represents the selected state (open,closed,all)
+     */
     private void setFilter(String filterString) {
         tabFilter = filterString;
-        Log.d("Filter", "Filter set");
     }
 
+    /**
+     * applies the currently set filter by removing the issues which have the contrary state
+     * (do noting if all is selected)
+     */
+    @SuppressLint("NotifyDataSetChanged")
     private void applyFilter() {
         switch (tabFilter) {
             case "open":
                 issueList.removeAll(viewModel.filterIssuesByState("closed"));
-                Log.d("Filter","open");
                 break;
             case "closed":
                 issueList.removeAll(viewModel.filterIssuesByState("opened"));
-                Log.d("Filter","closed");
                 break;
-            case "all": /*do nothing*/
-                Log.d("Filter","all");
+            case "all": /*do nothing but needed otherwise default will be chosen*/
                 break;
             default:
                 Log.e("Api", "No valid tab filter");
