@@ -1,12 +1,8 @@
 package de.hdmstuttgart.gitlapp.models;
 
-import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
-import androidx.room.Insert;
 import androidx.room.PrimaryKey;
-
-import java.util.List;
 
 
 @Entity(tableName = "projects")
@@ -16,21 +12,17 @@ public class Project {
     private int id;
     private String name;
     private String description;
-    private  int ownerId;
+    private  int owner_id;
     private String avatar_url;
+    private String name_with_namespace;
+    private String owner_name;
 
     @Ignore
-    private List<Label> projectLabels;
-    @Ignore
-    private List<Milestone> projectMilestones;
-
-
-    @Ignore
-    public Project(int id, String name, String description, int ownerId, String avatar_url) {
+    public Project(int id, String name, String description, int owner_id, String avatar_url) {
         this.id = id;
         this.name = name;
         this.description = description;
-        this.ownerId = ownerId;
+        this.owner_id = owner_id;
         this.avatar_url = avatar_url;
     }
 
@@ -82,12 +74,29 @@ public class Project {
         this.avatar_url = avatar_url;
     }
 
-    public int getOwnerId() {
-        return ownerId;
+    public int getOwner_id() {
+        return owner_id;
     }
 
-    public void setOwnerId(int ownerId) {
-        this.ownerId = ownerId;
+    public void setOwner_id(int owner_id) {
+        this.owner_id = owner_id;
+    }
+
+    public String getName_with_namespace() {
+        return name_with_namespace;
+    }
+
+    public void setName_with_namespace(String name_with_namespace) {
+        this.name_with_namespace = name_with_namespace;
+    }
+
+    public String getOwner_name() {
+        int index = name_with_namespace.indexOf('/');
+        return name_with_namespace.substring(0,index);
+    }
+
+    public void setOwner_name(String owner_name) {
+        this.owner_name = owner_name;
     }
 }
 
