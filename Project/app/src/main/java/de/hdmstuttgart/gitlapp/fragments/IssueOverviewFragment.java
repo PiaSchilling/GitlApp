@@ -65,6 +65,8 @@ public class IssueOverviewFragment extends Fragment {
     private MutableLiveData<String> networkCallMessage; //inform the user of update fail/success
     private final List<Issue> issueList = new ArrayList<>();
 
+    //tab filtering
+    private String tabFilter = "all";
 
 
     public IssueOverviewFragment() {
@@ -75,7 +77,7 @@ public class IssueOverviewFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param projectId the id of the project the overview is for to get the right issues
+     * @param projectId   the id of the project the overview is for to get the right issues
      * @param projectName the id of the projectName to show it in the app bar
      * @return A new instance of fragment IssueOverviewFragment.
      */
@@ -140,12 +142,13 @@ public class IssueOverviewFragment extends Fragment {
         issueListLiveData.observe(getViewLifecycleOwner(), changeList -> {
             issueList.clear();
             issueList.addAll(changeList);
+            applyFilter();
             issueList.sort(Comparator.comparingInt(Issue::getIid).reversed());
             adapter.notifyDataSetChanged(); //todo replace with more efficient
         });
 
         networkCallMessage.observe(getViewLifecycleOwner(), s -> {
-            Toast.makeText(getActivity(),s,Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), s, Toast.LENGTH_LONG).show();
             swipeRefreshLayout.setRefreshing(false); //when receive message update failed/success -> stop refreshing
         });
 
@@ -153,7 +156,7 @@ public class IssueOverviewFragment extends Fragment {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                Toast.makeText(getActivity(),"try to update",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "try to update", Toast.LENGTH_SHORT).show();
                 viewModel.updateIssueLiveData(projectId);
                 adapter.notifyDataSetChanged();
             }
@@ -164,19 +167,24 @@ public class IssueOverviewFragment extends Fragment {
             @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                try{
+                try {
                     String state = Objects.requireNonNull(tab.getText()).toString();
 
                     if (state.equals("open")) {
-                        issueList.removeAll(viewModel.filterIssuesByState("closed"));
-                        adapter.notifyDataSetChanged();
-                    }else if(state.equals("closed")){
-                        issueList.removeAll(viewModel.filterIssuesByState("opened"));
-                        adapter.notifyDataSetChanged();
+                        // issueList.removeAll(viewModel.filterIssuesByState("closed"));
+                        //adapter.notifyDataSetChanged();
+                        setFilter("open");
+                    } else if (state.equals("closed")) {
+                        //issueList.removeAll(viewModel.filterIssuesByState("opened"));
+                        //adapter.notifyDataSetChanged();
+                        setFilter("closed");
+                    }else if(state.equals("all")){
+                        setFilter("all");
                     }
-                }catch (NullPointerException e){
-                    Log.e("Api",e.getMessage());
+                } catch (NullPointerException e) {
+                    Log.e("Api", e.getMessage());
                 }
+                applyFilter();
             }
 
             @SuppressLint("NotifyDataSetChanged")
@@ -197,7 +205,7 @@ public class IssueOverviewFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Bundle bundle = new Bundle();
-                bundle.putInt("projectId",projectId);
+                bundle.putInt("projectId", projectId);
                 getActivity().getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragment_container, CreateIssueFragment.class, bundle)
                         .addToBackStack(null)
@@ -212,5 +220,29 @@ public class IssueOverviewFragment extends Fragment {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
+    }
+
+    private void setFilter(String filterString) {
+        tabFilter = filterString;
+        Log.d("Filter", "Filter set");
+    }
+
+    private void applyFilter() {
+        switch (tabFilter) {
+            case "open":
+                issueList.removeAll(viewModel.filterIssuesByState("closed"));
+                Log.d("Filter","open");
+                break;
+            case "closed":
+                issueList.removeAll(viewModel.filterIssuesByState("opened"));
+                Log.d("Filter","closed");
+                break;
+            case "all": /*do nothing*/
+                Log.d("Filter","all");
+                break;
+            default:
+                Log.e("Api", "No valid tab filter");
+        }
+        adapter.notifyDataSetChanged();
     }
 }
