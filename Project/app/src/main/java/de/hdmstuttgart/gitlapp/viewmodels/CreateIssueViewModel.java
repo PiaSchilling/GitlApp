@@ -57,12 +57,12 @@ public class CreateIssueViewModel extends ViewModel {
         issueRepository.postNewIssue(projectId,issueTitle,issueDescription,dueDate,weightInt,labelString.toString(),milestoneId);
     }
 
-    public List<Label> getProjectLabels(int projectId){
-        return projectRepository.getProjectLabels(projectId);
+    public MutableLiveData<List<Label>> getProjectLabels(int projectId){
+        return projectRepository.getLabelsLiveData(projectId);
     }
 
-    public List<Milestone> getProjectMilestones(int projectId){
-        return projectRepository.getProjectMilestones(projectId);
+    public MutableLiveData<List<Milestone>>getProjectMilestones(int projectId){
+        return projectRepository.getMilestoneLiveData(projectId);
     }
 
     public MutableLiveData<String> getMessage() {

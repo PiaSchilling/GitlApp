@@ -50,6 +50,8 @@ public class CreateIssueFragment extends Fragment {
     private CreateIssueViewModel viewModel;
 
     private MutableLiveData<String> networkCallMessage;
+    private MutableLiveData<List<Label>> projectLabels;
+    private MutableLiveData<List<Milestone>> projectMilestones;
 
     public CreateIssueFragment() {
         // Required empty public constructor
@@ -83,6 +85,8 @@ public class CreateIssueFragment extends Fragment {
         viewModel = new ViewModelProvider(this, container.viewModelFactory)
                 .get(CreateIssueViewModel.class);
 
+        projectLabels = viewModel.getProjectLabels(projectId);
+        projectMilestones = viewModel.getProjectMilestones(projectId);
 
     }
 
@@ -114,48 +118,60 @@ public class CreateIssueFragment extends Fragment {
         List<String> selectedLabels = new ArrayList<>();
         String selectedMilestone;
 
-        //fill chip groups
-        //label group
-        List<Label> labels = viewModel.getProjectLabels(projectId);
-        for (Label label: labels){
+        projectLabels.observe(getViewLifecycleOwner(), new Observer<List<Label>>() {
+            @Override
+            public void onChanged(List<Label> labels) {
+                labelGroup.removeAllViews();
+                //fill chip groups
+                //label group
+                Log.d("Labels", "labels " + labels.toString());
+                for (Label label : labels) {
 
-            Chip labelChip = new Chip(getActivity());
-            labelChip.setLayoutParams(new LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.WRAP_CONTENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT
-            ));
+                    Chip labelChip = new Chip(getActivity());
+                    labelChip.setLayoutParams(new LinearLayout.LayoutParams(
+                            LinearLayout.LayoutParams.WRAP_CONTENT,
+                            LinearLayout.LayoutParams.WRAP_CONTENT
+                    ));
 
-            labelChip.setText(label.getName());
-            labelChip.setChipBackgroundColor(ColorStateList.valueOf(Color.parseColor(label.getColor())));
-            labelChip.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(getActivity(), R.color.white)));
-            labelChip.setCheckable(true);
-            labelChip.setCheckedIconVisible(true);
+                    labelChip.setText(label.getName());
+                    labelChip.setChipBackgroundColor(ColorStateList.valueOf(Color.parseColor(label.getColor())));
+                    labelChip.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(getActivity(), R.color.white)));
+                    labelChip.setCheckable(true);
+                    labelChip.setCheckedIconVisible(true);
 
-            labelChip.setOnCheckedChangeListener((compoundButton, b) -> {
-                if(b){
-                    selectedLabels.add(labelChip.getText().toString());
-                }else{
-                    selectedLabels.remove(labelChip.getText().toString());
+                    labelChip.setOnCheckedChangeListener((compoundButton, b) -> {
+                        if (b) {
+                            selectedLabels.add(labelChip.getText().toString());
+                        } else {
+                            selectedLabels.remove(labelChip.getText().toString());
+                        }
+                    });
+                    labelGroup.addView(labelChip);
                 }
-            });
-            labelGroup.addView(labelChip);
-        }
+            }
+        });
 
-        //milestone group
-        List<Milestone> milestones = viewModel.getProjectMilestones(projectId);
-        for (Milestone milestone : milestones){
+        projectMilestones.observe(getViewLifecycleOwner(), new Observer<List<Milestone>>() {
+            @Override
+            public void onChanged(List<Milestone> milestones) {
+                milestoneGroup.removeAllViews();
+                for (Milestone milestone : milestones) {
+                    Log.d("Labels", "stones " + milestones.toString());
 
-            Chip milestoneChip = new Chip(getActivity());
-            milestoneChip.setLayoutParams(new LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.WRAP_CONTENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT
-            ));
+                    Chip milestoneChip = new Chip(getActivity());
+                    milestoneChip.setLayoutParams(new LinearLayout.LayoutParams(
+                            LinearLayout.LayoutParams.WRAP_CONTENT,
+                            LinearLayout.LayoutParams.WRAP_CONTENT
+                    ));
 
-            milestoneChip.setCheckable(true);
-            milestoneChip.setCheckedIconVisible(true);
-            milestoneChip.setText(milestone.getTitle());
-            milestoneGroup.addView(milestoneChip);
-        }
+                    milestoneChip.setCheckable(true);
+                    milestoneChip.setCheckedIconVisible(true);
+                    milestoneChip.setText(milestone.getTitle());
+                    milestoneGroup.addView(milestoneChip);
+                }
+            }
+        });
+
 
         // - - - - - date  selection - - - - -
         DatePickerDialog.OnDateSetListener dateSetListener;
@@ -164,7 +180,7 @@ public class CreateIssueFragment extends Fragment {
         //date picker for issue due date
         dateSetListener = (datePicker, year, month, day) -> {
             month += 1;
-            Log.d("Date",year + "-" + month + "-" + day);
+            Log.d("Date", year + "-" + month + "-" + day);
             dateString[0] = year + "-" + month + "-" + day;
             binding.dueDateButton.setText(dateString[0]);
         };
@@ -176,7 +192,7 @@ public class CreateIssueFragment extends Fragment {
             int month = cal.get(Calendar.MONTH);
             int day = cal.get(Calendar.DAY_OF_MONTH);
 
-            DatePickerDialog dialog = new DatePickerDialog(getActivity(), android.R.style.Theme_Material_Dialog,dateSetListener,year,month,day);
+            DatePickerDialog dialog = new DatePickerDialog(getActivity(), android.R.style.Theme_Material_Dialog, dateSetListener, year, month, day);
             dialog.setTitle("Choose issue due date");
             dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.DKGRAY));
             dialog.show();
@@ -193,15 +209,15 @@ public class CreateIssueFragment extends Fragment {
             String weight = binding.inputIssueWeight.getEditText().getText().toString();
             String milestoneName = null;
 
-            if(chip != null){
-                 milestoneName = chip.getText().toString();
+            if (chip != null) {
+                milestoneName = chip.getText().toString();
             }
 
             //title may not be empty
-            if(!title.isEmpty()){
-                viewModel.postNewIssue(projectId,title,description,dueDate,weight,selectedLabels,milestoneName); //todo implement labels and milestones
-            }else{
-                Toast.makeText(getActivity(),"Title can not be empty", Toast.LENGTH_SHORT).show();
+            if (!title.isEmpty()) {
+                viewModel.postNewIssue(projectId, title, description, dueDate, weight, selectedLabels, milestoneName); //todo implement labels and milestones
+            } else {
+                Toast.makeText(getActivity(), "Title can not be empty", Toast.LENGTH_SHORT).show();
             }
 
         });

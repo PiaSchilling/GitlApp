@@ -66,7 +66,7 @@ public class IssueOverviewFragment extends Fragment {
     private final List<Issue> issueList = new ArrayList<>();
 
     //tab filtering, all per default/on fragment start
-    private String tabFilter = "all";
+    private String tabFilter = "all";//todo move to viewModel
 
 
     public IssueOverviewFragment() {
@@ -162,7 +162,7 @@ public class IssueOverviewFragment extends Fragment {
         });
 
         // define action when tabs are changed (filter list)
-        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() { //todo add selected tab to viewModel (config change aware)
             @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onTabSelected(TabLayout.Tab tab) {

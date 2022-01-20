@@ -5,7 +5,9 @@ import android.util.Log;
 import androidx.lifecycle.MutableLiveData;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 import de.hdmstuttgart.gitlapp.data.database.AppDatabase;
 import de.hdmstuttgart.gitlapp.data.network.GitLabClient;
@@ -27,8 +29,10 @@ public class ProjectRepository {
     private List<Project> responseList = new ArrayList<>();
 
     //present data to the view model
-    private MutableLiveData<List<Project>> projectsLiveData = new MutableLiveData<>();
-    private MutableLiveData<String> networkCallMessage = new MutableLiveData<>();
+    private final MutableLiveData<List<Project>> projectsLiveData = new MutableLiveData<>();
+    private final MutableLiveData<String> networkCallMessage = new MutableLiveData<>();
+    private final MutableLiveData<List<Label>> labelsLiveData = new MutableLiveData<>();
+    private final MutableLiveData<List<Milestone>> milestoneLiveData = new MutableLiveData<>();
 
 
     public ProjectRepository(AppDatabase appDatabase, GitLabClient gitLabClient) {
@@ -114,11 +118,13 @@ public class ProjectRepository {
         call.enqueue(new Callback<List<Label>>() {
             @Override
             public void onResponse(Call<List<Label>> call, Response<List<Label>> response) {
-
                 if (response.isSuccessful()) {
                     List<Label> temp = response.body();
-                    appDatabase.labelDao().insertLabels(temp);
-                    appDatabase.labelDao().setProjectIdForIssue(projectId);
+                    if(!Objects.equals(temp, labelsLiveData.getValue())){
+                        labelsLiveData.setValue(temp);
+                        appDatabase.labelDao().insertLabels(temp);
+                        appDatabase.labelDao().setProjectIdForIssue(projectId);
+                    }
                 } else {
                     Log.e("Api", "fetchProjectLabels call NOT SUCCESSFUL, code: " + response.code());
                 }
@@ -143,7 +149,10 @@ public class ProjectRepository {
             public void onResponse(Call<List<Milestone>> call, Response<List<Milestone>> response) {
                 if (response.isSuccessful()) {
                     List<Milestone> temp = response.body();
-                    appDatabase.milestoneDao().insertMilestones(temp);
+                    if(!Objects.equals(temp, milestoneLiveData.getValue())){ //update live data only if something changed
+                        milestoneLiveData.setValue(temp);
+                        appDatabase.milestoneDao().insertMilestones(temp);
+                    }
                 } else {
                     Log.e("Api", "fetchProjectMilestones call NOT SUCCESSFUL, code: " + response.code());
                 }
@@ -179,6 +188,13 @@ public class ProjectRepository {
         return appDatabase.milestoneDao().getProjectMilestones(projectId); //todo implement api call, only already by issue used milestones are already in the db
     }
 
+    public MutableLiveData<List<Label>> getLabelsLiveData(int projectId) {
+        fetchProjectLabels(projectId);
+        return labelsLiveData;
+    }
 
-
+    public MutableLiveData<List<Milestone>> getMilestoneLiveData(int projectId) {
+        fetchProjectMilestones(projectId);
+        return milestoneLiveData;
+    }
 }
