@@ -3,7 +3,7 @@
     <style name="Theme.GitLapp" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/lightOrange</item>
-        <item name="colorPrimaryVariant">@color/lightOrange</item>
+        <item name="colorPrimaryVariant">@color/darkGreyGradient</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/lightOrange</item>

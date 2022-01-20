@@ -1,263 +1,152 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="match_parent"
     android:background="@drawable/gradient_background">
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appbar"
-        android:layout_height="wrap_content"
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        >
+        android:layout_height="?attr/actionBarSize"
+        android:background="@drawable/gradient_background"
+        android:elevation="30dp"
+        app:layout_scrollFlags="scroll|enterAlways">
 
-        <androidx.appcompat.widget.Toolbar
-            android:layout_height="?attr/actionBarSize"
-            android:layout_width="match_parent"
-            app:layout_scrollFlags="scroll|enterAlways"
-            android:background="@drawable/gradient_background"
-           >
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-               >
-
-                <ImageView
-                    android:id="@+id/toolbar_back_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:src="@drawable/ic_back_left"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/toolbarTitle"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"/>
-
-                <TextView
-                    android:id="@+id/toolbarTitle"
-                    style="@style/ToolbarTitleText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="15dp"
-                    android:text="Profile Settings"
-                    app:layout_constraintStart_toEndOf="@+id/toolbar_back_button"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    />
-
-
-                <!--
-                <ImageView
-                    android:id="@+id/toolbar_search_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="right"
-                    android:layout_weight="1"
-                    android:src="@drawable/ic_search"
-                    app:layout_constraintEnd_toStartOf="@+id/toolbar_sort_lowest_button"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    android:layout_marginEnd="30dp"/>
-
-                <ImageView
-                    android:id="@+id/toolbar_sort_lowest_button"
-                    android:layout_width="20dp"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="right"
-                    android:layout_weight="1"
-                    android:src="@drawable/ic_sort_lowest"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:layout_marginEnd="15dp"/>
-
-                    -->
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-        </androidx.appcompat.widget.Toolbar>
-
-
-
-    </com.google.android.material.appbar.AppBarLayout>
-
-    <androidx.core.widget.NestedScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-
-        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
+        <ImageView
+            android:id="@+id/toolbar_back_button"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            >
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/gradient_background"
-    android:padding="15dp">
+            android:layout_centerInParent="true"
+            android:src="@drawable/ic_back_left"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/toolbarTitle"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/toolbarTitle"
+            style="@style/ToolbarTitleText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="30dp"
+            android:text="@string/settings_toolbarTitle" />
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <View
+        android:id="@+id/dividerOne"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_below="@id/toolbar"
+        android:layout_marginTop="30dp"
+        android:background="?android:attr/listDivider"
+        android:backgroundTint="@color/lightGrey" />
 
 
     <include
         android:id="@+id/user_card"
         layout="@layout/view_user_card"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
-    <View
-        android:id="@+id/dividerOne"
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:layout_below="@id/user_card"
-        android:layout_marginVertical="20dp"
-        android:background="?android:attr/listDivider"
-        android:backgroundTint="@color/lightGrey" />
-
-    <TextView
-        android:id="@+id/hostUrl_label"
-        style="@style/TextViewSubtitle1"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/dividerOne"
-        android:layout_marginTop="15dp"
-        android:text="@string/label_host_url" />
-
-
-    <TextView
-        android:id="@+id/hostUrl_Link_label"
-        style="@style/Body2WhiteBold"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/hostUrl_label"
-        android:layout_marginTop="10dp"
-        android:text="https:// ...." />
-
-    <ImageView
-        android:id="@+id/url_edit_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/hostUrl_label"
-        android:layout_alignEnd="@+id/dividerOne"
-        android:layout_marginTop="10dp"
-        android:src="@drawable/ic_thumb_down" />
+        android:layout_below="@id/dividerOne" />
 
     <View
         android:id="@+id/dividerTwo"
         android:layout_width="match_parent"
         android:layout_height="2dp"
-        android:layout_below="@id/url_edit_button"
-        android:layout_marginVertical="20dp"
+        android:layout_below="@id/user_card"
         android:background="?android:attr/listDivider"
         android:backgroundTint="@color/lightGrey" />
 
 
-    <TextView
-        android:id="@+id/userId_label"
-        style="@style/TextViewSubtitle1"
+    <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/dividerTwo"
-        android:layout_marginTop="15dp"
-        android:text="@string/label_mail" />
+        android:layout_below="@id/dividerTwo"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp">
+
+        <View
+            android:id="@+id/dividerThree"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginVertical="20dp"
+            android:background="?android:attr/listDivider"
+            android:backgroundTint="@color/lightGrey" />
 
 
-    <TextView
-        android:id="@+id/mail_adress_label"
-        style="@style/Body2WhiteBold"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/userId_label"
-        android:layout_marginTop="10dp"
-        android:text="email@sonnenschein.de" />
-
-    <ImageView
-        android:id="@+id/mail_edit_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/userId_label"
-        android:layout_alignEnd="@id/dividerTwo"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="5dp"
-        android:src="@drawable/ic_thumb_down" />
-
-    <View
-        android:id="@+id/dividerThree"
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:layout_below="@id/mail_edit_button"
-        android:layout_marginVertical="20dp"
-        android:background="?android:attr/listDivider"
-        android:backgroundTint="@color/lightGrey" />
+        <TextView
+            android:id="@+id/hostUrl_label"
+            style="@style/TextViewSubtitle1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/dividerThree"
+            android:text="@string/label_host_url" />
 
 
-    <TextView
-        android:id="@+id/accessToken_label"
-        style="@style/TextViewSubtitle1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/dividerThree"
-        android:layout_marginTop="15dp"
-        android:text="@string/label_access_token" />
-
-    <ImageView
-        android:id="@+id/token_status_icon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/dividerThree"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="15dp"
-        android:layout_toEndOf="@+id/accessToken_label"
-        android:src="@drawable/ic_status_success_solid" />
-
-    <ImageView
-        android:id="@+id/calendear_icon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/accessToken_label"
-        android:layout_marginTop="11dp"
-        android:src="@drawable/ic_calendar" />
-
-    <TextView
-        android:id="@+id/accessToken_date_label"
-        style="@style/Body2WhiteBold"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/accessToken_label"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="10dp"
-        android:layout_toEndOf="@id/calendear_icon"
-        android:text="Nov 28, 2023" />
+        <TextView
+            android:id="@+id/hostUrl_Link_label"
+            style="@style/Body2WhiteBold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/hostUrl_label"
+            android:layout_marginTop="10dp"
+            android:text="https:// ...." />
 
 
+        <View
+            android:id="@+id/dividerFour"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_below="@id/hostUrl_Link_label"
+            android:layout_marginVertical="20dp"
+            android:background="?android:attr/listDivider"
+            android:backgroundTint="@color/lightGrey" />
 
 
-    <Button
-        android:id="@+id/remove_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/accessToken_label"
-        android:layout_alignEnd="@id/dividerThree"
-        android:text="@string/button_remove"
-
-        app:strokeColor="@color/lightGrey"
-        app:strokeWidth="1dp"
-        style="@style/OutlinedButton"
-        />
+        <TextView
+            android:id="@+id/userId_label"
+            style="@style/TextViewSubtitle1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/dividerFour"
+            android:text="@string/label_userId" />
 
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/remove_button"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="200dp"
-        android:text="Log out" />
+        <TextView
+            android:id="@+id/userIdNumber_label"
+            style="@style/Body2WhiteBold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/userId_label"
+            android:layout_marginTop="10dp"
+            android:text="your user id" />
+
+
+        <View
+            android:id="@+id/dividerFive"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_below="@id/userIdNumber_label"
+            android:layout_marginVertical="20dp"
+            android:background="?android:attr/listDivider"
+            android:backgroundTint="@color/lightGrey" />
+
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/dividerThree"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="200dp"
+            android:text="Log out" />
+
+    </RelativeLayout>
 
 </RelativeLayout>
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-    </androidx.core.widget.NestedScrollView>
 
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+

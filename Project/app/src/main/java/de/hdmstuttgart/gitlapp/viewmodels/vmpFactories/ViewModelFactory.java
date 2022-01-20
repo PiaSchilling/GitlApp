@@ -12,6 +12,7 @@ import de.hdmstuttgart.gitlapp.viewmodels.IssueDetailViewModel;
 import de.hdmstuttgart.gitlapp.viewmodels.IssueOverviewViewModel;
 import de.hdmstuttgart.gitlapp.viewmodels.LoginViewModel;
 import de.hdmstuttgart.gitlapp.viewmodels.ProjectsViewModel;
+import de.hdmstuttgart.gitlapp.viewmodels.SettingsViewModel;
 
 public class ViewModelFactory implements ViewModelProvider.Factory {
 
@@ -43,6 +44,9 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
         } else if(modelClass.isAssignableFrom(ProjectsViewModel.class)){
             ProjectsViewModel projectsViewModel = new ProjectsViewModel(projectRepository , profileRepository);
             return (T) projectsViewModel;
+        } else if (modelClass.isAssignableFrom(SettingsViewModel.class)) {
+            SettingsViewModel settingsViewModel = new SettingsViewModel(profileRepository, projectRepository);
+            return (T) settingsViewModel;
         }
         throw new IllegalArgumentException("ViewModel class not found");
     }

@@ -101,4 +101,13 @@ public class ProfileRepository {
     public MutableLiveData<String> getMessageLiveData() {
         return messageLiveData;
     }
+
+
+    public int getloggedInUserId(){
+        return appDatabase.profileDao().getProfile().getLoggedInUserId();
+    }
+
+    public String getHostUrl(){
+        return appDatabase.profileDao().getProfile().getHostUrl();
+    }
 }

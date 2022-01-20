@@ -8,7 +8,7 @@
     <string name="show_all_text_button">show all</string>
     <string name="log_in">LogIn</string>
     <string name="label_host_url">Host URL</string>
-    <string name="label_mail">Mail</string>
+    <string name="label_userId">Your User ID</string>
     <string name="label_access_token">Access Token</string>
     <string name="hint_host_URL">https://...</string>
     <string name="hint_user_id">Enter your user id here</string>
@@ -36,5 +36,6 @@
     <string name="tab_all">all</string>
     <string name="add_new_issue">Add new issue</string>
     <string name="project_toolbarTitle">Projects Overview</string>
+    <string name="settings_toolbarTitle">Profile Settings</string>
 
 </resources>

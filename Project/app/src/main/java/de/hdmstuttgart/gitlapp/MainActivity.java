@@ -17,6 +17,7 @@ import de.hdmstuttgart.gitlapp.fragments.IssueDetailFragment;
 import de.hdmstuttgart.gitlapp.fragments.IssueOverviewFragment;
 import de.hdmstuttgart.gitlapp.fragments.LoginFragment;
 import de.hdmstuttgart.gitlapp.fragments.ProjectsFragment;
+import de.hdmstuttgart.gitlapp.fragments.SettingsFragment;
 import de.hdmstuttgart.gitlapp.models.Issue;
 import de.hdmstuttgart.gitlapp.viewmodels.IssueDetailViewModel;
 
