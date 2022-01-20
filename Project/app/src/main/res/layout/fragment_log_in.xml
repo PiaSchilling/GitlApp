@@ -96,11 +96,33 @@
         android:text="@string/label_access_token"
         style="@style/TextViewSubtitle1" />
 
+    <TextView
+        android:id="@+id/accessToken_infoText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/accessToken_label"
+        android:layout_marginTop="15dp"
+        android:text="Have no access token yet?"
+        style="@style/Body2" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/openUrl_button"
+        style="@style/OutlinedButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/accessToken_label"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="4dp"
+        android:layout_toEndOf="@id/accessToken_infoText"
+        android:text="create"
+        android:drawableEnd="@drawable/ic_key" />
+
+
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/accessToken_textField"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/accessToken_label"
+        android:layout_below="@id/openUrl_button"
         android:hint="@string/hint_access_token"
         android:paddingTop="15dp"
         style="@style/TextInput">

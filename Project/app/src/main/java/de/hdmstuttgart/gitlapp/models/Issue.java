@@ -1,11 +1,9 @@
 package de.hdmstuttgart.gitlapp.models;
 
-import androidx.room.Embedded;
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -31,7 +29,7 @@ public class Issue {
     private int thumbs_up;
     private int thumbs_down;
 
-    private int hashcode = this.hashCode(); //remove
+    private int hashcode = this.hashCode(); //todo remove
 
     private String state;
 
@@ -68,11 +66,7 @@ public class Issue {
     public String toString() {
         return "Issue{" +
                 "id=" + id +
-                ", iid=" + iid +
-                ", weight=" + weight +
-                ", title='" + title + '\'' +
-                ", description='" + description + '\'' +
-                '}';
+                ", iid=" + iid + "}";
     }
 
     @Override//todo recreate for real issue implementation

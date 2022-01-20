@@ -1,7 +1,9 @@
 package de.hdmstuttgart.gitlapp.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -44,6 +46,7 @@ public class LoginFragment extends Fragment {
     private TextInputLayout userIdTextField;
     private TextInputLayout accessTokenTextField;
     private Button loginButton;
+    private Button openUrlButton;
     private ProgressBar spinner;
 
     private String baseUrl;
@@ -97,6 +100,7 @@ public class LoginFragment extends Fragment {
         userIdTextField = binding.userIdTextField;
         accessTokenTextField = binding.accessTokenTextField;
         loginButton = binding.loginButton;
+        openUrlButton = binding.openUrlButton;
         spinner = binding.progressSpinner;
 
         messageLiveData = viewModel.getMessageLiveData();
@@ -122,6 +126,22 @@ public class LoginFragment extends Fragment {
                             .addToBackStack(null)
                             .commit();
                 }
+            }
+        });
+
+        openUrlButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+               String baseUrl = baseUrlTextField.getEditText().getText().toString();
+
+               if(baseUrl.isEmpty()){
+                   Toast.makeText(getActivity(), "Please fill in the base url", Toast.LENGTH_SHORT).show();
+               }else{
+                   String tokenUrl = baseUrl + "/-/profile/personal_access_tokens?name=GitLappToken&scopes=api";
+                   Uri uri = Uri.parse(tokenUrl);
+                   Intent intent = new Intent(Intent.ACTION_VIEW,uri);
+                   startActivity(intent);
+               }
             }
         });
 
