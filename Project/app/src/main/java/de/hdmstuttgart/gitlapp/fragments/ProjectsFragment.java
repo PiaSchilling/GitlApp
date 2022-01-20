@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -17,6 +18,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,6 +28,7 @@ import com.bumptech.glide.Glide;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.hdmstuttgart.gitlapp.R;
 import de.hdmstuttgart.gitlapp.dependencies.AppContainer;
 import de.hdmstuttgart.gitlapp.CustomApplication;
 import de.hdmstuttgart.gitlapp.databinding.FragmentProjectsBinding;
@@ -50,6 +53,7 @@ public class ProjectsFragment extends Fragment {
     private String mParam2;
     private String projectName;
 
+    private AppContainer container;
 
 
     // bindings and viewmodel
@@ -64,6 +68,7 @@ public class ProjectsFragment extends Fragment {
     private TextView toolbarTitle;
     private TextView user;
     private SwipeRefreshLayout swipeRefresh;
+    private ImageView settingsButton;
 
 
     //data
@@ -95,7 +100,7 @@ public class ProjectsFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         // - - - - get the related view model - - - - -
-        AppContainer container = ((CustomApplication) getActivity().getApplication())
+        container = ((CustomApplication) getActivity().getApplication())
                 .getAppContainer(getActivity().getApplicationContext());
 
         projectsViewModel = new ViewModelProvider(this, container.viewModelFactory)
@@ -132,10 +137,18 @@ public class ProjectsFragment extends Fragment {
         user = binding.userCard.userNameLabel;
 
         user.setText(projectsViewModel.getLoggedInUserName());
-
         Glide.with(getContext())
                 .load(projectsViewModel.getLoggedInUserAvatar())
                 .into(imageView);
+
+        // get to the settings fragment
+        settingsButton = binding.toolbarSettingsButton;
+        settingsButton.setOnClickListener(v -> {
+            getActivity().getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, SettingsFragment.class, null)
+                    .addToBackStack(null)
+                    .commit();
+        });
 
 
         // swipe to refresh

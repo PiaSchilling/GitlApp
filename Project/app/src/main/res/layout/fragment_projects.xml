@@ -8,20 +8,22 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
+        android:id="@+id/toolbarContainer"
         android:layout_height="?attr/actionBarSize"
         android:layout_width="match_parent"
         app:layout_scrollFlags="scroll|enterAlways"
-        android:elevation="30dp"
-        android:background="@drawable/gradient_background"
-        >
+        android:background="@drawable/gradient_background">
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
             <ImageView
                 android:id="@+id/toolbar_back_button"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:src="@drawable/ic_back_left"
-                android:layout_centerInParent="true"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/toolbarTitle"
                 app:layout_constraintTop_toTopOf="parent"
@@ -32,10 +34,25 @@
                 style="@style/ToolbarTitleText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="30dp"
+                android:layout_marginStart="15dp"
                 android:text="@string/project_toolbarTitle"
-                android:layout_centerInParent="true"
+                app:layout_constraintStart_toEndOf="@+id/toolbar_back_button"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
                 />
+
+            <ImageView
+                android:id="@+id/toolbar_settings_button"
+                android:layout_width="20dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="right"
+                android:layout_weight="1"
+                android:src="@drawable/ic_settings"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginEnd="15dp"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.appcompat.widget.Toolbar>
 
@@ -43,7 +60,7 @@
         android:id="@+id/dividerOne"
         android:layout_width="match_parent"
         android:layout_height="2dp"
-        android:layout_below="@id/toolbar"
+        android:layout_below="@id/toolbarContainer"
         android:background="?android:attr/listDivider"
         android:backgroundTint="@color/lightGrey"
         android:layout_marginTop="30dp"/>

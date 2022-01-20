@@ -22,7 +22,7 @@ public class SettingsViewModel extends ViewModel {
     }
 
     public String getUserId(){
-          return String.valueOf(profileRepository.getloggedInUserId());
+          return String.valueOf(profileRepository.getLoggedInUserId());
     }
 
     public String getLoggedInUserName(){
@@ -31,5 +31,9 @@ public class SettingsViewModel extends ViewModel {
 
     public String getLoggedInUserAvatar(){
         return profileRepository.getLoggedIdUser().getAvatar_url();
+    }
+
+    public void clearDatabase(){
+        profileRepository.clearAppData();
     }
 }

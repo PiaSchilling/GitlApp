@@ -1,5 +1,7 @@
 package de.hdmstuttgart.gitlapp.data.repositories;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import androidx.lifecycle.LiveData;
@@ -103,11 +105,24 @@ public class ProfileRepository {
     }
 
 
-    public int getloggedInUserId(){
+    public int getLoggedInUserId(){
         return appDatabase.profileDao().getProfile().getLoggedInUserId();
     }
 
     public String getHostUrl(){
         return appDatabase.profileDao().getProfile().getHostUrl();
     }
+
+
+    // - - - - - clear data at log out - - - -
+    public void clearAppData(){
+        appDatabase.issueDao().clearIssuesTable();
+        appDatabase.labelDao().clearLabelsTable();
+        appDatabase.milestoneDao().clearMilestonesTable();
+        appDatabase.noteDao().clearNotesTable();
+        appDatabase.profileDao().clearProfileTable();
+        appDatabase.projectDao().clearProjectsTable();
+        appDatabase.userDao().clearUserTable();
+    }
+
 }

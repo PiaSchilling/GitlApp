@@ -42,6 +42,9 @@ public abstract class IssueDao {
     @Query("SELECT * FROM issues WHERE author_id = :userId")
     public abstract List<Issue> issuesByUser(int userId);
 
+    @Query("DELETE FROM issues")
+    public abstract void clearIssuesTable();
+
 
     public void insertOrUpdate(List<Issue> issues){
         //todo does not work, remove or change

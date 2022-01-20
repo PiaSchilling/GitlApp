@@ -1,20 +1,26 @@
 package de.hdmstuttgart.gitlapp.fragments;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.bumptech.glide.Glide;
 
 import de.hdmstuttgart.gitlapp.CustomApplication;
+import de.hdmstuttgart.gitlapp.R;
 import de.hdmstuttgart.gitlapp.databinding.FragmentProfileSettingsBinding;
 import de.hdmstuttgart.gitlapp.dependencies.AppContainer;
 import de.hdmstuttgart.gitlapp.viewmodels.SettingsViewModel;
@@ -31,6 +37,7 @@ public class SettingsFragment extends Fragment {
     private TextView userIdTextView;
     private ImageView imageView;
     private TextView user;
+    private Button logOutButton;
 
 
 
@@ -81,5 +88,26 @@ public class SettingsFragment extends Fragment {
                 .load(settingsViewModel.getLoggedInUserAvatar())
                 .into(imageView);
 
+        // trigger for logOut
+        logOutButton = binding.logOutButton;
+        logOutButton.setOnClickListener(v -> {
+            clearSharedPreferences();
+            settingsViewModel.clearDatabase();
+
+            getActivity().getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
+            getActivity().getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, LoginFragment.class, null)
+                    .commit();
+            Log.e("ST-", "LogOut triggered");
+        });
+    }
+
+
+    private void clearSharedPreferences(){
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("profileInformation", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("baseUrl", "default");
+        editor.apply();
     }
 }

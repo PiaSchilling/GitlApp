@@ -29,5 +29,7 @@ public interface ProjectDao {
     @Query("SELECT * FROM projects")
     List<Project> getAllProjects();
 
+    @Query("DELETE FROM projects")
+    void clearProjectsTable();
 }
 

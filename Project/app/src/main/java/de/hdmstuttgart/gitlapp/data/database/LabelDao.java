@@ -40,5 +40,8 @@ public interface LabelDao {
     @Query("UPDATE labels SET project_id = :projectId WHERE issue_id = 0 AND project_id = 0")
     void setProjectIdForIssue(int projectId);
 
+    @Query("DELETE FROM labels")
+    void clearLabelsTable();
+
 }
 

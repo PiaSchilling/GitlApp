@@ -23,5 +23,8 @@ public interface ProfileDao {
 
     @Query("SELECT * FROM profile")
     Profile getProfile();
+
+    @Query("DELETE FROM profile")
+    void clearProfileTable();
 }
 

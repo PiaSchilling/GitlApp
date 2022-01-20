@@ -36,4 +36,6 @@ public interface MilestoneDao {
     @Query("SELECT * FROM milestones WHERE id = :milestoneId")
     Milestone getMilestoneById(int milestoneId);
 
+    @Query("DELETE FROM milestones")
+    void clearMilestonesTable();
 }
