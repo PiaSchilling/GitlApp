@@ -23,6 +23,8 @@ import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputLayout;
 
+import java.util.Objects;
+
 import de.hdmstuttgart.gitlapp.CustomApplication;
 import de.hdmstuttgart.gitlapp.dependencies.LoginContainer;
 import de.hdmstuttgart.gitlapp.R;
@@ -72,6 +74,7 @@ public class LoginFragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        Log.d("Bug","LoginFragment onCreate");
         super.onCreate(savedInstanceState);
 
         // - - - - get the related view model - - - -
@@ -94,6 +97,8 @@ public class LoginFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        Log.d("Bug","LoginFragment onViewCreated");
+
         super.onViewCreated(view, savedInstanceState);
 
         baseUrlTextField = binding.hostUrlTextField;
@@ -107,9 +112,12 @@ public class LoginFragment extends Fragment {
         messageLiveData.observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(String s) {
+
                 //inform the user if login failed etc
-                Toast.makeText(getActivity(), messageLiveData.getValue(), Toast.LENGTH_LONG).show();
-                spinner.setVisibility(View.GONE);
+                if(!Objects.equals(messageLiveData.getValue(), "default")){ //default value is set after profile creation
+                    Toast.makeText(getActivity(), messageLiveData.getValue(), Toast.LENGTH_SHORT).show();
+                    spinner.setVisibility(View.GONE);
+                }
 
                 //fragment transaction when profile was successfully created
                 if (s.equals("Call successful, profile created")) {
@@ -121,6 +129,8 @@ public class LoginFragment extends Fragment {
                     editor.putString("baseUrl", url);
                     editor.apply();
 
+                    messageLiveData.setValue("default"); //otherwise this if clause will be always true afterwards -> app crash on logout (where login screen is called again)
+
                     getActivity().getSupportFragmentManager().beginTransaction()
                             .replace(R.id.fragment_container, ProjectsFragment.class, null)
                             .addToBackStack(null)
@@ -129,6 +139,7 @@ public class LoginFragment extends Fragment {
             }
         });
 
+        //open gitlab url in browser to let the user easily create an access token
         openUrlButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -145,8 +156,8 @@ public class LoginFragment extends Fragment {
             }
         });
 
+        //try to create the user profile
         loginButton.setOnClickListener(view1 -> {
-
             try {
                 baseUrl = baseUrlTextField.getEditText().getText().toString();
                 String userIdString = userIdTextField.getEditText().getText().toString();
@@ -155,9 +166,7 @@ public class LoginFragment extends Fragment {
                 if (baseUrl.isEmpty() || userIdString.isEmpty() || accessToken.isEmpty()) {
                     Toast.makeText(getActivity(), "Please fill in all fields", Toast.LENGTH_LONG).show();
                 } else {
-
                     int userId = Integer.parseInt(userIdString);
-
                     viewModel.createUserProfile(baseUrl, userId, accessToken); //create user profile
                     spinner.setVisibility(View.VISIBLE);
                 }
@@ -169,7 +178,7 @@ public class LoginFragment extends Fragment {
 
     @Override
     public void onDestroy() {
-        super.onDestroy();
+        super.onDestroy(); //todo i guess this is only called when the activity is destroyed
         container = null; //container will not be needed anymore after login is completed
     }
 }

@@ -3,7 +3,6 @@ package de.hdmstuttgart.gitlapp.fragments;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -90,16 +89,19 @@ public class SettingsFragment extends Fragment {
 
         // trigger for logOut
         logOutButton = binding.logOutButton;
+
         logOutButton.setOnClickListener(v -> {
             clearSharedPreferences();
             settingsViewModel.clearDatabase();
 
-            getActivity().getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+            FragmentManager fm = getParentFragmentManager(); //todo check if necessary
+            for (int i = 0; i < fm.getBackStackEntryCount(); i++) {
+                fm.popBackStack();
+            }
 
-            getActivity().getSupportFragmentManager().beginTransaction()
+            getParentFragmentManager().beginTransaction()
                     .replace(R.id.fragment_container, LoginFragment.class, null)
                     .commit();
-            Log.e("ST-", "LogOut triggered");
         });
     }
 
