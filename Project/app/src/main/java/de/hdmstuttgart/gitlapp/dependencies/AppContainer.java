@@ -58,7 +58,7 @@ public class AppContainer {
             viewModelFactory = new ViewModelFactory(issueRepository, projectRepository, profileRepository);
 
         } else {
-            Log.e("Api", "Can not find base url in shard preferences"); //can never happen
+            Log.e("Api", "Can not find base url in shared preferences"); //can never happen
         }
 
     }

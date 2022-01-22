@@ -28,8 +28,8 @@ public class IssueRepository {
     private List<Issue> responseList = new ArrayList<>();
 
     //present data to the viewModel
-    private MutableLiveData<List<Issue>> issuesLiveData = new MutableLiveData<>();
-    private MutableLiveData<String> networkCallMessage = new MutableLiveData<>();
+    private final MutableLiveData<List<Issue>> issuesLiveData = new MutableLiveData<>();
+    private final MutableLiveData<String> networkCallMessage = new MutableLiveData<>();
 
 
     public IssueRepository(AppDatabase appDatabase, GitLabClient gitLabClient) {
@@ -45,24 +45,22 @@ public class IssueRepository {
     }
 
     /**
-     * loads data from local source
+     * loads data from local source and tries to update this data
      *
      * @param projectId the id of the project the issues should be loaded for
      */
     public void initProjectIssues(int projectId) {
         responseList = ORM.completeIssueObjects(projectId, appDatabase);
+        fetchProjectIssues(projectId);
         issuesLiveData.setValue(responseList);
         Log.d("Api", "Loaded local data " + responseList.toString());
     }
 
     /**
-     * reloads the data by making api calls
-     * if call fails, data from the local database will be loaded
+     * fetches all issues by a specific project
      */
-    public void refreshProjectIssues(int projectId) {
-        //todo make background thread for this (threadpool)
-        //todo implement a callback
-
+    public void fetchProjectIssues(int projectId) {
+        //todo make background thread for this (thread pool)
         Call<List<Issue>> call = gitLabClient.getProjectIssues(projectId, accessToken);
         call.enqueue(new Callback<List<Issue>>() {
             @Override
@@ -87,14 +85,15 @@ public class IssueRepository {
 
             @Override
             public void onFailure(Call<List<Issue>> call, Throwable t) {
-                Log.d("Api", "Oh no " + t.getMessage() + ", data not updated");
-                Log.d("Api",t.toString());
-                t.printStackTrace();
+                Log.e("Api", "Oh no " + t.getMessage() + ", data not updated");
                 networkCallMessage.setValue("Oh no, check your wifi connection");
             }
         });
     }
 
+    /**
+     * makes an api call to post a new issue with parameters set by the user
+     */
     public void postNewIssue(int projectId, String issueTitle, String issueDescription, String dueDate, int weight,  String labels, int milestoneId){
         Call<Void> call = gitLabClient.postNewIssue(projectId,accessToken,issueTitle,issueDescription,dueDate,weight,milestoneId,labels);
         call.enqueue(new Callback<Void>() {
@@ -103,7 +102,7 @@ public class IssueRepository {
                 if(response.isSuccessful()){
                     Log.d("Api","IssuePost SUCCESS");
                     networkCallMessage.setValue("Add issue successful");
-                    refreshProjectIssues(projectId); //todo its not efficient to make two network calls!
+                    fetchProjectIssues(projectId); //todo its not efficient to make two network calls!
                 }else{
                     Log.e("Api","IssuePost FAIL, " + response.code());
                     networkCallMessage.setValue("Add issue failed, " + response.code()); //todo implement more meaningful message

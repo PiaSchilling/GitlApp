@@ -14,35 +14,28 @@ public class ProjectsViewModel extends ViewModel {
     ProjectRepository projectRepository;
     ProfileRepository profileRepository;
 
-    // MutableLiveData<List<Project>> mutableProjectLiveData = new MutableLiveData<>();
-
-
     public ProjectsViewModel(ProjectRepository projectRepository, ProfileRepository profileRepository){
         this.projectRepository = projectRepository;
         this.profileRepository = profileRepository;
     }
 
     /**
-     * refresh method in repo for re-fetching data from api if available
-     */
-    public void refreshProjects(){
-        projectRepository.refreshProjects();
-    }
-
-
-    // reine durch-reiche Methode
-    public MutableLiveData<List<Project>> getMutableLiveData(){
-        return projectRepository.getProjectsLiveData();
-    }
-
-    
-    /**
-     * calls repo to load data from local data or network 
+     * calls repo to load data from local data or network
      */
     public void initProjectsLiveData(){
         projectRepository.initProjects();
     }
 
+    /**
+     * calling repo which tries to update data from network
+     */
+    public void refreshProjects(){
+        projectRepository.fetchProjects();
+    }
+
+    public MutableLiveData<List<Project>> getMutableLiveData(){
+        return projectRepository.getProjectsLiveData();
+    }
 
     public MutableLiveData<String> getMessage() {
         return projectRepository.getNetworkCallMessage();

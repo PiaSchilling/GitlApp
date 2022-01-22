@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -29,7 +30,7 @@ public class CreateIssueViewModel extends ViewModel {
      */
     public void postNewIssue(int projectId, String issueTitle, String issueDescription, String dueDate, String weight, List<String> labels, String milestoneName){
 
-        //build label string
+        //build label string from list
         StringBuilder labelString = new StringBuilder();
         for (String label : labels){
             labelString.append(label).append(",");
@@ -46,8 +47,10 @@ public class CreateIssueViewModel extends ViewModel {
         //get milestone by name if not null
         int milestoneId = 0;
         if(milestoneName != null){
-            Optional<Milestone> result = projectRepository.getProjectMilestones(projectId).stream()
-                    .filter(milestone -> milestone.getTitle().equals(milestoneName)).findAny();
+            Optional<Milestone> result = Objects.requireNonNull(projectRepository.getMilestoneLiveData(projectId).getValue())
+                    .stream()
+                    .filter(milestone -> milestone.getTitle().equals(milestoneName))
+                    .findAny();
             if (result.isPresent()){
                 milestoneId = result.get().getId();
             }

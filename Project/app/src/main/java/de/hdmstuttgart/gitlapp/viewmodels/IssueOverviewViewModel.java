@@ -1,7 +1,5 @@
 package de.hdmstuttgart.gitlapp.viewmodels;
 
-import android.util.Log;
-
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
@@ -25,40 +23,38 @@ public class IssueOverviewViewModel extends ViewModel {
     }
 
     /**
-     * calls repo to load local data (if present)
-     * then tries to update data from network
-     * @return the initialized live data
+     * calls repo to load data from local data or network
      */
-    public MutableLiveData<List<Issue>> initIssueLiveData(int projectId) {
+    public void initIssueLiveData(int projectId) {
         issueRepository.initProjectIssues(projectId);
-        issueRepository.refreshProjectIssues(projectId);
-        return issueRepository.getIssueListLiveData();
     }
 
     /**
-     * tries to update data from network
-     * @return updated live data
+     * calling repo which tries to update data from network
      */
-    public MutableLiveData<List<Issue>> updateIssueLiveData(int projectId) {
-        issueRepository.refreshProjectIssues(projectId);
-        return issueRepository.getIssueListLiveData();
+    public void updateIssueLiveData(int projectId) {
+        issueRepository.fetchProjectIssues(projectId);
     }
 
-
+    /**
+     * filters a list of issues by a given state
+     * @param state issue state (open, closed, all)
+     * @return the filtered list
+     */
     public List<Issue> filterIssuesByState(String state) {
         List<Issue> temp = issueRepository.getIssueListLiveData().getValue();
-        List<Issue> result = Objects.requireNonNull(temp)
+        return Objects.requireNonNull(temp)
                 .stream()
                 .filter(issue -> issue.getState().equals(state))
                 .collect(Collectors.toList());
-        return result;
+    }
+
+    public MutableLiveData<List<Issue>> getMutableLiveData() {
+        return issueRepository.getIssueListLiveData();
     }
 
     public MutableLiveData<String> getMessage() {
         return issueRepository.getNetworkCallMessage();
     }
 
-    public MutableLiveData<List<Issue>> getMutableLiveData() {
-        return issueRepository.getIssueListLiveData();
-    }
 }

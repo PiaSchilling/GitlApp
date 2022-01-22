@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import de.hdmstuttgart.gitlapp.data.database.AppDatabase;
@@ -21,14 +20,13 @@ public class ProfileRepository {
     private final AppDatabase appDatabase;
     private final GitLabClient gitLabClient;
 
-    LiveData<Profile> profileLiveData = new MutableLiveData<>();
     MutableLiveData<String> messageLiveData = new MutableLiveData<>();
 
     // - - - - - Profile attributes - - - -
-    User loggedIdUser;
-    int userId;
-    String accessToken;
-    String hostUrl;
+    private User loggedIdUser;
+    private int userId;
+    private String accessToken;
+    private String hostUrl;
 
 
     public ProfileRepository(AppDatabase appDatabase, GitLabClient gitLabClient) {
@@ -36,16 +34,24 @@ public class ProfileRepository {
         this.gitLabClient = gitLabClient;
     }
 
-    private void initProfile(){
+    /**
+     * creates a profile and inserts in the database
+     */
+    private void createProfile(){
+        Log.d("Bug","createProfile triggered");
+
         Profile profile = new Profile(loggedIdUser.getId(), accessToken, hostUrl);
         Log.d("ProfileRepo","Profile created " + profile.toString());
         appDatabase.profileDao().insertProfile(profile);
     }
 
+    /**
+     * fetches user from network -> only if the call is successful the user exists
+     * only if the user exists a profile is created
+     * @param url the whole request url (including the base url bc this is the only way making api calls with dynamic base url)
+     */
     private void fetchUser(String url){
-
-        Log.d("ProfileRepo","FetchUser called");
-
+        Log.d("Bug","fetchUser triggered");
         Call<User> call = gitLabClient.getSingleUserWithWholeUrl(url, this.accessToken);
         call.enqueue(new Callback<User>() {
             @Override
@@ -54,8 +60,7 @@ public class ProfileRepository {
                     if(response.body() != null){
                         loggedIdUser = response.body();
                         appDatabase.userDao().insertUsers(loggedIdUser);
-                        initProfile();
-
+                        createProfile();
                         messageLiveData.setValue("Call successful, profile created");
                         Log.d("ProfileRepo","SUCCESS" + loggedIdUser.toString());
                     }
@@ -84,15 +89,12 @@ public class ProfileRepository {
         this.userId = userId;
         this.accessToken = "Bearer " + accessToken;
         this.hostUrl = hostUrl;
-
         String url = hostUrl + "/api/v4/users/" + userId;
-
         fetchUser(url);
     }
 
     public User getLoggedIdUser(){
         int localUserId = appDatabase.profileDao().getProfile().getLoggedInUserId();
-        Log.e("ST-", "localUserId " + localUserId);
         return appDatabase.userDao().getUserById(localUserId);
     }
 

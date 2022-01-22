@@ -5,7 +5,6 @@ import android.util.Log;
 import androidx.lifecycle.MutableLiveData;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -21,8 +20,9 @@ import retrofit2.Response;
 public class ProjectRepository {
 
     // - - - - -  Sources - - - - - -
-    private AppDatabase appDatabase;
-    private GitLabClient gitLabClient;
+    private final AppDatabase appDatabase;
+    private final GitLabClient gitLabClient;
+
     private String accessToken;
 
     //holding response of api call or when this fails the "response" of the db
@@ -54,7 +54,7 @@ public class ProjectRepository {
      */
     public void initProjects() {
         responseList = appDatabase.projectDao().getAllProjects();
-        refreshProjects();
+        fetchProjects();
         projectsLiveData.setValue(responseList);
         Log.d("Api", "Loaded local data " + responseList.toString());
     }
@@ -64,7 +64,7 @@ public class ProjectRepository {
      * reloads the data by making api calls
      * if call fails, data from the local database will be loaded
      */
-    public void refreshProjects() {
+    public void fetchProjects() {
 
         Call<List<Project>> call = gitLabClient.getMemberProjects(accessToken);
         call.enqueue(new Callback<List<Project>>() {
@@ -91,8 +91,9 @@ public class ProjectRepository {
 
             @Override
             public void onFailure(Call<List<Project>> call, Throwable t) {
-                Log.d("Api", "Oh no " + t.getMessage() + ", loading data form database");
-                responseList = appDatabase.projectDao().getAllProjects();
+                Log.e("Api", "Oh no " + t.getMessage() + ", loading data form database");
+                networkCallMessage.setValue("Oh no, check your wifi connection");
+               // responseList = appDatabase.projectDao().getAllProjects();
             }
         });
     }
@@ -106,7 +107,8 @@ public class ProjectRepository {
     }
 
 
-    // - - - - - single project detail - - - - - -
+
+    // - - - - - single project details - - - - - -
 
     /**
      * make an api call to get all labels by a specific project
@@ -164,28 +166,6 @@ public class ProjectRepository {
 
             }
         });
-    }
-
-    /**
-     * get all labels defined in a project
-     *
-     * @param projectId the id of the project the labels should be returned for
-     * @return a list of labels
-     */
-    public List<Label> getProjectLabels(int projectId) {
-        fetchProjectLabels(projectId);
-        return appDatabase.labelDao().getProjectLabels(projectId); //todo implement api call, only already by issue used labels are already in the db
-    }
-
-    /**
-     * get all milestones defined in a project
-     *
-     * @param projectId the id of the project the milestones should be returned for
-     * @return a list of milestones
-     */
-    public List<Milestone> getProjectMilestones(int projectId) {
-        fetchProjectMilestones(projectId);
-        return appDatabase.milestoneDao().getProjectMilestones(projectId); //todo implement api call, only already by issue used milestones are already in the db
     }
 
     public MutableLiveData<List<Label>> getLabelsLiveData(int projectId) {

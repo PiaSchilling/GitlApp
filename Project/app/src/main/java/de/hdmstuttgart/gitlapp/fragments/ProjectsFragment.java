@@ -1,5 +1,6 @@
 package de.hdmstuttgart.gitlapp.fragments;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -123,6 +124,7 @@ public class ProjectsFragment extends Fragment {
         return binding.getRoot();    }
 
 
+    @SuppressLint("NotifyDataSetChanged")
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -144,7 +146,7 @@ public class ProjectsFragment extends Fragment {
         // get to the settings fragment
         settingsButton = binding.toolbarSettingsButton;
         settingsButton.setOnClickListener(v -> {
-            getActivity().getSupportFragmentManager().beginTransaction()
+            getParentFragmentManager().beginTransaction()
                     .replace(R.id.fragment_container, SettingsFragment.class, null)
                     .addToBackStack(null)
                     .commit();
@@ -154,6 +156,7 @@ public class ProjectsFragment extends Fragment {
         // swipe to refresh
         swipeRefresh = binding.swipeRefreshProject;
         swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onRefresh() {
                 projectsViewModel.refreshProjects();

@@ -108,7 +108,7 @@ public class IssueOverviewFragment extends Fragment {
 
         // - - - - -  init and update data
         viewModel.initIssueLiveData(projectId);
-        this.issueListLiveData = viewModel.updateIssueLiveData(projectId);
+        this.issueListLiveData = viewModel.getMutableLiveData();
 
         //  - - - - get data from view model - - - -
         networkCallMessage = viewModel.getMessage();
@@ -122,6 +122,7 @@ public class IssueOverviewFragment extends Fragment {
     }
 
 
+    @SuppressLint("NotifyDataSetChanged")
     @Override // set data and click listeners to the views
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -153,6 +154,7 @@ public class IssueOverviewFragment extends Fragment {
 
         //refresh data on swipe
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onRefresh() {
                 Toast.makeText(getActivity(), "try to update", Toast.LENGTH_SHORT).show();
@@ -194,7 +196,7 @@ public class IssueOverviewFragment extends Fragment {
             public void onClick(View view) {
                 Bundle bundle = new Bundle();
                 bundle.putInt("projectId", projectId);
-                getActivity().getSupportFragmentManager().beginTransaction()
+                getParentFragmentManager().beginTransaction()
                         .replace(R.id.fragment_container, CreateIssueFragment.class, bundle)
                         .addToBackStack(null)
                         .commit();

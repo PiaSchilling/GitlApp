@@ -46,6 +46,7 @@ public abstract class IssueDao {
     public abstract void clearIssuesTable();
 
 
+
     public void insertOrUpdate(List<Issue> issues){
         //todo does not work, remove or change
         for (Issue issue : issues){

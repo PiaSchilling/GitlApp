@@ -9,7 +9,6 @@ import androidx.room.Query;
 import androidx.room.Update;
 
 import java.util.List;
-import java.util.Map;
 
 import de.hdmstuttgart.gitlapp.models.Label;
 
@@ -42,6 +41,5 @@ public interface LabelDao {
 
     @Query("DELETE FROM labels")
     void clearLabelsTable();
-
 }
 

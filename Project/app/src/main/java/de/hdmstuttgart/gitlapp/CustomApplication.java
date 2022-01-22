@@ -12,7 +12,7 @@ public class CustomApplication extends Application {
     private AppContainer container;
     private LoginContainer loginContainer;
 
-    //dependency container (singleton access)
+    //dependency container
     public AppContainer getAppContainer(Context context){
         if(container == null){
             container = new AppContainer(context);
