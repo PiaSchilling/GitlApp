@@ -42,4 +42,8 @@ public class IssueDetailViewModel extends ViewModel {
             return fallBackLiveData;
         }
     }
+
+    public void closeIssue(int projectId, int issueIid){
+        issueRepository.closeIssue(projectId,issueIid);
+    }
 }

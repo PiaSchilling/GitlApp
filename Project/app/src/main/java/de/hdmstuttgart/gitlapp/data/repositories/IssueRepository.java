@@ -106,8 +106,6 @@ public class IssueRepository {
                 }else{
                     Log.e("Api","IssuePost FAIL, " + response.code());
                     networkCallMessage.setValue("Add issue failed, " + response.code()); //todo implement more meaningful message
-                    Log.e("Api", String.valueOf(response.errorBody()));
-                    Log.e("Api",response.message());
                 }
             }
 
@@ -115,6 +113,30 @@ public class IssueRepository {
             public void onFailure(Call<Void> call, Throwable t) {
                 networkCallMessage.setValue("Add issue failed, check wifi connection");
                 Log.e("Api","IssuePost FAIL, " + t.getMessage());
+            }
+        });
+    }
+
+    public void closeIssue(int projectId, int issueIid){
+        Call<Void> call = gitLabClient.closeIssue(projectId,issueIid,accessToken);
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if(response.isSuccessful()){
+                    Log.d("Api","IssueClose SUCCESS");
+                    networkCallMessage.setValue("Close issue successful");
+                    fetchProjectIssues(projectId);
+                }else{
+                    Log.e("Api","IssueClose FAIL, " + response.code());
+                    networkCallMessage.setValue("Close issue failed, " + response.code());
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                networkCallMessage.setValue("Close issue failed, check wifi connection");
+                Log.e("Api","IssueClose FAIL, " + t.getMessage());
             }
         });
     }

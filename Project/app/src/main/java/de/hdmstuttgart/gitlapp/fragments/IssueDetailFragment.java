@@ -22,6 +22,7 @@ import com.bumptech.glide.Glide;
 import com.google.android.material.chip.Chip;
 
 import java.util.List;
+import java.util.Objects;
 
 import de.hdmstuttgart.gitlapp.dependencies.AppContainer;
 import de.hdmstuttgart.gitlapp.CustomApplication;
@@ -83,7 +84,7 @@ public class IssueDetailFragment extends Fragment {
         viewModel = new ViewModelProvider(this, container.viewModelFactory)
                 .get(IssueDetailViewModel.class);
 
-        setLiveData();
+        this.issueLiveData = viewModel.getIssueDetailLiveData(issueId);
     }
 
     @Override
@@ -99,17 +100,8 @@ public class IssueDetailFragment extends Fragment {
         bindDataToViews();
     }
 
-    /**
-     * call method from viewModel to init the data related with this view/fragment
-     */
-    private void setLiveData() {
-        this.issueLiveData = viewModel.getIssueDetailLiveData(issueId);
-    }
-
 
     private void bindDataToViews(){
-
-        //todo add "show all" screen
 
         try{
 
@@ -177,5 +169,15 @@ public class IssueDetailFragment extends Fragment {
             Log.e("Api",e.getMessage());
             Toast.makeText(getActivity(),"Error loading data",Toast.LENGTH_SHORT).show();
         }
+
+        binding.closeIssueButton.setOnClickListener(view -> {
+            try{
+                int projectId = Objects.requireNonNull(issueLiveData.getValue()).getProject_id();
+                int issueIid = issueLiveData.getValue().getIid();
+                viewModel.closeIssue(projectId,issueIid);
+            }catch (NullPointerException e){
+                Log.e("Api", e.getMessage());
+            }
+        });
     }
 }
