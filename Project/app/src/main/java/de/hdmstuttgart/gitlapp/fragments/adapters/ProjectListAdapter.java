@@ -42,6 +42,7 @@ public class ProjectListAdapter extends RecyclerView.Adapter<ProjectListAdapter.
         private final TextView projectNameTextView;
         private final ImageView projectAvatar;
         private final TextView projectInitials;
+        private final TextView ownerNameTextView;
 
 
 
@@ -57,11 +58,16 @@ public class ProjectListAdapter extends RecyclerView.Adapter<ProjectListAdapter.
             return projectInitials;
         }
 
+        public TextView getOwnerNameTextView() {
+            return ownerNameTextView;
+        }
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             projectNameTextView = itemView.findViewById(R.id.projectTitle);
             projectAvatar = itemView.findViewById(R.id.avatarProject);
             projectInitials = itemView.findViewById(R.id.initialsProject);
+            ownerNameTextView = itemView.findViewById(R.id.projectOwnerName);
         }
     }
 
@@ -82,9 +88,11 @@ public class ProjectListAdapter extends RecyclerView.Adapter<ProjectListAdapter.
     public void onBindViewHolder(@NonNull ProjectListAdapter.ViewHolder holder, int position) {
         Project projectOnPosition = projectList.get(position);
         String projectName = projectOnPosition.getName();
+        String ownerName = projectOnPosition.getOwner_name();
 
         // set Text
         holder.getProjectNameTextView().setText(projectName);
+        holder.getOwnerNameTextView().setText(ownerName);
 
 
         // set Image

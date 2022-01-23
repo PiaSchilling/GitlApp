@@ -18,7 +18,7 @@ import retrofit2.http.Url;
 //all the requests for the api
 public interface GitLabClient {
 
-    @GET("projects/{id}/issues?with_labels_details=true") //todo make project id not hardcoded
+    @GET("projects/{id}/issues?with_labels_details=true")
     Call<List<Issue>> getProjectIssues(@Path ("id") int projectId,
                                        @Header("Authorization") String auth);
 

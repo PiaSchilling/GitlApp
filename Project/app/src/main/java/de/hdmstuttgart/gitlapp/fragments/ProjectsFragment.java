@@ -134,7 +134,7 @@ public class ProjectsFragment extends Fragment {
         // create and add adapter
         addListAdapter();
 
-        // user Card binding and setting of the values
+        // user Card
         imageView = binding.userCard.projectAvatar;
         user = binding.userCard.userNameLabel;
 
