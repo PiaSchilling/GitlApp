@@ -12,7 +12,7 @@ import java.util.List;
 import de.hdmstuttgart.gitlapp.models.Note;
 
 @Dao
-public interface NoteDao {
+public interface NoteDao { //todo can be removed if we kick the comment feature
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertNotes(Note ... notes);
