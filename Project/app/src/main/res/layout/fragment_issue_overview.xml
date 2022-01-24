@@ -55,8 +55,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/tab_layout"
             android:layout_marginTop="10dp"
-
-            />
+            android:layoutAnimation="@anim/layout_animation"/>
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
@@ -70,6 +69,16 @@
         android:layout_margin="16dp"
         android:contentDescription="@string/add_new_issue"
         android:src="@android:drawable/ic_input_add" />
+
+    <ProgressBar
+        android:id="@+id/progress_spinner_issue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/Widget.MaterialComponents.CircularProgressIndicator"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:indeterminate="true"
+        android:visibility="gone"/>
 
 
 </RelativeLayout>
