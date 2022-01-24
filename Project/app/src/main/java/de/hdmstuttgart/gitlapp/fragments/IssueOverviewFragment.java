@@ -92,7 +92,7 @@ public class IssueOverviewFragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+        super.onCreate(savedInstanceState); //todo this whole method should ideal only called once
         if (getArguments() != null) {
             projectId = getArguments().getInt(ARG_PARAM1);
             projectName = getArguments().getString(ARG_PARAM2);
@@ -107,6 +107,7 @@ public class IssueOverviewFragment extends Fragment {
                 .get(IssueOverviewViewModel.class);
 
         // - - - - -  init and update data
+        viewModel.setProjectId(projectId);
         viewModel.initIssueLiveData(projectId);
         this.issueListLiveData = viewModel.getMutableLiveData();
 
@@ -144,10 +145,16 @@ public class IssueOverviewFragment extends Fragment {
             issueList.addAll(changeList);
             applyFilter();
             issueList.sort(Comparator.comparingInt(Issue::getIid).reversed());
+            Log.d("Page","Observe" + issueList.toString());
             adapter.notifyDataSetChanged(); //todo replace with more efficient
         });
 
         networkCallMessage.observe(getViewLifecycleOwner(), s -> {
+            if(s.equals("loading")){
+                binding.progressSpinnerIssue.setVisibility(View.VISIBLE);
+            }else{
+                binding.progressSpinnerIssue.setVisibility(View.GONE);
+            }
             Toast.makeText(getActivity(), s, Toast.LENGTH_LONG).show();
             swipeRefreshLayout.setRefreshing(false); //when receive message update failed/success -> stop refreshing
         });
@@ -202,6 +209,8 @@ public class IssueOverviewFragment extends Fragment {
                         .commit();
             }
         });
+
+        setListPagination();
     }
 
     /**
@@ -212,6 +221,7 @@ public class IssueOverviewFragment extends Fragment {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
+        recyclerView.scheduleLayoutAnimation();
     }
 
     /**
@@ -240,5 +250,20 @@ public class IssueOverviewFragment extends Fragment {
                 Log.e("Api", "No valid tab filter");
         }
         adapter.notifyDataSetChanged();
+    }
+
+    private void setListPagination(){
+        binding.recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+
+                if(!recyclerView.canScrollVertically(1) && newState == RecyclerView.SCROLL_STATE_IDLE){
+                    Log.d("Page","Reached the end");
+                    viewModel.incrementPageNumber();
+                    viewModel.updateIssueLiveData(projectId);
+                }
+            }
+        });
     }
 }

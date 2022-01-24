@@ -22,7 +22,8 @@ public interface GitLabClient {
     // - - - - - issues - - - - -
     @GET("projects/{id}/issues?with_labels_details=true")
     Call<List<Issue>> getProjectIssues(@Path ("id") int projectId,
-                                       @Header("Authorization") String auth);
+                                       @Header("Authorization") String auth,
+                                       @Query("page") int page);
 
     @PUT("projects/{id}/issues/{issue_iid}?state_event=close")
     Call<Void> closeIssue(@Path("id") int projectId,

@@ -7,7 +7,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -19,7 +18,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -182,6 +180,7 @@ public class ProjectsFragment extends Fragment {
             projectList.clear();
             projectList.addAll(changeList);
             adapter.notifyDataSetChanged();
+            recyclerView.scheduleLayoutAnimation();
             Log.e("ST-", "ProjectList in onViewCreated() " + projectList.toString());
         });
     }
@@ -193,6 +192,7 @@ public class ProjectsFragment extends Fragment {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
+        recyclerView.scheduleLayoutAnimation();
     }
 
 

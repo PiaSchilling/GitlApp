@@ -17,7 +17,7 @@ public class ServiceGenerator {
 
     public ServiceGenerator(String baseUrl){
 
-        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
+        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor(); //todo remove https logger and dependency for that!
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         OkHttpClient client = new OkHttpClient.Builder()
                 .addInterceptor(interceptor).build();

@@ -43,7 +43,7 @@ public class ORM {
                 issue.setMilestone_id(milestone.getId());
             }
         }
-        appDatabase.issueDao().insertOrUpdate(issues);
+        appDatabase.issueDao().insertIssues(issues);
         appDatabase.userDao().insertUsers(authors);
         appDatabase.labelDao().insertLabels(labels);
         appDatabase.milestoneDao().insertMilestones(milestones);
