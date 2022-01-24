@@ -15,15 +15,17 @@ import de.hdmstuttgart.gitlapp.models.Issue;
  */
 public class IssueOverviewViewModel extends ViewModel {
 
-    IssueRepository issueRepository;
-
+    private final IssueRepository issueRepository;
+    private int pageNumber;
 
     public IssueOverviewViewModel(IssueRepository issueRepository) {
         this.issueRepository = issueRepository;
+        this.pageNumber = 1;
     }
 
     /**
      * calls repo to load data from local data or network
+     * but only if the issues for this project aren't currently stored in the live data object (cached)
      */
     public void initIssueLiveData(int projectId) {
         issueRepository.initProjectIssues(projectId);
@@ -33,7 +35,7 @@ public class IssueOverviewViewModel extends ViewModel {
      * calling repo which tries to update data from network
      */
     public void updateIssueLiveData(int projectId) {
-        issueRepository.fetchProjectIssues(projectId);
+        issueRepository.fetchProjectIssues(projectId, pageNumber);
     }
 
     /**
@@ -49,6 +51,10 @@ public class IssueOverviewViewModel extends ViewModel {
                 .collect(Collectors.toList());
     }
 
+    public void incrementPageNumber(){
+        this.pageNumber++;
+    }
+
     public MutableLiveData<List<Issue>> getMutableLiveData() {
         return issueRepository.getIssueListLiveData();
     }
@@ -56,5 +62,6 @@ public class IssueOverviewViewModel extends ViewModel {
     public MutableLiveData<String> getMessage() {
         return issueRepository.getNetworkCallMessage();
     }
+
 
 }

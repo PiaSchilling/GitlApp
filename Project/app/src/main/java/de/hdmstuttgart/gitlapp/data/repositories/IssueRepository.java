@@ -5,7 +5,10 @@ import android.util.Log;
 import androidx.lifecycle.MutableLiveData;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -30,6 +33,8 @@ public class IssueRepository {
     //present data to the viewModel
     private final MutableLiveData<List<Issue>> issuesLiveData = new MutableLiveData<>();
     private final MutableLiveData<String> networkCallMessage = new MutableLiveData<>();
+    private final MutableLiveData<Issue> singleIssueLiveData = new MutableLiveData<>();
+
 
 
     public IssueRepository(AppDatabase appDatabase, GitLabClient gitLabClient) {
@@ -51,7 +56,7 @@ public class IssueRepository {
      */
     public void initProjectIssues(int projectId) {
         responseList = ORM.completeIssueObjects(projectId, appDatabase);
-        fetchProjectIssues(projectId);
+        fetchProjectIssues(projectId,1);
         issuesLiveData.setValue(responseList);
         Log.d("Api", "Loaded local data " + responseList.toString());
     }
@@ -59,17 +64,22 @@ public class IssueRepository {
     /**
      * fetches all issues by a specific project
      */
-    public void fetchProjectIssues(int projectId) {
+    public void fetchProjectIssues(int projectId, int page) {
+        networkCallMessage.postValue("loading");
         //todo make background thread for this (thread pool)
-        Call<List<Issue>> call = gitLabClient.getProjectIssues(projectId, accessToken);
+        Call<List<Issue>> call = gitLabClient.getProjectIssues(projectId, accessToken, page);
         call.enqueue(new Callback<List<Issue>>() {
             @Override
             public void onResponse(Call<List<Issue>> call, Response<List<Issue>> response) {
                 if (response.isSuccessful()) {
                     responseList = response.body();
-                    Log.d("Api", "IssueCall SUCCESS " + responseList.toString());
+
                     ORM.mapAndInsertIssues(responseList, appDatabase);
-                    issuesLiveData.postValue(responseList);
+                    List<Issue> issues = ORM.completeIssueObjects(projectId,appDatabase);
+                    issues.sort(Comparator.comparingInt(Issue::getIid).reversed());
+                    issuesLiveData.postValue(issues);
+
+                    Log.d("Api", "IssueCall SUCCESS " + responseList.toString());
                     networkCallMessage.postValue("Update successful");
                 } else {
                     if(response.code() == 401){
@@ -102,7 +112,7 @@ public class IssueRepository {
                 if(response.isSuccessful()){
                     Log.d("Api","IssuePost SUCCESS");
                     networkCallMessage.setValue("Add issue successful");
-                    fetchProjectIssues(projectId); //todo its not efficient to make two network calls!
+                    fetchProjectIssues(projectId,1); //todo its not efficient to make two network calls!
                 }else{
                     Log.e("Api","IssuePost FAIL, " + response.code());
                     networkCallMessage.setValue("Add issue failed, " + response.code()); //todo implement more meaningful message
@@ -117,15 +127,20 @@ public class IssueRepository {
         });
     }
 
+    /**
+     * change the state of an issue from open to closed by making the corresponding api call
+     * @param projectId the id of the project the issue belongs to
+     * @param issueIid the iid of the issue which should be closed
+     */
     public void closeIssue(int projectId, int issueIid){
         Call<Void> call = gitLabClient.closeIssue(projectId,issueIid,accessToken);
         call.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if(response.isSuccessful()){
+                    getSingleProjectIssue(projectId,issueIid); //if close was successful make call to update only the updated issue
                     Log.d("Api","IssueClose SUCCESS");
                     networkCallMessage.setValue("Close issue successful");
-                    fetchProjectIssues(projectId);
                 }else{
                     Log.e("Api","IssueClose FAIL, " + response.code());
                     networkCallMessage.setValue("Close issue failed, " + response.code());
@@ -141,6 +156,42 @@ public class IssueRepository {
         });
     }
 
+    /**
+     * fetch a single project issue by its iid
+     * @param projectId the project the issue belongs to
+     * @param issueIid the issueIid of the issue which should be fetched
+     */
+    public void getSingleProjectIssue(int projectId, int issueIid){ //todo not working needs to be fixed (label bug)
+        Call<Issue> call = gitLabClient.getProjectIssueByIid(projectId,issueIid,accessToken);
+        call.enqueue(new Callback<Issue>() {
+            @Override
+            public void onResponse(Call<Issue> call, Response<Issue> response) {
+                if(response.isSuccessful()){
+                    Issue responseIssue = response.body();
+                    appDatabase.issueDao().updateIssues(responseIssue);
+
+                    //update list with new issue
+                    singleIssueLiveData.setValue(responseIssue);
+                    Optional<Issue> temp = issuesLiveData.getValue()
+                            .stream()
+                            .filter(issue -> issue.getIid() == issueIid).findAny();
+                    if(temp.isPresent()){
+                        int index = issuesLiveData.getValue().indexOf(temp.get());
+                        issuesLiveData.getValue().set(index,responseIssue);
+                    }
+                    Log.d("Api","SingleIssueCall SUCCESS, updated issue #" + Objects.requireNonNull(responseIssue).getIid());
+                }else{
+                    Log.e("Api", "SingleIssueCall FAIL, " + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Issue> call, Throwable t) {
+                Log.e("Api","SingleIssueCall FAIL, " + t.getMessage());
+            }
+        });
+    }
+
     public MutableLiveData<List<Issue>> getIssueListLiveData() {
         Log.d("Api", "Called get issueLiveData" + issuesLiveData.getValue());
         return this.issuesLiveData;
@@ -152,8 +203,8 @@ public class IssueRepository {
      * @return a live data object containing a single issue
      * @throws Exception if no issue with the issueId can be found
      */
-    public MutableLiveData<Issue> getSingleIssueLiveData(int issueId) throws Exception {
-        MutableLiveData<Issue> singleIssueLiveData = new MutableLiveData<>();
+    public MutableLiveData<Issue> setSingleIssueLiveData(int issueId) throws Exception {
+       // MutableLiveData<Issue> singleIssueLiveData = new MutableLiveData<>();
         List<Issue> temp = responseList
                 .stream()
                 .filter(issue -> issue.getId() == issueId)
@@ -166,6 +217,10 @@ public class IssueRepository {
         }
         Log.d("Api","GetSingleIssueLiveData throws exception, list size: " + temp.size());
         throw new Exception("Issue with id " + issueId + " exists " + temp.size() + " times");
+    }
+
+    public MutableLiveData<Issue> getSingleIssueLiveData(){
+        return singleIssueLiveData;
     }
 
     /**
