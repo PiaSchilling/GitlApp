@@ -74,7 +74,7 @@ public class Issue {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Issue issue = (Issue) o;
-        return id == issue.id && weight == issue.weight && hashcode == issue.hashcode && thumbs_up == issue.thumbs_up && thumbs_down == issue.thumbs_down && project_id == issue.project_id && author_id == issue.author_id && title.equals(issue.title) && description.equals(issue.description) && state == issue.state;
+        return id == issue.id && weight == issue.weight && hashcode == issue.hashcode && thumbs_up == issue.thumbs_up && thumbs_down == issue.thumbs_down && project_id == issue.project_id && author_id == issue.author_id && Objects.equals(title,issue.title) && Objects.equals(description,issue.description) && Objects.equals(state,issue.state);
     }
 
     @Override

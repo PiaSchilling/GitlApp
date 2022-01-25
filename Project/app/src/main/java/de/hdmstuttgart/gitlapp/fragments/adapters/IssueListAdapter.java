@@ -2,6 +2,7 @@ package de.hdmstuttgart.gitlapp.fragments.adapters;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -79,6 +80,7 @@ public class IssueListAdapter extends ListAdapter<Issue, IssueListAdapter.ViewHo
     public IssueListAdapter(List<Issue> issueList, OnIssueClickListener clickListener) {
         super(DIFF_CALLBACK);
         this.submitList(issueList);
+        Log.e("Bug",getCurrentList().toString());
         this.issueClickListener = clickListener;
     }
 
@@ -87,15 +89,12 @@ public class IssueListAdapter extends ListAdapter<Issue, IssueListAdapter.ViewHo
                 @Override
                 public boolean areItemsTheSame( //todo understand
                         @NonNull Issue oldIssue, @NonNull Issue newIssue) {
-                    // User properties may have changed if reloaded from the DB, but ID is fixed
                     return oldIssue.getId() == newIssue.getId();
                 }
 
                 @Override
                 public boolean areContentsTheSame(
                         @NonNull Issue oldIssue, @NonNull Issue newIssue) {
-                    // NOTE: if you use equals, your object must properly override Object#equals()
-                    // Incorrectly returning false here will result in too many animations.
                     return oldIssue.equals(newIssue);
                 }
             };
@@ -139,12 +138,7 @@ public class IssueListAdapter extends ListAdapter<Issue, IssueListAdapter.ViewHo
         }
 
         //onclick on listview item
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                issueClickListener.onIssueClick(issueOnPosition);
-            }
-        });
+        holder.itemView.setOnClickListener(view -> issueClickListener.onIssueClick(issueOnPosition));
 
     }
 
