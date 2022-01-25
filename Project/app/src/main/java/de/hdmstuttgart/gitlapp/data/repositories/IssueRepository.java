@@ -73,11 +73,12 @@ public class IssueRepository {
             public void onResponse(Call<List<Issue>> call, Response<List<Issue>> response) {
                 if (response.isSuccessful()) {
                     responseList = response.body();
-
+                    Log.e("Api","onResponse " + responseList.toString());
                     ORM.mapAndInsertIssues(responseList, appDatabase);
-                    List<Issue> issues = ORM.completeIssueObjects(projectId,appDatabase);
-                    issues.sort(Comparator.comparingInt(Issue::getIid).reversed());
-                    issuesLiveData.postValue(issues);
+                    responseList = ORM.completeIssueObjects(projectId,appDatabase);
+                    Log.e("Api","issuese" + responseList.toString());
+                    responseList.sort(Comparator.comparingInt(Issue::getIid).reversed());
+                    issuesLiveData.postValue(responseList);
 
                     Log.d("Api", "IssueCall SUCCESS " + responseList.toString());
                     networkCallMessage.postValue("Update successful");
@@ -205,6 +206,7 @@ public class IssueRepository {
      */
     public MutableLiveData<Issue> setSingleIssueLiveData(int issueId) throws Exception {
        // MutableLiveData<Issue> singleIssueLiveData = new MutableLiveData<>();
+        Log.e("Api",responseList.toString());
         List<Issue> temp = responseList
                 .stream()
                 .filter(issue -> issue.getId() == issueId)
@@ -215,7 +217,7 @@ public class IssueRepository {
             Log.d("Api","GetSingleIssueLiveData returns " + temp.get(0).toString());
             return singleIssueLiveData;
         }
-        Log.d("Api","GetSingleIssueLiveData throws exception, list size: " + temp.size());
+        Log.e("Api","GetSingleIssueLiveData throws exception, list size: " + temp.size());
         throw new Exception("Issue with id " + issueId + " exists " + temp.size() + " times");
     }
 
