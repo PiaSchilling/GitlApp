@@ -9,6 +9,7 @@ import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.util.Log;
@@ -98,52 +99,55 @@ public class IssueDetailFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         bindDataToViews();
+
+        issueLiveData.observe(getViewLifecycleOwner(), issue -> {
+            Log.d("State","OnChanged triggered");
+            setStateChip();
+        });
     }
 
 
-    private void bindDataToViews(){
+    //todo split up in multiple methods
+    private void bindDataToViews() {
 
-        try{
+        try {
 
             // - - - - set views which can not be null - - - -
-            binding.issueIid.setText(getString(R.string.issue_iid,issueLiveData.getValue().getIid()));
+            binding.issueIid.setText(getString(R.string.issue_iid, issueLiveData.getValue().getIid()));
             binding.issueTitle.setText(issueLiveData.getValue().getTitle());
-            binding.authorCard.createDate.setText(getString(R.string.issue_create_date,issueLiveData.getValue().getCreated_at()));
+            binding.authorCard.createDate.setText(getString(R.string.issue_create_date, issueLiveData.getValue().getCreated_at()));
             binding.thumbsUp.thumbsUpCount.setText(String.valueOf(issueLiveData.getValue().getThumbs_up()));
             binding.thumbsDown.thumbsDownCount.setText(String.valueOf(issueLiveData.getValue().getThumbs_down()));
             binding.weightChip.setText(String.valueOf(issueLiveData.getValue().getWeight()));
             binding.authorCard.authorName.setText(issueLiveData.getValue().getAuthor().getName());
 
             // - - - - set view which can be null or empty (if null set default value) - - - -
-            if(issueLiveData.getValue().getDescription() == null || issueLiveData.getValue().getDescription().isEmpty()){
+            if (issueLiveData.getValue().getDescription() == null || issueLiveData.getValue().getDescription().isEmpty()) {
                 binding.issueDescriptionContent.setText("no description");
-            }else{
+            } else {
                 binding.issueDescriptionContent.setText(issueLiveData.getValue().getDescription());
             }
 
-            if(issueLiveData.getValue().getMilestone() == null){
+            if (issueLiveData.getValue().getMilestone() == null) {
                 binding.milestoneTitle.setText("milestone name not set");
-            }else{
+            } else {
                 binding.milestoneTitle.setText(issueLiveData.getValue().getMilestone().getTitle());
             }
 
-            if(issueLiveData.getValue().getDue_date() == null){
-                binding.dueDate.setText(getString(R.string.issue_due_date,"not set"));
-            }else{
-                binding.dueDate.setText(getString(R.string.issue_due_date,issueLiveData.getValue().getDue_date()));
+            if (issueLiveData.getValue().getDue_date() == null) {
+                binding.dueDate.setText(getString(R.string.issue_due_date, "not set"));
+            } else {
+                binding.dueDate.setText(getString(R.string.issue_due_date, issueLiveData.getValue().getDue_date()));
             }
 
             // - - - - set state chip text and color- - - -
-            if(issueLiveData.getValue().getState().equals("opened")){
-                binding.statusChip.setChipBackgroundColor(ColorStateList.valueOf(ContextCompat.getColor(getActivity(),R.color.green)));
-            }
-            binding.statusChip.setText(issueLiveData.getValue().getState());
+            setStateChip();
 
 
             // - - - - set label list - - - -
             List<Label> labels = issueLiveData.getValue().getLabels();
 
-            for (Label label: labels){
+            for (Label label : labels) {
 
                 Chip labelChip = new Chip(getActivity());
 
@@ -154,7 +158,7 @@ public class IssueDetailFragment extends Fragment {
 
                 labelChip.setText(label.getName());
                 labelChip.setChipBackgroundColor(ColorStateList.valueOf(Color.parseColor(label.getColor())));
-                labelChip.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(getActivity(),R.color.white)));
+                labelChip.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(getActivity(), R.color.white)));
                 binding.labelContainer.addView(labelChip);
             }
 
@@ -165,19 +169,28 @@ public class IssueDetailFragment extends Fragment {
                     .into(binding.authorCard.avatar);
 
 
-        }catch (NullPointerException e){
-            Log.e("Api",e.getMessage());
-            Toast.makeText(getActivity(),"Error loading data",Toast.LENGTH_SHORT).show();
+        } catch (NullPointerException e) {
+            Log.e("Api", e.getMessage());
+            Toast.makeText(getActivity(), "Error loading data", Toast.LENGTH_SHORT).show();
         }
 
         binding.closeIssueButton.setOnClickListener(view -> {
-            try{
+            try {
                 int projectId = Objects.requireNonNull(issueLiveData.getValue()).getProject_id();
                 int issueIid = issueLiveData.getValue().getIid();
-                viewModel.closeIssue(projectId,issueIid);
-            }catch (NullPointerException e){
+                viewModel.closeIssue(projectId, issueIid);
+            } catch (NullPointerException e) {
                 Log.e("Api", e.getMessage());
             }
         });
+    }
+
+    private void setStateChip() {
+        if (issueLiveData.getValue().getState().equals("opened")) {
+            binding.statusChip.setChipBackgroundColor(ColorStateList.valueOf(ContextCompat.getColor(getActivity(), R.color.green)));
+        }else{
+            binding.statusChip.setChipBackgroundColor(ColorStateList.valueOf(ContextCompat.getColor(getActivity(), R.color.red)));
+        }
+        binding.statusChip.setText(issueLiveData.getValue().getState());
     }
 }

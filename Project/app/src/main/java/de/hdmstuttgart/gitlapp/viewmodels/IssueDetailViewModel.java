@@ -33,7 +33,7 @@ public class IssueDetailViewModel extends ViewModel {
      */
     public MutableLiveData<Issue> getIssueDetailLiveData(int issueId) {
         try {
-            return issueRepository.setSingleIssueLiveData(issueId);
+            return issueRepository.getSingleIssueLiveData(issueId);
         } catch (Exception e) {
             Log.e("Api",e.getMessage() + " | returning fallBackIssue");
             Issue fallBackIssue = new Issue(0,0,0,"-","-",new User(),0,0,0,0,0, "closed");

@@ -17,9 +17,7 @@ import de.hdmstuttgart.gitlapp.fragments.IssueDetailFragment;
 import de.hdmstuttgart.gitlapp.fragments.IssueOverviewFragment;
 import de.hdmstuttgart.gitlapp.fragments.LoginFragment;
 import de.hdmstuttgart.gitlapp.fragments.ProjectsFragment;
-import de.hdmstuttgart.gitlapp.fragments.SettingsFragment;
-import de.hdmstuttgart.gitlapp.models.Issue;
-import de.hdmstuttgart.gitlapp.viewmodels.IssueDetailViewModel;
+
 
 
 public class MainActivity extends AppCompatActivity {
@@ -46,13 +44,10 @@ public class MainActivity extends AppCompatActivity {
             }
         }else{
             Log.d("Login", "Base url " + baseUrl);
-            Log.d("Login", "Profile saved, show login screen");
+            Log.d("Login", "Profile saved, show login no screen");
             if (savedInstanceState == null) {
-                Bundle bundle = new Bundle();
-                bundle.putInt("projectId",7124);
-                bundle.putString("projectName","GitLapp");
                 getSupportFragmentManager().beginTransaction()
-                        .add(R.id.fragment_container, ProjectsFragment.class, bundle)
+                        .add(R.id.fragment_container, ProjectsFragment.class, null)
                         .commit();
             }
         }

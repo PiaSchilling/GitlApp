@@ -139,7 +139,9 @@ public class IssueRepository {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if(response.isSuccessful()){
-                    getSingleProjectIssue(projectId,issueIid); //if close was successful make call to update only the updated issue
+                    Optional<Issue> updatedIssue = responseList.stream().filter(issue -> issue.getIid() == issueIid).findAny();
+                    updatedIssue.ifPresent(issue -> issue.setState("closed"));
+                    updatedIssue.ifPresent(singleIssueLiveData::setValue);
                     Log.d("Api","IssueClose SUCCESS");
                     networkCallMessage.setValue("Close issue successful");
                 }else{
@@ -157,42 +159,6 @@ public class IssueRepository {
         });
     }
 
-    /**
-     * fetch a single project issue by its iid
-     * @param projectId the project the issue belongs to
-     * @param issueIid the issueIid of the issue which should be fetched
-     */
-    public void getSingleProjectIssue(int projectId, int issueIid){ //todo not working needs to be fixed (label bug)
-        Call<Issue> call = gitLabClient.getProjectIssueByIid(projectId,issueIid,accessToken);
-        call.enqueue(new Callback<Issue>() {
-            @Override
-            public void onResponse(Call<Issue> call, Response<Issue> response) {
-                if(response.isSuccessful()){
-                    Issue responseIssue = response.body();
-                    appDatabase.issueDao().updateIssues(responseIssue);
-
-                    //update list with new issue
-                    singleIssueLiveData.setValue(responseIssue);
-                    Optional<Issue> temp = issuesLiveData.getValue()
-                            .stream()
-                            .filter(issue -> issue.getIid() == issueIid).findAny();
-                    if(temp.isPresent()){
-                        int index = issuesLiveData.getValue().indexOf(temp.get());
-                        issuesLiveData.getValue().set(index,responseIssue);
-                    }
-                    Log.d("Api","SingleIssueCall SUCCESS, updated issue #" + Objects.requireNonNull(responseIssue).getIid());
-                }else{
-                    Log.e("Api", "SingleIssueCall FAIL, " + response.code());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Issue> call, Throwable t) {
-                Log.e("Api","SingleIssueCall FAIL, " + t.getMessage());
-            }
-        });
-    }
-
     public MutableLiveData<List<Issue>> getIssueListLiveData() {
         Log.d("Api", "Called get issueLiveData" + issuesLiveData.getValue());
         return this.issuesLiveData;
@@ -204,8 +170,7 @@ public class IssueRepository {
      * @return a live data object containing a single issue
      * @throws Exception if no issue with the issueId can be found
      */
-    public MutableLiveData<Issue> setSingleIssueLiveData(int issueId) throws Exception {
-       // MutableLiveData<Issue> singleIssueLiveData = new MutableLiveData<>();
+    public MutableLiveData<Issue> getSingleIssueLiveData(int issueId) throws Exception {
         Log.e("Api",responseList.toString());
         List<Issue> temp = responseList
                 .stream()
@@ -219,10 +184,6 @@ public class IssueRepository {
         }
         Log.e("Api","GetSingleIssueLiveData throws exception, list size: " + temp.size());
         throw new Exception("Issue with id " + issueId + " exists " + temp.size() + " times");
-    }
-
-    public MutableLiveData<Issue> getSingleIssueLiveData(){
-        return singleIssueLiveData;
     }
 
     /**

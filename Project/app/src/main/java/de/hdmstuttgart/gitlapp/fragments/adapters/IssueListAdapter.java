@@ -1,7 +1,6 @@
 package de.hdmstuttgart.gitlapp.fragments.adapters;
 
 import android.content.Context;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,7 +10,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
@@ -23,7 +21,7 @@ import de.hdmstuttgart.gitlapp.models.Issue;
 
 public class IssueListAdapter extends ListAdapter<Issue, IssueListAdapter.ViewHolder> {
 
-    private OnIssueClickListener issueClickListener;
+    private final OnIssueClickListener issueClickListener;
 
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -32,7 +30,6 @@ public class IssueListAdapter extends ListAdapter<Issue, IssueListAdapter.ViewHo
         private final TextView createdDateTextView;
         private final TextView authorTextView;
         private final TextView dueDateTextView;
-        private final ImageView calendarIcon;
         private final TextView iidTextView;
         private final ImageView statusBar;
 
@@ -43,7 +40,6 @@ public class IssueListAdapter extends ListAdapter<Issue, IssueListAdapter.ViewHo
             createdDateTextView = itemView.findViewById(R.id.time_string);
             authorTextView = itemView.findViewById(R.id.author_name);
             dueDateTextView = itemView.findViewById(R.id.date_posted);
-            calendarIcon = itemView.findViewById(R.id.calendar_icon);
             iidTextView = itemView.findViewById(R.id.issue_iid_card);
             statusBar = itemView.findViewById(R.id.status_bar);
         }
@@ -62,10 +58,6 @@ public class IssueListAdapter extends ListAdapter<Issue, IssueListAdapter.ViewHo
 
         public TextView getDueDateTextView() {
             return dueDateTextView;
-        }
-
-        public ImageView getCalendarIcon() {
-            return calendarIcon;
         }
 
         public TextView getIidTextView() {
@@ -128,7 +120,7 @@ public class IssueListAdapter extends ListAdapter<Issue, IssueListAdapter.ViewHo
         holder.getIidTextView().setText(context.getString(R.string.issue_iid, iid));
 
         if (dueDate == null || dueDate.isEmpty()) {
-            holder.getDueDateTextView().setText(""); //todo remove due date
+            holder.getDueDateTextView().setText("");
         }
 
         if (issueOnPosition.getState().equals("opened")) {

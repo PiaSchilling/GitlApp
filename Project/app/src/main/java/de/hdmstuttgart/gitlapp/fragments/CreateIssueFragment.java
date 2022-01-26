@@ -201,7 +201,8 @@ public class CreateIssueFragment extends Fragment {
 
         // - - - - button listeners - - - -
         binding.createButton.setOnClickListener(view12 -> {
-
+            //todo end fragment if successful
+            //todo labels are not displayed offline check why
             Chip chip = milestoneGroup.findViewById(milestoneGroup.getCheckedChipId());
             String title = binding.inputIssueTitle.getEditText().getText().toString();
             String description = binding.inputIssueDescription.getEditText().getText().toString();
