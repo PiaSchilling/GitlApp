@@ -57,6 +57,7 @@
         >
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/hostUrl_editText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/white"/>
@@ -81,6 +82,7 @@
         style="@style/TextInput">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/userId_editText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="number"
@@ -128,6 +130,7 @@
         style="@style/TextInput">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/accessToken_editText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/white"
@@ -135,13 +138,13 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.button.MaterialButton
-        android:layout_below="@+id/accessToken_textField"
-        android:layout_centerHorizontal="true"
+        android:id="@+id/login_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/login_button"
-        android:text="@string/login_button"
-        android:layout_marginTop="40dp" />
+        android:layout_below="@+id/accessToken_textField"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="40dp"
+        android:text="@string/login_button" />
 
     <ProgressBar
         android:id="@+id/progress_spinner"
