@@ -5,16 +5,18 @@ import androidx.lifecycle.ViewModel;
 
 import java.util.List;
 
+import de.hdmstuttgart.gitlapp.data.repositories.IProfileRepository;
+import de.hdmstuttgart.gitlapp.data.repositories.IProjectRepository;
 import de.hdmstuttgart.gitlapp.data.repositories.ProfileRepository;
 import de.hdmstuttgart.gitlapp.data.repositories.ProjectRepository;
 import de.hdmstuttgart.gitlapp.models.Project;
 
 public class ProjectsViewModel extends ViewModel {
 
-    ProjectRepository projectRepository;
-    ProfileRepository profileRepository;
+    IProjectRepository projectRepository;
+    IProfileRepository profileRepository;
 
-    public ProjectsViewModel(ProjectRepository projectRepository, ProfileRepository profileRepository){
+    public ProjectsViewModel(IProjectRepository projectRepository, IProfileRepository profileRepository){
         this.projectRepository = projectRepository;
         this.profileRepository = profileRepository;
     }

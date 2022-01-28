@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 
+import de.hdmstuttgart.gitlapp.data.repositories.IIssueRepository;
 import de.hdmstuttgart.gitlapp.data.repositories.IssueRepository;
 import de.hdmstuttgart.gitlapp.models.Issue;
 import de.hdmstuttgart.gitlapp.models.User;
@@ -15,14 +16,14 @@ import de.hdmstuttgart.gitlapp.models.User;
  */
 public class IssueDetailViewModel extends ViewModel {
 
-    private final IssueRepository issueRepository;
+    private final IIssueRepository issueRepository;
 
 
     /**
      * view model is always instanced for a specific issueId
      * @param issueRepository for fetching data
      */
-    public IssueDetailViewModel(IssueRepository issueRepository){
+    public IssueDetailViewModel(IIssueRepository issueRepository){
         this.issueRepository = issueRepository;
     }
 

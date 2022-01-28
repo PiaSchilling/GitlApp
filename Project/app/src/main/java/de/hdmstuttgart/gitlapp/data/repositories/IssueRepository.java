@@ -19,7 +19,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class IssueRepository {
+public class IssueRepository implements IIssueRepository{
 
     // - - - - - Sources - - - - - - - -
     private final AppDatabase appDatabase;
@@ -54,6 +54,7 @@ public class IssueRepository {
      *
      * @param projectId the id of the project the issues should be loaded for
      */
+    @Override
     public void initProjectIssues(int projectId) {
         responseList = ORM.completeIssueObjects(projectId, appDatabase);
         fetchProjectIssues(projectId,1);
@@ -64,6 +65,7 @@ public class IssueRepository {
     /**
      * fetches all issues by a specific project
      */
+    @Override
     public void fetchProjectIssues(int projectId, int page) {
         networkCallMessage.postValue("loading");
         //todo make background thread for this (thread pool)
@@ -105,6 +107,7 @@ public class IssueRepository {
     /**
      * makes an api call to post a new issue with parameters set by the user
      */
+    @Override
     public void postNewIssue(int projectId, String issueTitle, String issueDescription, String dueDate, int weight,  String labels, int milestoneId){
         Call<Void> call = gitLabClient.postNewIssue(projectId,accessToken,issueTitle,issueDescription,dueDate,weight,milestoneId,labels);
         call.enqueue(new Callback<Void>() {
@@ -133,6 +136,7 @@ public class IssueRepository {
      * @param projectId the id of the project the issue belongs to
      * @param issueIid the iid of the issue which should be closed
      */
+    @Override
     public void closeIssue(int projectId, int issueIid){
         Call<Void> call = gitLabClient.closeIssue(projectId,issueIid,accessToken);
         call.enqueue(new Callback<Void>() {
@@ -159,6 +163,7 @@ public class IssueRepository {
         });
     }
 
+    @Override
     public MutableLiveData<List<Issue>> getIssueListLiveData() {
         Log.d("Api", "Called get issueLiveData" + issuesLiveData.getValue());
         return this.issuesLiveData;
@@ -170,6 +175,7 @@ public class IssueRepository {
      * @return a live data object containing a single issue
      * @throws Exception if no issue with the issueId can be found
      */
+    @Override
     public MutableLiveData<Issue> getSingleIssueLiveData(int issueId) throws Exception {
         Log.e("Api",responseList.toString());
         List<Issue> temp = responseList
@@ -191,6 +197,7 @@ public class IssueRepository {
      *
      * @return LiveData object containing the message
      */
+    @Override
     public MutableLiveData<String> getNetworkCallMessage() {
         return networkCallMessage;
     }

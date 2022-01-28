@@ -17,7 +17,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ProjectRepository {
+public class ProjectRepository implements IProjectRepository{
 
     // - - - - -  Sources - - - - - -
     private final AppDatabase appDatabase;
@@ -52,6 +52,7 @@ public class ProjectRepository {
      * loads the locally stored project (local cache) and tries to update
      * should be called on app start, in case there is no network connection data is still displayed
      */
+    @Override
     public void initProjects() {
         responseList = appDatabase.projectDao().getAllProjects();
         fetchProjects();
@@ -64,6 +65,7 @@ public class ProjectRepository {
      * reloads the data by making api calls
      * if call fails, data from the local database will be loaded
      */
+    @Override
     public void fetchProjects() {
 
         Call<List<Project>> call = gitLabClient.getMemberProjects(accessToken);
@@ -98,10 +100,12 @@ public class ProjectRepository {
         });
     }
 
+    @Override
     public MutableLiveData<List<Project>> getProjectsLiveData() {
         return this.projectsLiveData;
     }
 
+    @Override
     public MutableLiveData<String> getNetworkCallMessage() {
         return networkCallMessage;
     }
@@ -115,6 +119,7 @@ public class ProjectRepository {
      *
      * @param projectId id of the project for which the data should be fetched for
      */
+    @Override
     public void fetchProjectLabels(int projectId) {
         Call<List<Label>> call = gitLabClient.getProjectLabels(projectId, accessToken);
         call.enqueue(new Callback<List<Label>>() {
@@ -144,6 +149,7 @@ public class ProjectRepository {
      *
      * @param projectId id of the project for which the data should be fetched for
      */
+    @Override
     public void fetchProjectMilestones(int projectId) {
         Call<List<Milestone>> call = gitLabClient.getProjectMilestones(projectId, accessToken);
         call.enqueue(new Callback<List<Milestone>>() {
@@ -168,11 +174,13 @@ public class ProjectRepository {
         });
     }
 
+    @Override
     public MutableLiveData<List<Label>> getLabelsLiveData(int projectId) {
         fetchProjectLabels(projectId);
         return labelsLiveData;
     }
 
+    @Override
     public MutableLiveData<List<Milestone>> getMilestoneLiveData(int projectId) {
         fetchProjectMilestones(projectId);
         return milestoneLiveData;

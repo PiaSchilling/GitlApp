@@ -3,14 +3,15 @@ package de.hdmstuttgart.gitlapp.viewmodels;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import de.hdmstuttgart.gitlapp.data.repositories.IProfileRepository;
 import de.hdmstuttgart.gitlapp.data.repositories.ProfileRepository;
 
 public class LoginViewModel extends ViewModel {
 
 
-    private final ProfileRepository profileRepository;
+    private final IProfileRepository profileRepository;
 
-    public LoginViewModel(ProfileRepository profileRepository){
+    public LoginViewModel(IProfileRepository profileRepository){
         this.profileRepository = profileRepository;
     }
 

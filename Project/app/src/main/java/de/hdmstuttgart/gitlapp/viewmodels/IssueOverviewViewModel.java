@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import de.hdmstuttgart.gitlapp.data.repositories.IIssueRepository;
 import de.hdmstuttgart.gitlapp.data.repositories.IssueRepository;
 import de.hdmstuttgart.gitlapp.models.Issue;
 
@@ -15,10 +16,10 @@ import de.hdmstuttgart.gitlapp.models.Issue;
  */
 public class IssueOverviewViewModel extends ViewModel {
 
-    private final IssueRepository issueRepository;
+    private final IIssueRepository issueRepository;
     private int pageNumber;
 
-    public IssueOverviewViewModel(IssueRepository issueRepository) {
+    public IssueOverviewViewModel(IIssueRepository issueRepository) {
         this.issueRepository = issueRepository;
         this.pageNumber = 1;
     }

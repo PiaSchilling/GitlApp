@@ -14,7 +14,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ProfileRepository {
+public class ProfileRepository implements IProfileRepository{
 
     // - - - - - Sources - - - - - - - -
     private final AppDatabase appDatabase;
@@ -37,7 +37,8 @@ public class ProfileRepository {
     /**
      * creates a profile and inserts in the database
      */
-    private void createProfile(){
+    @Override
+    public void createProfile(){
         Log.d("Bug","createProfile triggered");
 
         Profile profile = new Profile(loggedIdUser.getId(), accessToken, hostUrl);
@@ -50,7 +51,8 @@ public class ProfileRepository {
      * only if the user exists a profile is created
      * @param url the whole request url (including the base url bc this is the only way making api calls with dynamic base url)
      */
-    private void fetchUser(String url){
+    @Override
+    public void fetchUser(String url){
         Log.d("Bug","fetchUser triggered");
         Call<User> call = gitLabClient.getSingleUserWithWholeUrl(url, this.accessToken);
         call.enqueue(new Callback<User>() {
@@ -85,6 +87,7 @@ public class ProfileRepository {
         });
     }
 
+    @Override
     public void setProfileInformation(int userId, String hostUrl, String accessToken){
         this.userId = userId;
         this.accessToken = "Bearer " + accessToken;
@@ -93,30 +96,30 @@ public class ProfileRepository {
         fetchUser(url);
     }
 
+    @Override
     public User getLoggedIdUser(){
         int localUserId = appDatabase.profileDao().getProfile().getLoggedInUserId();
         return appDatabase.userDao().getUserById(localUserId);
     }
 
-    public Profile getUserProfile(){
-        return appDatabase.profileDao().getProfile();
-    }
 
-    public MutableLiveData<String> getMessageLiveData() {
-        return messageLiveData;
-    }
-
-
+    @Override
     public int getLoggedInUserId(){
         return appDatabase.profileDao().getProfile().getLoggedInUserId();
     }
 
+    @Override
     public String getHostUrl(){
         return appDatabase.profileDao().getProfile().getHostUrl();
     }
 
+    @Override
+    public MutableLiveData<String> getMessageLiveData() {
+        return messageLiveData;
+    }
 
     // - - - - - clear data at log out - - - -
+    @Override
     public void clearAppData(){
         appDatabase.issueDao().clearIssuesTable();
         appDatabase.labelDao().clearLabelsTable();

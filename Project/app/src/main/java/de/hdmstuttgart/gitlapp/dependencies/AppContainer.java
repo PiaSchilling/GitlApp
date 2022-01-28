@@ -11,6 +11,9 @@ import java.util.concurrent.Executors;
 import de.hdmstuttgart.gitlapp.data.database.AppDatabase;
 import de.hdmstuttgart.gitlapp.data.network.GitLabClient;
 import de.hdmstuttgart.gitlapp.data.network.ServiceGenerator;
+import de.hdmstuttgart.gitlapp.data.repositories.IIssueRepository;
+import de.hdmstuttgart.gitlapp.data.repositories.IProfileRepository;
+import de.hdmstuttgart.gitlapp.data.repositories.IProjectRepository;
 import de.hdmstuttgart.gitlapp.data.repositories.IssueRepository;
 import de.hdmstuttgart.gitlapp.data.repositories.ProfileRepository;
 import de.hdmstuttgart.gitlapp.data.repositories.ProjectRepository;
@@ -27,9 +30,9 @@ public class AppContainer {
     public GitLabClient gitLabClient;
 
     // - - - - - - Repositories - - - - - - - - - - - - -
-    public IssueRepository issueRepository;
-    public ProjectRepository projectRepository;
-    public ProfileRepository profileRepository;
+    public IIssueRepository issueRepository;
+    public IProjectRepository projectRepository;
+    public IProfileRepository profileRepository;
 
 
     // - - - - - - view model provider factories - - - - -

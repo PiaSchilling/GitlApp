@@ -4,9 +4,10 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
-import de.hdmstuttgart.gitlapp.data.repositories.IssueRepository;
+import de.hdmstuttgart.gitlapp.data.repositories.IIssueRepository;
+import de.hdmstuttgart.gitlapp.data.repositories.IProfileRepository;
+import de.hdmstuttgart.gitlapp.data.repositories.IProjectRepository;
 import de.hdmstuttgart.gitlapp.data.repositories.ProfileRepository;
-import de.hdmstuttgart.gitlapp.data.repositories.ProjectRepository;
 import de.hdmstuttgart.gitlapp.viewmodels.CreateIssueViewModel;
 import de.hdmstuttgart.gitlapp.viewmodels.IssueDetailViewModel;
 import de.hdmstuttgart.gitlapp.viewmodels.IssueOverviewViewModel;
@@ -16,11 +17,11 @@ import de.hdmstuttgart.gitlapp.viewmodels.SettingsViewModel;
 
 public class ViewModelFactory implements ViewModelProvider.Factory {
 
-    private final IssueRepository issueRepository;
-    private final ProjectRepository projectRepository;
-    private final ProfileRepository profileRepository;
+    private final IIssueRepository issueRepository;
+    private final IProjectRepository projectRepository;
+    private final IProfileRepository profileRepository;
 
-    public ViewModelFactory(IssueRepository issueRepository, ProjectRepository projectRepository, ProfileRepository profileRepository){
+    public ViewModelFactory(IIssueRepository issueRepository, IProjectRepository projectRepository, IProfileRepository profileRepository){
         this.issueRepository = issueRepository;
         this.projectRepository = projectRepository;
         this.profileRepository = profileRepository;

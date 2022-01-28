@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
+import de.hdmstuttgart.gitlapp.data.repositories.IProfileRepository;
 import de.hdmstuttgart.gitlapp.data.repositories.IssueRepository;
 import de.hdmstuttgart.gitlapp.data.repositories.ProfileRepository;
 import de.hdmstuttgart.gitlapp.viewmodels.LoginViewModel;
@@ -14,9 +15,9 @@ import de.hdmstuttgart.gitlapp.viewmodels.LoginViewModel;
  */
 public class LoginViewModelFactory implements ViewModelProvider.Factory {
 
-    private final ProfileRepository profileRepository;
+    private final IProfileRepository profileRepository;
 
-    public LoginViewModelFactory(ProfileRepository profileRepository){
+    public LoginViewModelFactory(IProfileRepository profileRepository){
         this.profileRepository = profileRepository;
     }
 

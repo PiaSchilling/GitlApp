@@ -10,6 +10,8 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import de.hdmstuttgart.gitlapp.data.repositories.IIssueRepository;
+import de.hdmstuttgart.gitlapp.data.repositories.IProjectRepository;
 import de.hdmstuttgart.gitlapp.data.repositories.IssueRepository;
 import de.hdmstuttgart.gitlapp.data.repositories.ProjectRepository;
 import de.hdmstuttgart.gitlapp.models.Label;
@@ -17,10 +19,10 @@ import de.hdmstuttgart.gitlapp.models.Milestone;
 
 public class CreateIssueViewModel extends ViewModel {
 
-    private final IssueRepository issueRepository;
-    private final ProjectRepository projectRepository;
+    private final IIssueRepository issueRepository;
+    private final IProjectRepository projectRepository;
 
-    public CreateIssueViewModel(IssueRepository issueRepository,ProjectRepository projectRepository){
+    public CreateIssueViewModel(IIssueRepository issueRepository,IProjectRepository projectRepository){
         this.issueRepository = issueRepository;
         this.projectRepository = projectRepository;
     }
