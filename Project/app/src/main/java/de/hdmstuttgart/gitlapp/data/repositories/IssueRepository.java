@@ -75,10 +75,9 @@ public class IssueRepository implements IIssueRepository{
             public void onResponse(Call<List<Issue>> call, Response<List<Issue>> response) {
                 if (response.isSuccessful()) {
                     responseList = response.body();
-                    Log.e("Api","onResponse " + responseList.toString());
+                    Log.e("Api","onResponse " + responseList.toString()); //todo nullpointer
                     ORM.mapAndInsertIssues(responseList, appDatabase);
                     responseList = ORM.completeIssueObjects(projectId,appDatabase);
-                    Log.e("Api","issuese" + responseList.toString());
                     responseList.sort(Comparator.comparingInt(Issue::getIid).reversed());
                     issuesLiveData.postValue(responseList);
 

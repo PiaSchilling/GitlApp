@@ -140,21 +140,17 @@ public class IssueOverviewFragment extends Fragment implements OnIssueClickListe
         viewModel.getMessage().observe(getViewLifecycleOwner(), s -> {
             if(s.equals("loading")){
                 binding.progressSpinnerIssue.setVisibility(View.VISIBLE);
+            }else if (Objects.equals(s,"Update successful")){
+                binding.progressSpinnerIssue.setVisibility(View.GONE);
             }else{
                 binding.progressSpinnerIssue.setVisibility(View.GONE);
+                Toast.makeText(getActivity(), s, Toast.LENGTH_SHORT).show(); //todo test if error toast is displayed
             }
-            Toast.makeText(getActivity(), s, Toast.LENGTH_LONG).show();
             swipeRefreshLayout.setRefreshing(false); //when receive message update failed/success -> stop refreshing
         });
 
         //refresh data on swipe
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                Toast.makeText(getActivity(), "try to update", Toast.LENGTH_SHORT).show();
-                viewModel.updateIssueLiveData(projectId);
-            }
-        });
+        swipeRefreshLayout.setOnRefreshListener(() -> viewModel.updateIssueLiveData(projectId));
 
         // define action when tabs are changed (filter list)
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() { //todo add selected tab to viewModel (config change aware)

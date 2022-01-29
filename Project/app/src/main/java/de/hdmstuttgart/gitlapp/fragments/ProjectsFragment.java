@@ -26,6 +26,7 @@ import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import de.hdmstuttgart.gitlapp.R;
 import de.hdmstuttgart.gitlapp.dependencies.AppContainer;
@@ -153,22 +154,16 @@ public class ProjectsFragment extends Fragment {
 
         // swipe to refresh
         swipeRefresh = binding.swipeRefreshProject;
-        swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @SuppressLint("NotifyDataSetChanged")
-            @Override
-            public void onRefresh() {
-                projectsViewModel.refreshProjects();
-                Toast.makeText(getActivity(), "Projects loading", Toast.LENGTH_SHORT).show();
-                adapter.notifyDataSetChanged();
-            }
+        swipeRefresh.setOnRefreshListener(() -> {
+            projectsViewModel.refreshProjects();
+            adapter.notifyDataSetChanged();
         });
 
-        networkCallMessage.observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(String s) {
-                Toast.makeText(getActivity(), s, Toast.LENGTH_LONG).show();
-                swipeRefresh.setRefreshing(false);
+        networkCallMessage.observe(getViewLifecycleOwner(), s -> {
+            if(!Objects.equals(s,"Update successful")){ //needed to stop refresh layout but should not be displayed as a toast
+                Toast.makeText(getActivity(), s, Toast.LENGTH_SHORT).show();
             }
+            swipeRefresh.setRefreshing(false);
         });
 
 

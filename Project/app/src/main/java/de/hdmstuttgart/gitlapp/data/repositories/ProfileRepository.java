@@ -6,6 +6,8 @@ import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
 
+import java.util.Objects;
+
 import de.hdmstuttgart.gitlapp.data.database.AppDatabase;
 import de.hdmstuttgart.gitlapp.data.network.GitLabClient;
 import de.hdmstuttgart.gitlapp.models.Profile;
@@ -53,7 +55,6 @@ public class ProfileRepository implements IProfileRepository{
      */
     @Override
     public void fetchUser(String url){
-        Log.d("Bug","fetchUser triggered");
         Call<User> call = gitLabClient.getSingleUserWithWholeUrl(url, this.accessToken);
         call.enqueue(new Callback<User>() {
             @Override
@@ -63,15 +64,14 @@ public class ProfileRepository implements IProfileRepository{
                         loggedIdUser = response.body();
                         appDatabase.userDao().insertUsers(loggedIdUser);
                         createProfile();
-                        messageLiveData.setValue("Call successful, profile created");
                         Log.d("ProfileRepo","SUCCESS" + loggedIdUser.toString());
                     }
                 }else{
                     Log.e("ProfileRepo","call not successful, code" + response.code());
                     if(response.code() == 401){
-                        messageLiveData.setValue("Not able to authorize, check access token");
+                        messageLiveData.setValue("Oops not able to authorize, check access token");
                     }else if(response.code() == 404){
-                        messageLiveData.setValue("Cannot find user with id " + userId + " ,check user id");
+                        messageLiveData.setValue("Oops cannot find user with id " + userId + ", check user id");
                     }else{
                         messageLiveData.setValue("Error, code " + response.code());
                     }
@@ -81,8 +81,16 @@ public class ProfileRepository implements IProfileRepository{
 
             @Override
             public void onFailure(Call<User> call, Throwable t) {
-                Log.e("ProfileRepo","FAIL " + t.getMessage());
-                messageLiveData.setValue("Not able to create profile, check internet connection");
+                try{
+                    Log.e("ProfileRepo","FAIL " + t.getMessage());
+                    if(Objects.requireNonNull(t.getMessage()).contains("Malformed URL")){
+                        messageLiveData.setValue("Oops, the url seems to be incorrect");
+                    }else{
+                        messageLiveData.setValue("Not able to create profile, check internet connection");
+                    }
+                }catch (NullPointerException e){
+                    Log.e("Api",e.getMessage());
+                }
             }
         });
     }

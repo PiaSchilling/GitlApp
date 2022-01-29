@@ -95,7 +95,6 @@ public class ProjectRepository implements IProjectRepository{
             public void onFailure(Call<List<Project>> call, Throwable t) {
                 Log.e("Api", "Oh no " + t.getMessage() + ", loading data form database");
                 networkCallMessage.setValue("Oh no, check your wifi connection");
-               // responseList = appDatabase.projectDao().getAllProjects();
             }
         });
     }
