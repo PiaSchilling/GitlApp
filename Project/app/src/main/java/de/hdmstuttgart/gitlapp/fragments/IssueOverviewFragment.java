@@ -63,6 +63,7 @@ public class IssueOverviewFragment extends Fragment implements OnIssueClickListe
 
     //tab filtering, all per default/on fragment start
     private String tabFilter = "all";//todo move to viewModel
+    private int selectedTab = 0; //default selected tab is 0 (all)
 
 
     public IssueOverviewFragment() {
@@ -132,9 +133,9 @@ public class IssueOverviewFragment extends Fragment implements OnIssueClickListe
         addListAdapter();
 
         // - - - - set listeners  - - - -
-        //(bc getViewLifecycleOwner() it can be done only after onCreateView)
         viewModel.getMutableLiveData().observe(getViewLifecycleOwner(), changeList -> {
             showFilteredIssueList();
+
         });
 
         viewModel.getMessage().observe(getViewLifecycleOwner(), s -> {
@@ -152,13 +153,18 @@ public class IssueOverviewFragment extends Fragment implements OnIssueClickListe
         //refresh data on swipe
         swipeRefreshLayout.setOnRefreshListener(() -> viewModel.updateIssueLiveData(projectId));
 
+        //store the currently selected tab
+        TabLayout.Tab tab = tabLayout.getTabAt(selectedTab);
+        tab.select();
+
         // define action when tabs are changed (filter list)
-        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() { //todo add selected tab to viewModel (config change aware)
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 try {
                     String state = Objects.requireNonNull(tab.getText()).toString();
                     setFilter(state);
+                    selectedTab = tab.getPosition();
                     showFilteredIssueList();
                 } catch (NullPointerException e) {
                     Log.e("Api", e.getMessage());
