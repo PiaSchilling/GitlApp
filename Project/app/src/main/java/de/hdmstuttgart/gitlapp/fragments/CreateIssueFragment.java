@@ -27,6 +27,7 @@ import com.google.android.material.chip.ChipGroup;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Objects;
 
 import de.hdmstuttgart.gitlapp.CustomApplication;
 import de.hdmstuttgart.gitlapp.R;
@@ -106,8 +107,12 @@ public class CreateIssueFragment extends Fragment {
         networkCallMessage.observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(String s) {
-                Toast.makeText(getActivity(), networkCallMessage.getValue(), Toast.LENGTH_SHORT).show();
-                //todo if successful end fragment
+                if(!Objects.equals(s,"Update successful")){
+                    Toast.makeText(getActivity(), networkCallMessage.getValue(), Toast.LENGTH_SHORT).show();
+                }
+                if(Objects.equals(s,"Add issue successful")){
+                    getParentFragmentManager().popBackStackImmediate(); //end fragment if post was successful
+                }
             }
         });
 
