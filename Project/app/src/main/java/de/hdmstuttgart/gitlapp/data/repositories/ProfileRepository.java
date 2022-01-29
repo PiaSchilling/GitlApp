@@ -64,6 +64,7 @@ public class ProfileRepository implements IProfileRepository{
                         loggedIdUser = response.body();
                         appDatabase.userDao().insertUsers(loggedIdUser);
                         createProfile();
+                        messageLiveData.setValue("Call successful, profile created");
                         Log.d("ProfileRepo","SUCCESS" + loggedIdUser.toString());
                     }
                 }else{
