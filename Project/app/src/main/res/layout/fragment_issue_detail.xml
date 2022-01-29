@@ -40,22 +40,13 @@
             android:textAppearance="@style/TextAppearance.MaterialComponents.Overline"
             android:textColor="@color/lightOrange" />
 
-        <TextView
-            android:id="@+id/milestone_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBaseline="@id/due_date"
-            android:layout_alignParentEnd="true"
-            android:layout_marginTop="10dp"
-            android:text="milestone name"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Overline"
-            android:textColor="@color/lightGrey" />
+
 
         <com.google.android.material.chip.Chip
             android:id="@+id/status_chip"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/milestone_title"
+            android:layout_below="@id/issue_title"
             android:layout_marginHorizontal="5dp"
             android:layout_toStartOf="@id/weight_chip"
             android:text="closed"
@@ -66,7 +57,7 @@
             android:id="@+id/weight_chip"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/milestone_title"
+            android:layout_below="@id/issue_title"
             android:layout_alignParentEnd="true"
             android:text="4"
             android:textColor="@color/lightGrey"
@@ -142,19 +133,43 @@
             android:background="?android:attr/listDivider"
             android:backgroundTint="@color/lightGrey" />
 
-        <include
-            android:id="@+id/comment"
-            layout="@layout/view_comment"
+        <ImageView
+            android:id="@+id/tachometer"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_below="@+id/dividerFour"
+            android:layout_marginEnd="30dp"
+            android:src="@drawable/ic_tachometer" />
+
+        <TextView
+            android:id="@+id/milestone_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/dividerFour" />
+            android:layout_below="@id/dividerFour"
+            android:layout_marginTop="8dp"
+            android:layout_toRightOf="@id/tachometer"
+            android:text="Milestone: "
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Overline"
+            android:textColor="@color/lightGrey" />
+
+        <TextView
+            android:id="@+id/milestone_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+           android:layout_below="@+id/dividerFour"
+            android:layout_toRightOf="@id/milestone_text"
+            android:layout_alignBaseline="@+id/milestone_text"
+            android:layout_marginLeft="15dp"
+            android:text="milestone name"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Overline"
+            android:textColor="@color/lightGrey" />
 
 
         <View
             android:id="@+id/dividerFive"
             android:layout_width="match_parent"
             android:layout_height="2dp"
-            android:layout_below="@id/comment"
+            android:layout_below="@id/tachometer"
             android:layout_marginVertical="10dp"
             android:background="?android:attr/listDivider"
             android:backgroundTint="@color/lightGrey" />
