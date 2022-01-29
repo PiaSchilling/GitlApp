@@ -5,8 +5,6 @@ import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
 import de.hdmstuttgart.gitlapp.data.repositories.IProfileRepository;
-import de.hdmstuttgart.gitlapp.data.repositories.IssueRepository;
-import de.hdmstuttgart.gitlapp.data.repositories.ProfileRepository;
 import de.hdmstuttgart.gitlapp.viewmodels.LoginViewModel;
 
 /**

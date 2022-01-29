@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModel;
 
 
 import de.hdmstuttgart.gitlapp.data.repositories.IIssueRepository;
-import de.hdmstuttgart.gitlapp.data.repositories.IssueRepository;
 import de.hdmstuttgart.gitlapp.models.Issue;
 import de.hdmstuttgart.gitlapp.models.User;
 
@@ -37,7 +36,7 @@ public class IssueDetailViewModel extends ViewModel {
             return issueRepository.getSingleIssueLiveData(issueId);
         } catch (Exception e) {
             Log.e("Api",e.getMessage() + " | returning fallBackIssue");
-            Issue fallBackIssue = new Issue(0,0,0,"-","-",new User(),0,0,0,0,0, "closed");
+            Issue fallBackIssue = new Issue(0,0,0,"-","-",new User(),0,0,0,0, "closed");
             MutableLiveData<Issue> fallBackLiveData = new MutableLiveData<>();
             fallBackLiveData.setValue(fallBackIssue);
             return fallBackLiveData;

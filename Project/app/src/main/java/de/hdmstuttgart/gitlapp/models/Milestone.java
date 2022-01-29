@@ -1,12 +1,11 @@
 
 package de.hdmstuttgart.gitlapp.models;
 
-import androidx.room.ColumnInfo;
+import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
-import java.util.Date;
 
 @Entity(tableName = "milestones")
 public class Milestone {
@@ -18,7 +17,7 @@ public class Milestone {
     private String title;
 
     @Ignore
-    public Milestone(int id, int iid, int projectId, String title, String description, State state, Date createDate, Date dueDate) {
+    public Milestone(int id, int iid, int projectId, String title) {
         this.id = id;
         this.iid = iid;
         this.project_id = projectId;
@@ -29,6 +28,7 @@ public class Milestone {
 
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "Milestone{" +

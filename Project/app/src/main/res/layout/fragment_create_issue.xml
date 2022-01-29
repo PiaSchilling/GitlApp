@@ -26,6 +26,7 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/input_issue_editText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/hint_issue_title"
@@ -44,6 +45,7 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
+                android:id="@+id/input_issue_description_editText"
                 android:hint="@string/hint_issue_description"
                 android:inputType="textMultiLine"
                 android:textColor="@color/white"
@@ -65,6 +67,7 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:id="@+id/input_issue_weight_editText"
                 android:hint="@string/hint_issue_weight"
                 android:inputType="number"
                 android:textColor="@color/white"/>

@@ -1,5 +1,6 @@
 package de.hdmstuttgart.gitlapp.models;
 
+import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
@@ -28,6 +29,7 @@ public class User {
 
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "User{" +

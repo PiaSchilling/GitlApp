@@ -1,8 +1,6 @@
 package de.hdmstuttgart.gitlapp.fragments.adapters;
 
-import android.content.Intent;
 import android.graphics.drawable.Drawable;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,8 +10,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -25,15 +21,12 @@ import com.bumptech.glide.request.target.Target;
 import java.util.List;
 
 import de.hdmstuttgart.gitlapp.R;
-import de.hdmstuttgart.gitlapp.fragments.IssueDetailFragment;
-import de.hdmstuttgart.gitlapp.fragments.IssueOverviewFragment;
-import de.hdmstuttgart.gitlapp.models.Issue;
 import de.hdmstuttgart.gitlapp.models.Project;
 
 public class ProjectListAdapter extends RecyclerView.Adapter<ProjectListAdapter.ViewHolder> {
 
     private final List<Project> projectList;
-    private FragmentActivity activity;
+    private final OnProjectClickListener clickListener;
 
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
@@ -48,10 +41,6 @@ public class ProjectListAdapter extends RecyclerView.Adapter<ProjectListAdapter.
 
         public TextView getProjectNameTextView() {
             return projectNameTextView;
-        }
-
-        public ImageView getProjectAvatar(){
-            return projectAvatar;
         }
 
         public TextView getProjectInitials() {
@@ -71,9 +60,9 @@ public class ProjectListAdapter extends RecyclerView.Adapter<ProjectListAdapter.
         }
     }
 
-    public ProjectListAdapter (List<Project> projectList, FragmentActivity activity){
+    public ProjectListAdapter (List<Project> projectList, OnProjectClickListener clickListener){
         this.projectList = projectList;
-        this.activity = activity;
+        this.clickListener = clickListener;
     }
 
     @NonNull
@@ -116,17 +105,7 @@ public class ProjectListAdapter extends RecyclerView.Adapter<ProjectListAdapter.
                 .into(holder.projectAvatar);
 
 
-
-        holder.itemView.setOnClickListener(v -> {
-            Bundle bundle = new Bundle();
-            bundle.putString("projectName", projectOnPosition.getName());
-            bundle.putInt("projectId",projectOnPosition.getId());
-
-            activity.getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_container, IssueOverviewFragment.class, bundle)
-                    .addToBackStack(null)
-                    .commit();
-        });
+        holder.itemView.setOnClickListener(v -> clickListener.onProjectClick(projectOnPosition));
     }
 
     @Override

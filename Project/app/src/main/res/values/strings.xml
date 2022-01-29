@@ -37,5 +37,7 @@
     <string name="add_new_issue">Add new issue</string>
     <string name="project_toolbarTitle">Projects Overview</string>
     <string name="settings_toolbarTitle">Profile Settings</string>
+    <string name="no_issue_description_label">no description</string>
+    <string name="no_milestone_set_label">milestone not set</string>
 
 </resources>

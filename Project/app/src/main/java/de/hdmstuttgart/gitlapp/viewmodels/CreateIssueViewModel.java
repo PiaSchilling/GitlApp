@@ -8,12 +8,9 @@ import androidx.lifecycle.ViewModel;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import de.hdmstuttgart.gitlapp.data.repositories.IIssueRepository;
 import de.hdmstuttgart.gitlapp.data.repositories.IProjectRepository;
-import de.hdmstuttgart.gitlapp.data.repositories.IssueRepository;
-import de.hdmstuttgart.gitlapp.data.repositories.ProjectRepository;
 import de.hdmstuttgart.gitlapp.models.Label;
 import de.hdmstuttgart.gitlapp.models.Milestone;
 

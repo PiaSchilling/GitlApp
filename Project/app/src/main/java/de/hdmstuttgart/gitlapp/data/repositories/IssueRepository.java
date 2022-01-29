@@ -2,6 +2,7 @@ package de.hdmstuttgart.gitlapp.data.repositories;
 
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 
 import java.util.ArrayList;
@@ -66,23 +67,28 @@ public class IssueRepository implements IIssueRepository{
      * fetches all issues by a specific project
      */
     @Override
-    public void fetchProjectIssues(int projectId, int page) {
+    public void fetchProjectIssues(int projectId, int page) {           //todo make background thread for this (thread pool)
         networkCallMessage.postValue("loading");
-        //todo make background thread for this (thread pool)
         Call<List<Issue>> call = gitLabClient.getProjectIssues(projectId, accessToken, page);
         call.enqueue(new Callback<List<Issue>>() {
             @Override
-            public void onResponse(Call<List<Issue>> call, Response<List<Issue>> response) {
+            public void onResponse(@NonNull Call<List<Issue>> call, @NonNull Response<List<Issue>> response) {
                 if (response.isSuccessful()) {
-                    responseList = response.body();
-                    Log.e("Api","onResponse " + responseList.toString()); //todo nullpointer
-                    ORM.mapAndInsertIssues(responseList, appDatabase);
-                    responseList = ORM.completeIssueObjects(projectId,appDatabase);
-                    responseList.sort(Comparator.comparingInt(Issue::getIid).reversed());
-                    issuesLiveData.postValue(responseList);
+                    try{
+                        responseList = response.body();
 
-                    Log.d("Api", "IssueCall SUCCESS " + responseList.toString());
-                    networkCallMessage.postValue("Update successful");
+                        ORM.mapAndInsertIssues(Objects.requireNonNull(responseList), appDatabase);
+                        responseList = ORM.completeIssueObjects(projectId,appDatabase);
+
+                        responseList.sort(Comparator.comparingInt(Issue::getIid).reversed());
+                        issuesLiveData.postValue(responseList);
+
+                        Log.d("Api", "IssueCall SUCCESS " + responseList.toString());
+                        networkCallMessage.postValue("Update successful");
+                    }catch(NullPointerException e){
+                        Log.e("Api", "responseList is null");
+                    }
+
                 } else {
                     if(response.code() == 401){
                         networkCallMessage.setValue("Problem with authentication");
@@ -96,7 +102,7 @@ public class IssueRepository implements IIssueRepository{
             }
 
             @Override
-            public void onFailure(Call<List<Issue>> call, Throwable t) {
+            public void onFailure(@NonNull Call<List<Issue>> call, @NonNull Throwable t) {
                 Log.e("Api", "Oh no " + t.getMessage() + ", data not updated");
                 networkCallMessage.setValue("Oh no, check your wifi connection");
             }
@@ -111,7 +117,7 @@ public class IssueRepository implements IIssueRepository{
         Call<Void> call = gitLabClient.postNewIssue(projectId,accessToken,issueTitle,issueDescription,dueDate,weight,milestoneId,labels);
         call.enqueue(new Callback<Void>() {
             @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
+            public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
                 if(response.isSuccessful()){
                     Log.d("Api","IssuePost SUCCESS");
                     networkCallMessage.setValue("Add issue successful");
@@ -123,7 +129,7 @@ public class IssueRepository implements IIssueRepository{
             }
 
             @Override
-            public void onFailure(Call<Void> call, Throwable t) {
+            public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
                 networkCallMessage.setValue("Add issue failed, check wifi connection");
                 Log.e("Api","IssuePost FAIL, " + t.getMessage());
             }
@@ -140,7 +146,7 @@ public class IssueRepository implements IIssueRepository{
         Call<Void> call = gitLabClient.closeIssue(projectId,issueIid,accessToken);
         call.enqueue(new Callback<Void>() {
             @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
+            public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
                 if(response.isSuccessful()){
                     Optional<Issue> updatedIssue = responseList.stream().filter(issue -> issue.getIid() == issueIid).findAny();
                     updatedIssue.ifPresent(issue -> issue.setState("closed"));
@@ -155,7 +161,7 @@ public class IssueRepository implements IIssueRepository{
             }
 
             @Override
-            public void onFailure(Call<Void> call, Throwable t) {
+            public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
                 networkCallMessage.setValue("Close issue failed, check wifi connection");
                 Log.e("Api","IssueClose FAIL, " + t.getMessage());
             }

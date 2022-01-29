@@ -1,20 +1,12 @@
 package de.hdmstuttgart.gitlapp;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.Button;
-import android.widget.TextView;
 
-import java.util.List;
-
-import de.hdmstuttgart.gitlapp.fragments.IssueDetailFragment;
-import de.hdmstuttgart.gitlapp.fragments.IssueOverviewFragment;
 import de.hdmstuttgart.gitlapp.fragments.LoginFragment;
 import de.hdmstuttgart.gitlapp.fragments.ProjectsFragment;
 

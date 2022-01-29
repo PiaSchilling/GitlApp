@@ -1,20 +1,18 @@
 package de.hdmstuttgart.gitlapp.fragments;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,43 +30,27 @@ import de.hdmstuttgart.gitlapp.R;
 import de.hdmstuttgart.gitlapp.dependencies.AppContainer;
 import de.hdmstuttgart.gitlapp.CustomApplication;
 import de.hdmstuttgart.gitlapp.databinding.FragmentProjectsBinding;
+import de.hdmstuttgart.gitlapp.fragments.adapters.OnProjectClickListener;
 import de.hdmstuttgart.gitlapp.fragments.adapters.ProjectListAdapter;
 import de.hdmstuttgart.gitlapp.models.Project;
 import de.hdmstuttgart.gitlapp.viewmodels.ProjectsViewModel;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link ProjectsFragment#newInstance} factory method to
- * create an instance of this fragment.
  */
-public class ProjectsFragment extends Fragment {
+public class ProjectsFragment extends Fragment implements OnProjectClickListener {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-    private String projectName;
-
-    private AppContainer container;
+    private Context context;
 
 
-    // bindings and viewmodel
+    // bindings and viewModel
     private FragmentProjectsBinding binding;
     private ProjectsViewModel projectsViewModel;
     private ProjectListAdapter adapter;
 
     // views
-    private Toolbar toolbar;
     private RecyclerView recyclerView;
-    private ImageView imageView;
-    private TextView toolbarTitle;
-    private TextView user;
     private SwipeRefreshLayout swipeRefresh;
-    private ImageView settingsButton;
 
 
     //data
@@ -81,18 +63,10 @@ public class ProjectsFragment extends Fragment {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @return A new instance of fragment ProjectsFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static ProjectsFragment newInstance() {
-        ProjectsFragment fragment = new ProjectsFragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
-        return fragment;
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        this.context = context;
     }
 
     @Override
@@ -100,8 +74,8 @@ public class ProjectsFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         // - - - - get the related view model - - - - -
-        container = ((CustomApplication) getActivity().getApplication())
-                .getAppContainer(getActivity().getApplicationContext());
+        AppContainer container = ((CustomApplication) context.getApplicationContext())
+                .getAppContainer(context.getApplicationContext());
 
         projectsViewModel = new ViewModelProvider(this, container.viewModelFactory)
                 .get(ProjectsViewModel.class);
@@ -109,14 +83,12 @@ public class ProjectsFragment extends Fragment {
         // - - - - - get data from view model - - - - -
         projectsViewModel.initProjectsLiveData();
         projectsLiveData = projectsViewModel.getMutableLiveData();
-        projectList.addAll(projectsLiveData.getValue());
-        Log.e("ST-", "ProjectsLiveData in onCreate() " + projectsLiveData.getValue().toString());
-
+        projectList.addAll(Objects.requireNonNull(projectsLiveData.getValue()));
         networkCallMessage = projectsViewModel.getMessage();
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentProjectsBinding.inflate(inflater, container, false);
@@ -134,22 +106,20 @@ public class ProjectsFragment extends Fragment {
         addListAdapter();
 
         // user Card
-        imageView = binding.userCard.projectAvatar;
-        user = binding.userCard.userNameLabel;
+        ImageView imageView = binding.userCard.projectAvatar;
+        TextView user = binding.userCard.userNameLabel;
 
         user.setText(projectsViewModel.getLoggedInUserName());
-        Glide.with(getContext())
+        Glide.with(context)
                 .load(projectsViewModel.getLoggedInUserAvatar())
                 .into(imageView);
 
         // get to the settings fragment
-        settingsButton = binding.toolbarSettingsButton;
-        settingsButton.setOnClickListener(v -> {
-            getParentFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_container, SettingsFragment.class, null)
-                    .addToBackStack(null)
-                    .commit();
-        });
+        ImageView settingsButton = binding.toolbarSettingsButton;
+        settingsButton.setOnClickListener(v -> getParentFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, SettingsFragment.class, null)
+                .addToBackStack(null)
+                .commit());
 
 
         // swipe to refresh
@@ -169,21 +139,18 @@ public class ProjectsFragment extends Fragment {
 
         // - - - - set listeners  - - - -
         //(bc getViewLifecycleOwner() it can be done only after onCreateView)
-        Log.e("ST-", "ProjectLiveData in onViewCreated() " + projectsLiveData.getValue().toString());
 
         projectsLiveData.observe(getViewLifecycleOwner(), changeList -> {
             projectList.clear();
             projectList.addAll(changeList);
             adapter.notifyDataSetChanged();
             recyclerView.scheduleLayoutAnimation();
-            Log.e("ST-", "ProjectList in onViewCreated() " + projectList.toString());
         });
     }
 
 
     private void addListAdapter() {
-        Log.e("ST-", "ProjectList in addListAdapter() " + projectList.toString());
-        adapter = new ProjectListAdapter(projectList, getActivity());
+        adapter = new ProjectListAdapter(projectList, this);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
@@ -191,4 +158,15 @@ public class ProjectsFragment extends Fragment {
     }
 
 
+    @Override
+    public void onProjectClick(Project project) {
+        Bundle bundle = new Bundle();
+        bundle.putString("projectName", project.getName());
+        bundle.putInt("projectId", project.getId());
+
+       getParentFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, IssueOverviewFragment.class, bundle)
+                .addToBackStack(null)
+                .commit();
+    }
 }

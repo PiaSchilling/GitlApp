@@ -26,18 +26,10 @@ import de.hdmstuttgart.gitlapp.viewmodels.SettingsViewModel;
 import de.hdmstuttgart.gitlapp.viewmodels.vmpFactories.ViewModelFactory;
 
 public class SettingsFragment extends Fragment {
-
-    private AppContainer appContainer;
+    private Context context;
 
     private SettingsViewModel settingsViewModel;
     private FragmentProfileSettingsBinding binding;
-
-    private TextView hostUrlTextview;
-    private TextView userIdTextView;
-    private ImageView imageView;
-    private TextView user;
-    private Button logOutButton;
-
 
 
     public SettingsFragment() {
@@ -46,12 +38,18 @@ public class SettingsFragment extends Fragment {
 
 
     @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        this.context = context;
+    }
+
+    @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         // get related view model
-        appContainer = ((CustomApplication) getActivity().getApplication())
-                .getAppContainer(getActivity().getApplicationContext());
+        AppContainer appContainer = ((CustomApplication) context.getApplicationContext())
+                .getAppContainer(context.getApplicationContext());
 
         ViewModelFactory viewModelFactory = appContainer.viewModelFactory;
 
@@ -70,34 +68,29 @@ public class SettingsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        hostUrlTextview = binding.hostUrlLinkLabel;
-        userIdTextView = binding.userIdNumberLabel;
+        TextView hostUrlTextview = binding.hostUrlLinkLabel;
+        TextView userIdTextView = binding.userIdNumberLabel;
 
 
         hostUrlTextview.setText(settingsViewModel.getGitlabUrl());
         userIdTextView.setText(settingsViewModel.getUserId());
 
         // user Card binding and setting of the values
-        imageView = binding.userCard.projectAvatar;
-        user = binding.userCard.userNameLabel;
+        ImageView imageView = binding.userCard.projectAvatar;
+        TextView user = binding.userCard.userNameLabel;
 
         user.setText(settingsViewModel.getLoggedInUserName());
 
-        Glide.with(getContext())
+        Glide.with(context)
                 .load(settingsViewModel.getLoggedInUserAvatar())
                 .into(imageView);
 
         // trigger for logOut
-        logOutButton = binding.logOutButton;
+        Button logOutButton = binding.logOutButton;
 
         logOutButton.setOnClickListener(v -> {
             clearSharedPreferences();
             settingsViewModel.clearDatabase();
-
-            FragmentManager fm = getParentFragmentManager(); //todo check if necessary
-            for (int i = 0; i < fm.getBackStackEntryCount(); i++) {
-                fm.popBackStack();
-            }
 
             getParentFragmentManager().beginTransaction()
                     .replace(R.id.fragment_container, LoginFragment.class, null)
@@ -107,7 +100,7 @@ public class SettingsFragment extends Fragment {
 
 
     private void clearSharedPreferences(){
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("profileInformation", Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = context.getSharedPreferences("profileInformation", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("baseUrl", "default");
         editor.apply();

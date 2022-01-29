@@ -2,6 +2,7 @@ package de.hdmstuttgart.gitlapp.data.repositories;
 
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 
 import java.util.ArrayList;
@@ -17,7 +18,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ProjectRepository implements IProjectRepository{
+public class ProjectRepository implements IProjectRepository {
 
     // - - - - -  Sources - - - - - -
     private final AppDatabase appDatabase;
@@ -25,10 +26,10 @@ public class ProjectRepository implements IProjectRepository{
 
     private String accessToken;
 
-    //holding response of api call or when this fails the "response" of the db
+    // holding response of api call or when this fails the "response" of the db
     private List<Project> responseList = new ArrayList<>();
 
-    //present data to the view model
+    // present data to the view model
     private final MutableLiveData<List<Project>> projectsLiveData = new MutableLiveData<>();
     private final MutableLiveData<String> networkCallMessage = new MutableLiveData<>();
     private final MutableLiveData<List<Label>> labelsLiveData = new MutableLiveData<>();
@@ -67,11 +68,10 @@ public class ProjectRepository implements IProjectRepository{
      */
     @Override
     public void fetchProjects() {
-
         Call<List<Project>> call = gitLabClient.getMemberProjects(accessToken);
         call.enqueue(new Callback<List<Project>>() {
             @Override
-            public void onResponse(Call<List<Project>> call, Response<List<Project>> response) {
+            public void onResponse(@NonNull Call<List<Project>> call, @NonNull Response<List<Project>> response) {
                 if (response.isSuccessful()) {
                     responseList = response.body();
                     appDatabase.projectDao().insertProjects(responseList);
@@ -88,11 +88,10 @@ public class ProjectRepository implements IProjectRepository{
                         networkCallMessage.setValue("Error, code " + response.code());
                     }
                 }
-
             }
 
             @Override
-            public void onFailure(Call<List<Project>> call, Throwable t) {
+            public void onFailure(@NonNull Call<List<Project>> call, @NonNull Throwable t) {
                 Log.e("Api", "Oh no " + t.getMessage() + ", loading data form database");
                 networkCallMessage.setValue("Oh no, check your wifi connection");
             }
@@ -110,7 +109,6 @@ public class ProjectRepository implements IProjectRepository{
     }
 
 
-
     // - - - - - single project details - - - - - -
 
     /**
@@ -123,10 +121,10 @@ public class ProjectRepository implements IProjectRepository{
         Call<List<Label>> call = gitLabClient.getProjectLabels(projectId, accessToken);
         call.enqueue(new Callback<List<Label>>() {
             @Override
-            public void onResponse(Call<List<Label>> call, Response<List<Label>> response) {
+            public void onResponse(@NonNull Call<List<Label>> call, @NonNull Response<List<Label>> response) {
                 if (response.isSuccessful()) {
                     List<Label> temp = response.body();
-                    if(!Objects.equals(temp, labelsLiveData.getValue())){
+                    if (!Objects.equals(temp, labelsLiveData.getValue())) {
                         labelsLiveData.setValue(temp);
                         appDatabase.labelDao().insertLabels(temp);
                         appDatabase.labelDao().setProjectIdForIssue(projectId);
@@ -137,7 +135,7 @@ public class ProjectRepository implements IProjectRepository{
             }
 
             @Override
-            public void onFailure(Call<List<Label>> call, Throwable t) {
+            public void onFailure(@NonNull Call<List<Label>> call, @NonNull Throwable t) {
                 Log.e("Api", "FAIL, code: " + t.getMessage());
             }
         });
@@ -153,10 +151,10 @@ public class ProjectRepository implements IProjectRepository{
         Call<List<Milestone>> call = gitLabClient.getProjectMilestones(projectId, accessToken);
         call.enqueue(new Callback<List<Milestone>>() {
             @Override
-            public void onResponse(Call<List<Milestone>> call, Response<List<Milestone>> response) {
+            public void onResponse(@NonNull Call<List<Milestone>> call, @NonNull Response<List<Milestone>> response) {
                 if (response.isSuccessful()) {
                     List<Milestone> temp = response.body();
-                    if(!Objects.equals(temp, milestoneLiveData.getValue())){ //update live data only if something changed
+                    if (!Objects.equals(temp, milestoneLiveData.getValue())) { //update live data only if something changed
                         milestoneLiveData.setValue(temp);
                         appDatabase.milestoneDao().insertMilestones(temp);
                     }
@@ -166,9 +164,8 @@ public class ProjectRepository implements IProjectRepository{
             }
 
             @Override
-            public void onFailure(Call<List<Milestone>> call, Throwable t) {
+            public void onFailure(@NonNull Call<List<Milestone>> call, @NonNull Throwable t) {
                 Log.e("Api", "fetchProjectMilestones call FAIL, code: " + t.getMessage());
-
             }
         });
     }

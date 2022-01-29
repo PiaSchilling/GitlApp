@@ -1,9 +1,8 @@
 package de.hdmstuttgart.gitlapp.data.repositories;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 
 import java.util.Objects;
@@ -58,7 +57,7 @@ public class ProfileRepository implements IProfileRepository{
         Call<User> call = gitLabClient.getSingleUserWithWholeUrl(url, this.accessToken);
         call.enqueue(new Callback<User>() {
             @Override
-            public void onResponse(Call<User> call, Response<User> response) {
+            public void onResponse(@NonNull Call<User> call, @NonNull Response<User> response) {
                 if(response.isSuccessful()){
                     if(response.body() != null){
                         loggedIdUser = response.body();
@@ -81,7 +80,7 @@ public class ProfileRepository implements IProfileRepository{
             }
 
             @Override
-            public void onFailure(Call<User> call, Throwable t) {
+            public void onFailure(@NonNull Call<User> call, @NonNull Throwable t) {
                 try{
                     Log.e("ProfileRepo","FAIL " + t.getMessage());
                     if(Objects.requireNonNull(t.getMessage()).contains("Malformed URL")){
@@ -127,13 +126,14 @@ public class ProfileRepository implements IProfileRepository{
         return messageLiveData;
     }
 
+
+
     // - - - - - clear data at log out - - - -
     @Override
     public void clearAppData(){
         appDatabase.issueDao().clearIssuesTable();
         appDatabase.labelDao().clearLabelsTable();
         appDatabase.milestoneDao().clearMilestonesTable();
-        appDatabase.noteDao().clearNotesTable();
         appDatabase.profileDao().clearProfileTable();
         appDatabase.projectDao().clearProjectsTable();
         appDatabase.userDao().clearUserTable();

@@ -1,5 +1,6 @@
 package de.hdmstuttgart.gitlapp.models;
 
+import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
@@ -15,7 +16,6 @@ public class Project {
     private  int owner_id;
     private String avatar_url;
     private String name_with_namespace;
-    private String owner_name;
 
     @Ignore
     public Project(int id, String name, String description, int owner_id, String avatar_url) {
@@ -31,6 +31,7 @@ public class Project {
     }
 
 
+    @NonNull
     @Override
     public String toString() {
         return "Project{" +
@@ -96,7 +97,6 @@ public class Project {
     }
 
     public void setOwner_name(String owner_name) {
-        this.owner_name = owner_name;
     }
 }
 

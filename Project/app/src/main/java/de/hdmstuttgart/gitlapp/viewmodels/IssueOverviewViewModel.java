@@ -8,7 +8,6 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import de.hdmstuttgart.gitlapp.data.repositories.IIssueRepository;
-import de.hdmstuttgart.gitlapp.data.repositories.IssueRepository;
 import de.hdmstuttgart.gitlapp.models.Issue;
 
 /***

@@ -1,12 +1,11 @@
 package de.hdmstuttgart.gitlapp.fragments;
 
-import android.annotation.SuppressLint;
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -19,7 +18,6 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.google.android.material.appbar.MaterialToolbar;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.Objects;
@@ -35,10 +33,10 @@ import de.hdmstuttgart.gitlapp.viewmodels.IssueOverviewViewModel;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link IssueOverviewFragment#newInstance} factory method to
- * create an instance of this fragment.
  */
 public class IssueOverviewFragment extends Fragment implements OnIssueClickListener {
+
+    private Context context;
 
     //bundle data
     private static final String ARG_PARAM1 = "projectId";
@@ -51,15 +49,8 @@ public class IssueOverviewFragment extends Fragment implements OnIssueClickListe
     private IssueOverviewViewModel viewModel;
     private IssueListAdapter adapter;
 
-    //views
-    private MaterialToolbar toolbar;
-    private TabLayout tabLayout;
     private RecyclerView recyclerView;
-    private FloatingActionButton button;
     private SwipeRefreshLayout swipeRefreshLayout;
-
-    //data
-    private MutableLiveData<String> networkCallMessage; //inform the user of update fail/success
 
     //tab filtering, all per default/on fragment start
     private String tabFilter = "all";//todo move to viewModel
@@ -70,21 +61,10 @@ public class IssueOverviewFragment extends Fragment implements OnIssueClickListe
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param projectId   the id of the project the overview is for to get the right issues
-     * @param projectName the id of the projectName to show it in the app bar
-     * @return A new instance of fragment IssueOverviewFragment.
-     */
-    public static IssueOverviewFragment newInstance(int projectId, String projectName) {
-        IssueOverviewFragment fragment = new IssueOverviewFragment();
-        Bundle args = new Bundle();
-        args.putInt(ARG_PARAM1, projectId);
-        args.putString(ARG_PARAM2, projectName);
-        fragment.setArguments(args);
-        return fragment;
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        this.context = context;
     }
 
     @Override
@@ -97,21 +77,18 @@ public class IssueOverviewFragment extends Fragment implements OnIssueClickListe
         }
 
         // - - - -  get the related view model - - - -
-        AppContainer container = ((CustomApplication) getActivity().getApplication())
-                .getAppContainer(getActivity().getApplicationContext());
+        AppContainer container = ((CustomApplication) context.getApplicationContext())
+                .getAppContainer(context.getApplicationContext());
 
         viewModel = new ViewModelProvider(this, container.viewModelFactory)
                 .get(IssueOverviewViewModel.class);
 
         // - - - - -  init and update data
         viewModel.initIssueLiveData(projectId);
-
-        //  - - - - get data from view model - - - -
-        networkCallMessage = viewModel.getMessage();
     }
 
     @Override // Inflate the layout for this fragment
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentIssueOverviewBinding.inflate(inflater, container, false);
         return binding.getRoot();
@@ -122,10 +99,10 @@ public class IssueOverviewFragment extends Fragment implements OnIssueClickListe
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        toolbar = binding.toolbar;
-        tabLayout = binding.tabLayout;
+        //views
+        MaterialToolbar toolbar = binding.toolbar;
+        TabLayout tabLayout = binding.tabLayout;
         recyclerView = binding.recyclerView;
-        button = binding.addIssueButton;
         swipeRefreshLayout = binding.swipeRefresh;
         toolbar.setTitle(getString(R.string.bar_title, projectName));
 
@@ -133,10 +110,7 @@ public class IssueOverviewFragment extends Fragment implements OnIssueClickListe
         addListAdapter();
 
         // - - - - set listeners  - - - -
-        viewModel.getMutableLiveData().observe(getViewLifecycleOwner(), changeList -> {
-            showFilteredIssueList();
-
-        });
+        viewModel.getMutableLiveData().observe(getViewLifecycleOwner(), changeList -> showFilteredIssueList());
 
         viewModel.getMessage().observe(getViewLifecycleOwner(), s -> {
             if(s.equals("loading")){
@@ -155,7 +129,9 @@ public class IssueOverviewFragment extends Fragment implements OnIssueClickListe
 
         //store the currently selected tab
         TabLayout.Tab tab = tabLayout.getTabAt(selectedTab);
-        tab.select();
+        if( tab != null){
+            tab.select();
+        }
 
         // define action when tabs are changed (filter list)
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -181,16 +157,13 @@ public class IssueOverviewFragment extends Fragment implements OnIssueClickListe
             }
         });
 
-        binding.addIssueButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Bundle bundle = new Bundle();
-                bundle.putInt("projectId", projectId);
-                getParentFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_container, CreateIssueFragment.class, bundle)
-                        .addToBackStack(null)
-                        .commit();
-            }
+        binding.addIssueButton.setOnClickListener(view1 -> {
+            Bundle bundle = new Bundle();
+            bundle.putInt("projectId", projectId);
+            getParentFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, CreateIssueFragment.class, bundle)
+                    .addToBackStack(null)
+                    .commit();
         });
 
         setListPagination();

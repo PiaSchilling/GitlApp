@@ -7,8 +7,6 @@ import java.util.List;
 
 import de.hdmstuttgart.gitlapp.data.repositories.IProfileRepository;
 import de.hdmstuttgart.gitlapp.data.repositories.IProjectRepository;
-import de.hdmstuttgart.gitlapp.data.repositories.ProfileRepository;
-import de.hdmstuttgart.gitlapp.data.repositories.ProjectRepository;
 import de.hdmstuttgart.gitlapp.models.Project;
 
 public class ProjectsViewModel extends ViewModel {

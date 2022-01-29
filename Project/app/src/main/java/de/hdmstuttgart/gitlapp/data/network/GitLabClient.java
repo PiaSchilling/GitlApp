@@ -40,10 +40,6 @@ public interface GitLabClient {
                             @Query("milestone_id") int milestoneId,
                             @Query("labels") String labels);
 
-    @GET("projects/{id}/issues/{issue_iid}")
-    Call<Issue> getProjectIssueByIid(@Path("id") int projectId,
-                                           @Path("issue_iid") int issueIid,
-                                           @Header("Authorization") String auth);
 
     // - - - - - projects - - - - - -
     @GET("projects?membership=true")
@@ -59,10 +55,6 @@ public interface GitLabClient {
 
 
     // - - - - - users - - - - -
-    @GET("users/{id}")
-    Call<User> getSingleUser(@Path ("id") int userId,
-                             @Header("Authorization") String auth);
-
     @GET
     Call<User> getSingleUserWithWholeUrl(@Url String url,
                                          @Header("Authorization") String auth);

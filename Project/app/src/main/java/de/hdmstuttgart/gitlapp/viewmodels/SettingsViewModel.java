@@ -3,19 +3,14 @@ package de.hdmstuttgart.gitlapp.viewmodels;
 import androidx.lifecycle.ViewModel;
 
 import de.hdmstuttgart.gitlapp.data.repositories.IProfileRepository;
-import de.hdmstuttgart.gitlapp.data.repositories.IProjectRepository;
-import de.hdmstuttgart.gitlapp.data.repositories.ProfileRepository;
-import de.hdmstuttgart.gitlapp.data.repositories.ProjectRepository;
 
 public class SettingsViewModel extends ViewModel {
 
 
     private final IProfileRepository profileRepository;
-    private final IProjectRepository projectRepository;
 
-    public SettingsViewModel(IProfileRepository profileRepository, IProjectRepository projectRepository) {
+    public SettingsViewModel(IProfileRepository profileRepository) {
         this.profileRepository = profileRepository;
-        this.projectRepository = projectRepository;
     }
 
 

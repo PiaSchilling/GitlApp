@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModelProvider;
 import de.hdmstuttgart.gitlapp.data.repositories.IIssueRepository;
 import de.hdmstuttgart.gitlapp.data.repositories.IProfileRepository;
 import de.hdmstuttgart.gitlapp.data.repositories.IProjectRepository;
-import de.hdmstuttgart.gitlapp.data.repositories.ProfileRepository;
 import de.hdmstuttgart.gitlapp.viewmodels.CreateIssueViewModel;
 import de.hdmstuttgart.gitlapp.viewmodels.IssueDetailViewModel;
 import de.hdmstuttgart.gitlapp.viewmodels.IssueOverviewViewModel;
@@ -46,7 +45,7 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
             ProjectsViewModel projectsViewModel = new ProjectsViewModel(projectRepository , profileRepository);
             return (T) projectsViewModel;
         } else if (modelClass.isAssignableFrom(SettingsViewModel.class)) {
-            SettingsViewModel settingsViewModel = new SettingsViewModel(profileRepository, projectRepository);
+            SettingsViewModel settingsViewModel = new SettingsViewModel(profileRepository);
             return (T) settingsViewModel;
         }
         throw new IllegalArgumentException("ViewModel class not found");

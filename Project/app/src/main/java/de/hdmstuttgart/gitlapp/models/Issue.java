@@ -1,5 +1,6 @@
 package de.hdmstuttgart.gitlapp.models;
 
+import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
@@ -44,7 +45,7 @@ public class Issue {
 
 
     @Ignore
-    public Issue(int id, int iid, int weight, String title, String description, User author, int author_id, int project_id, int thumbs_up, int thumbs_down, int hashcode, String state) {
+    public Issue(int id, int iid, int weight, String title, String description, User author, int author_id, int project_id, int thumbs_up, int thumbs_down, String state) {
         this.id = id;
         this.iid = iid;
         this.weight = weight;
@@ -55,13 +56,13 @@ public class Issue {
         this.project_id = project_id;
         this.thumbs_up = thumbs_up;
         this.thumbs_down = thumbs_down;
-        this.hashcode = this.hashCode();
         this.state = state;
     }
 
     public Issue() {
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "Issue{" +

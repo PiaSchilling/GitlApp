@@ -1,5 +1,6 @@
 package de.hdmstuttgart.gitlapp.fragments;
 
+import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -9,7 +10,6 @@ import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.util.Log;
@@ -35,14 +35,13 @@ import de.hdmstuttgart.gitlapp.viewmodels.IssueDetailViewModel;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link IssueDetailFragment#newInstance} factory method to
- * create an instance of this fragment.
  */
 public class IssueDetailFragment extends Fragment {
 
+    private Context context;
+
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ISSUE_ID = "issueId";
-
     private int issueId;
 
     private MutableLiveData<Issue> issueLiveData = new MutableLiveData<>();
@@ -55,20 +54,10 @@ public class IssueDetailFragment extends Fragment {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param issueId id of the issue the fragment represents
-     * @return A new instance of fragment IssueDetailFragment.
-     */
-    public static IssueDetailFragment newInstance(int issueId) {
-        IssueDetailFragment fragment = new IssueDetailFragment();
-        Bundle args = new Bundle();
-        args.putInt(ISSUE_ID, issueId);
-        Log.d("Api","args: " + args.get(ISSUE_ID));
-        fragment.setArguments(args);
-        return fragment;
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        this.context = context;
     }
 
     @Override
@@ -79,8 +68,8 @@ public class IssueDetailFragment extends Fragment {
         }
 
         //- - - - get the view model and init data - - - -
-        AppContainer container = ((CustomApplication) getActivity().getApplication())
-                .getAppContainer(getActivity().getApplicationContext());
+        AppContainer container = ((CustomApplication) context.getApplicationContext())
+                .getAppContainer(context.getApplicationContext());
 
         viewModel = new ViewModelProvider(this, container.viewModelFactory)
                 .get(IssueDetailViewModel.class);
@@ -89,7 +78,7 @@ public class IssueDetailFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentIssueDetailBinding.inflate(inflater, container, false);
         return binding.getRoot();
@@ -111,9 +100,8 @@ public class IssueDetailFragment extends Fragment {
     private void bindDataToViews() {
 
         try {
-
             // - - - - set views which can not be null - - - -
-            binding.issueIid.setText(getString(R.string.issue_iid, issueLiveData.getValue().getIid()));
+            binding.issueIid.setText(getString(R.string.issue_iid, Objects.requireNonNull(issueLiveData.getValue()).getIid()));
             binding.issueTitle.setText(issueLiveData.getValue().getTitle());
             binding.authorCard.createDate.setText(getString(R.string.issue_create_date, issueLiveData.getValue().getCreated_at()));
             binding.thumbsUp.thumbsUpCount.setText(String.valueOf(issueLiveData.getValue().getThumbs_up()));
@@ -123,13 +111,13 @@ public class IssueDetailFragment extends Fragment {
 
             // - - - - set view which can be null or empty (if null set default value) - - - -
             if (issueLiveData.getValue().getDescription() == null || issueLiveData.getValue().getDescription().isEmpty()) {
-                binding.issueDescriptionContent.setText("no description");
+                binding.issueDescriptionContent.setText(R.string.no_issue_description_label);
             } else {
                 binding.issueDescriptionContent.setText(issueLiveData.getValue().getDescription());
             }
 
             if (issueLiveData.getValue().getMilestone() == null) {
-                binding.milestoneTitle.setText("milestone name not set");
+                binding.milestoneTitle.setText(R.string.no_milestone_set_label);
             } else {
                 binding.milestoneTitle.setText(issueLiveData.getValue().getMilestone().getTitle());
             }
@@ -149,7 +137,7 @@ public class IssueDetailFragment extends Fragment {
 
             for (Label label : labels) {
 
-                Chip labelChip = new Chip(getActivity());
+                Chip labelChip = new Chip(context);
 
                 labelChip.setLayoutParams(new LinearLayout.LayoutParams(
                         LinearLayout.LayoutParams.WRAP_CONTENT,
@@ -158,7 +146,7 @@ public class IssueDetailFragment extends Fragment {
 
                 labelChip.setText(label.getName());
                 labelChip.setChipBackgroundColor(ColorStateList.valueOf(Color.parseColor(label.getColor())));
-                labelChip.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(getActivity(), R.color.white)));
+                labelChip.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(context, R.color.white)));
                 binding.labelContainer.addView(labelChip);
             }
 
@@ -187,9 +175,9 @@ public class IssueDetailFragment extends Fragment {
 
     private void setStateChip() {
         if (issueLiveData.getValue().getState().equals("opened")) {
-            binding.statusChip.setChipBackgroundColor(ColorStateList.valueOf(ContextCompat.getColor(getActivity(), R.color.green)));
+            binding.statusChip.setChipBackgroundColor(ColorStateList.valueOf(ContextCompat.getColor(context, R.color.green)));
         }else{
-            binding.statusChip.setChipBackgroundColor(ColorStateList.valueOf(ContextCompat.getColor(getActivity(), R.color.red)));
+            binding.statusChip.setChipBackgroundColor(ColorStateList.valueOf(ContextCompat.getColor(context, R.color.red)));
         }
         binding.statusChip.setText(issueLiveData.getValue().getState());
     }
