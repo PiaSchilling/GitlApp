@@ -13,16 +13,6 @@
         android:elevation="30dp"
         app:layout_scrollFlags="scroll|enterAlways">
 
-        <ImageView
-            android:id="@+id/toolbar_back_button"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_centerInParent="true"
-            android:src="@drawable/ic_back_left"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/toolbarTitle"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/toolbarTitle"
@@ -30,7 +20,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:layout_marginLeft="30dp"
             android:text="@string/settings_toolbarTitle" />
 
     </androidx.appcompat.widget.Toolbar>
