@@ -178,6 +178,7 @@ public class IssueDetailFragment extends Fragment {
             binding.statusChip.setChipBackgroundColor(ColorStateList.valueOf(ContextCompat.getColor(context, R.color.green)));
         }else{
             binding.statusChip.setChipBackgroundColor(ColorStateList.valueOf(ContextCompat.getColor(context, R.color.red)));
+            binding.closeIssueButton.setVisibility(View.GONE);
         }
         binding.statusChip.setText(issueLiveData.getValue().getState());
     }
