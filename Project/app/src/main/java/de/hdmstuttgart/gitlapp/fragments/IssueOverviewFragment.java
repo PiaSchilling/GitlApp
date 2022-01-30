@@ -1,6 +1,10 @@
 package de.hdmstuttgart.gitlapp.fragments;
 
+import static androidx.core.content.ContextCompat.getSystemService;
+
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -22,6 +26,7 @@ import com.google.android.material.tabs.TabLayout;
 
 import java.util.Objects;
 
+import de.hdmstuttgart.gitlapp.data.network.NetworkStatus;
 import de.hdmstuttgart.gitlapp.dependencies.AppContainer;
 import de.hdmstuttgart.gitlapp.CustomApplication;
 import de.hdmstuttgart.gitlapp.R;
@@ -100,26 +105,28 @@ public class IssueOverviewFragment extends Fragment implements OnIssueClickListe
         super.onViewCreated(view, savedInstanceState);
 
         //views
-        MaterialToolbar toolbar = binding.toolbar;
-        TabLayout tabLayout = binding.tabLayout;
         recyclerView = binding.recyclerView;
         swipeRefreshLayout = binding.swipeRefresh;
-        toolbar.setTitle(getString(R.string.bar_title, projectName));
+        binding.toolbar.setTitle(getString(R.string.bar_title, projectName));
 
         //create and add adapter
         addListAdapter();
+        setListPagination();
+
 
         // - - - - set listeners  - - - -
         viewModel.getMutableLiveData().observe(getViewLifecycleOwner(), changeList -> showFilteredIssueList());
 
         viewModel.getMessage().observe(getViewLifecycleOwner(), s -> {
-            if(s.equals("loading")){
+            if (s == NetworkStatus.LOADING) {
                 binding.progressSpinnerIssue.setVisibility(View.VISIBLE);
-            }else if (Objects.equals(s,"Update successful")){
+            } else if (s == NetworkStatus.SUCCESS) {
+                binding.addIssueButton.setEnabled(true);
                 binding.progressSpinnerIssue.setVisibility(View.GONE);
-            }else{
-                binding.progressSpinnerIssue.setVisibility(View.GONE);
-                Toast.makeText(getActivity(), s, Toast.LENGTH_SHORT).show(); //todo test if error toast is displayed
+            } else {
+                binding.addIssueButton.setEnabled(false);
+                binding.progressSpinnerIssue.setVisibility(View.GONE); //cant add issues when offline
+                Toast.makeText(getActivity(), s.message, Toast.LENGTH_SHORT).show(); //todo test if error toast is displayed
             }
             swipeRefreshLayout.setRefreshing(false); //when receive message update failed/success -> stop refreshing
         });
@@ -128,13 +135,13 @@ public class IssueOverviewFragment extends Fragment implements OnIssueClickListe
         swipeRefreshLayout.setOnRefreshListener(() -> viewModel.updateIssueLiveData(projectId));
 
         //store the currently selected tab
-        TabLayout.Tab tab = tabLayout.getTabAt(selectedTab);
-        if( tab != null){
+        TabLayout.Tab tab = binding.tabLayout.getTabAt(selectedTab);
+        if (tab != null) {
             tab.select();
         }
 
         // define action when tabs are changed (filter list)
-        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+        binding.tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 try {
@@ -166,7 +173,6 @@ public class IssueOverviewFragment extends Fragment implements OnIssueClickListe
                     .commit();
         });
 
-        setListPagination();
     }
 
     /**
@@ -207,14 +213,14 @@ public class IssueOverviewFragment extends Fragment implements OnIssueClickListe
         }
     }
 
-    private void setListPagination(){
+    private void setListPagination() {
         binding.recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
 
-                if(!recyclerView.canScrollVertically(1) && newState == RecyclerView.SCROLL_STATE_IDLE){
-                    Log.d("Page","Reached the end");
+                if (!recyclerView.canScrollVertically(1) && newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    Log.d("Page", "Reached the end");
                     viewModel.incrementPageNumber();
                     viewModel.updateIssueLiveData(projectId);
                 }
@@ -225,11 +231,12 @@ public class IssueOverviewFragment extends Fragment implements OnIssueClickListe
     @Override
     public void onIssueClick(Issue issue) {
         Bundle bundle = new Bundle();
-        bundle.putInt("issueId",issue.getId());
+        bundle.putInt("issueId", issue.getId());
 
         getParentFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, IssueDetailFragment.class, bundle)
                 .addToBackStack(null)
                 .commit();
     }
+
 }
