@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import java.util.List;
 
+import de.hdmstuttgart.gitlapp.data.network.NetworkStatus;
 import de.hdmstuttgart.gitlapp.models.Issue;
 
 public interface IIssueRepository {
@@ -20,6 +21,6 @@ public interface IIssueRepository {
 
     MutableLiveData<Issue> getSingleIssueLiveData(int issueId) throws Exception;
 
-    MutableLiveData<String> getNetworkCallMessage();
+    MutableLiveData<NetworkStatus> getNetworkCallMessage();
 }
 

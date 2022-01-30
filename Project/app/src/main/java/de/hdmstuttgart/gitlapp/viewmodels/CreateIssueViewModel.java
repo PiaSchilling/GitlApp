@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+import de.hdmstuttgart.gitlapp.data.network.NetworkStatus;
 import de.hdmstuttgart.gitlapp.data.repositories.IIssueRepository;
 import de.hdmstuttgart.gitlapp.data.repositories.IProjectRepository;
 import de.hdmstuttgart.gitlapp.models.Label;
@@ -67,7 +68,7 @@ public class CreateIssueViewModel extends ViewModel {
         return projectRepository.getMilestoneLiveData(projectId);
     }
 
-    public MutableLiveData<String> getMessage() {
+    public MutableLiveData<NetworkStatus> getMessage() {
         return issueRepository.getNetworkCallMessage();
     }
 }

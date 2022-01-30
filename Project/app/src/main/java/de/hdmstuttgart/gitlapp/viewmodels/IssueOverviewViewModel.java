@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import de.hdmstuttgart.gitlapp.data.network.NetworkStatus;
 import de.hdmstuttgart.gitlapp.data.repositories.IIssueRepository;
 import de.hdmstuttgart.gitlapp.models.Issue;
 
@@ -59,7 +60,7 @@ public class IssueOverviewViewModel extends ViewModel {
         return issueRepository.getIssueListLiveData();
     }
 
-    public MutableLiveData<String> getMessage() {
+    public MutableLiveData<NetworkStatus> getMessage() {
         return issueRepository.getNetworkCallMessage();
     }
 

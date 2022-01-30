@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 
 import de.hdmstuttgart.gitlapp.data.database.AppDatabase;
 import de.hdmstuttgart.gitlapp.data.network.GitLabClient;
+import de.hdmstuttgart.gitlapp.data.network.NetworkStatus;
 import de.hdmstuttgart.gitlapp.models.Issue;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -33,7 +34,7 @@ public class IssueRepository implements IIssueRepository{
 
     //present data to the viewModel
     private final MutableLiveData<List<Issue>> issuesLiveData = new MutableLiveData<>();
-    private final MutableLiveData<String> networkCallMessage = new MutableLiveData<>();
+    private final MutableLiveData<NetworkStatus> networkCallMessage = new MutableLiveData<>();
     private final MutableLiveData<Issue> singleIssueLiveData = new MutableLiveData<>();
 
 
@@ -58,6 +59,7 @@ public class IssueRepository implements IIssueRepository{
     @Override
     public void initProjectIssues(int projectId) {
         responseList = ORM.completeIssueObjects(projectId, appDatabase);
+        responseList.sort(Comparator.comparingInt(Issue::getIid).reversed()); //newest at the top
         fetchProjectIssues(projectId,1);
         issuesLiveData.setValue(responseList);
         Log.d("Api", "Loaded local data " + responseList.toString());
@@ -68,7 +70,7 @@ public class IssueRepository implements IIssueRepository{
      */
     @Override
     public void fetchProjectIssues(int projectId, int page) {           //todo make background thread for this (thread pool)
-        networkCallMessage.postValue("loading");
+        networkCallMessage.postValue(NetworkStatus.LOADING);
         Call<List<Issue>> call = gitLabClient.getProjectIssues(projectId, accessToken, page);
         call.enqueue(new Callback<List<Issue>>() {
             @Override
@@ -84,18 +86,20 @@ public class IssueRepository implements IIssueRepository{
                         issuesLiveData.postValue(responseList);
 
                         Log.d("Api", "IssueCall SUCCESS " + responseList.toString());
-                        networkCallMessage.postValue("Update successful");
+                        networkCallMessage.postValue(NetworkStatus.SUCCESS);
                     }catch(NullPointerException e){
                         Log.e("Api", "responseList is null");
                     }
 
                 } else {
                     if(response.code() == 401){
-                        networkCallMessage.setValue("Problem with authentication");
+                        networkCallMessage.setValue(NetworkStatus.AUTHENTICATION_ERROR);
                     }else if(response.code() == 404){
-                        networkCallMessage.setValue("Project with id " + projectId + " not found");
+                        NetworkStatus.NOT_FOUND.setMessage("Project with id " + projectId + " not found");
+                        networkCallMessage.setValue(NetworkStatus.NOT_FOUND);
                     }else{
-                        networkCallMessage.setValue("Error, code " + response.code());
+                        NetworkStatus.FAIL.setMessage("Code " + response.code());
+                        networkCallMessage.setValue(NetworkStatus.FAIL);
                     }
                     Log.e("Api", "IssueCall FAIL, code " + response.code());
                 }
@@ -104,7 +108,7 @@ public class IssueRepository implements IIssueRepository{
             @Override
             public void onFailure(@NonNull Call<List<Issue>> call, @NonNull Throwable t) {
                 Log.e("Api", "Oh no " + t.getMessage() + ", data not updated");
-                networkCallMessage.setValue("Oh no, check your wifi connection");
+                networkCallMessage.setValue(NetworkStatus.NETWORK_ERROR);
             }
         });
     }
@@ -120,17 +124,17 @@ public class IssueRepository implements IIssueRepository{
             public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
                 if(response.isSuccessful()){
                     Log.d("Api","IssuePost SUCCESS");
-                    networkCallMessage.setValue("Add issue successful");
+                    networkCallMessage.setValue(NetworkStatus.POST_SUCCESS);
                     fetchProjectIssues(projectId,1); //todo its not efficient to make two network calls!
                 }else{
                     Log.e("Api","IssuePost FAIL, " + response.code());
-                    networkCallMessage.setValue("Add issue failed, " + response.code()); //todo implement more meaningful message
+                    networkCallMessage.setValue(NetworkStatus.FAIL); //todo implement more meaningful message
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
-                networkCallMessage.setValue("Add issue failed, check wifi connection");
+                networkCallMessage.setValue(NetworkStatus.NETWORK_ERROR);
                 Log.e("Api","IssuePost FAIL, " + t.getMessage());
             }
         });
@@ -152,17 +156,17 @@ public class IssueRepository implements IIssueRepository{
                     updatedIssue.ifPresent(issue -> issue.setState("closed"));
                     updatedIssue.ifPresent(singleIssueLiveData::setValue);
                     Log.d("Api","IssueClose SUCCESS");
-                    networkCallMessage.setValue("Close issue successful");
+                    networkCallMessage.setValue(NetworkStatus.SUCCESS);
                 }else{
                     Log.e("Api","IssueClose FAIL, " + response.code());
-                    networkCallMessage.setValue("Close issue failed, " + response.code());
+                    networkCallMessage.setValue(NetworkStatus.FAIL);
                 }
 
             }
 
             @Override
             public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
-                networkCallMessage.setValue("Close issue failed, check wifi connection");
+                networkCallMessage.setValue(NetworkStatus.NETWORK_ERROR);
                 Log.e("Api","IssueClose FAIL, " + t.getMessage());
             }
         });
@@ -203,7 +207,7 @@ public class IssueRepository implements IIssueRepository{
      * @return LiveData object containing the message
      */
     @Override
-    public MutableLiveData<String> getNetworkCallMessage() {
+    public MutableLiveData<NetworkStatus> getNetworkCallMessage() {
         return networkCallMessage;
     }
 }

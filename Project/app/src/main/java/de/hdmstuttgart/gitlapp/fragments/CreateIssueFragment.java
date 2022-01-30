@@ -31,6 +31,7 @@ import java.util.Objects;
 
 import de.hdmstuttgart.gitlapp.CustomApplication;
 import de.hdmstuttgart.gitlapp.R;
+import de.hdmstuttgart.gitlapp.data.network.NetworkStatus;
 import de.hdmstuttgart.gitlapp.databinding.FragmentCreateIssueBinding;
 import de.hdmstuttgart.gitlapp.dependencies.AppContainer;
 import de.hdmstuttgart.gitlapp.models.Label;
@@ -50,7 +51,6 @@ public class CreateIssueFragment extends Fragment {
     private FragmentCreateIssueBinding binding;
     private CreateIssueViewModel viewModel;
 
-    private MutableLiveData<String> networkCallMessage;
     private MutableLiveData<List<Label>> projectLabels;
     private MutableLiveData<List<Milestone>> projectMilestones;
 
@@ -96,12 +96,11 @@ public class CreateIssueFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         // - - - - -  data observation - - - -
-        networkCallMessage = viewModel.getMessage();
-        networkCallMessage.observe(getViewLifecycleOwner(), s -> {
-            if(!Objects.equals(s,"Update successful")){
-                Toast.makeText(getActivity(), networkCallMessage.getValue(), Toast.LENGTH_SHORT).show();
+        viewModel.getMessage().observe(getViewLifecycleOwner(), s -> {
+            if(s != NetworkStatus.SUCCESS){
+                Toast.makeText(getActivity(), s.message, Toast.LENGTH_SHORT).show();
             }
-            if(Objects.equals(s,"Add issue successful")){
+            if(s == NetworkStatus.POST_SUCCESS){
                 getParentFragmentManager().popBackStackImmediate(); //end fragment if post was successful
             }
         });
