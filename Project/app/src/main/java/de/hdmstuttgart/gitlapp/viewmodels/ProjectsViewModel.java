@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel;
 
 import java.util.List;
 
+import de.hdmstuttgart.gitlapp.data.network.NetworkStatus;
 import de.hdmstuttgart.gitlapp.data.repositories.IProfileRepository;
 import de.hdmstuttgart.gitlapp.data.repositories.IProjectRepository;
 import de.hdmstuttgart.gitlapp.models.Project;
@@ -37,7 +38,7 @@ public class ProjectsViewModel extends ViewModel {
         return projectRepository.getProjectsLiveData();
     }
 
-    public MutableLiveData<String> getMessage() {
+    public MutableLiveData<NetworkStatus> getMessage() {
         return projectRepository.getNetworkCallMessage();
     }
 

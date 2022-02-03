@@ -97,10 +97,13 @@ public class CreateIssueFragment extends Fragment {
 
         // - - - - -  data observation - - - -
         viewModel.getMessage().observe(getViewLifecycleOwner(), s -> {
-            if(s != NetworkStatus.SUCCESS){
+            if(s == NetworkStatus.LOADING){
+                binding.progressSpinnerCreateIssue.setVisibility(View.VISIBLE);
+            }else if(s != NetworkStatus.SUCCESS){
                 Toast.makeText(getActivity(), s.message, Toast.LENGTH_SHORT).show();
             }
-            if(s == NetworkStatus.POST_SUCCESS){
+
+            if(s == NetworkStatus.ISSUE_POST_SUCCESS){
                 getParentFragmentManager().popBackStackImmediate(); //end fragment if post was successful
             }
         });

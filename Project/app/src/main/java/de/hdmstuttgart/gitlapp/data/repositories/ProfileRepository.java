@@ -9,6 +9,7 @@ import java.util.Objects;
 
 import de.hdmstuttgart.gitlapp.data.database.AppDatabase;
 import de.hdmstuttgart.gitlapp.data.network.GitLabClient;
+import de.hdmstuttgart.gitlapp.data.network.NetworkStatus;
 import de.hdmstuttgart.gitlapp.models.Profile;
 import de.hdmstuttgart.gitlapp.models.User;
 import retrofit2.Call;
@@ -21,7 +22,7 @@ public class ProfileRepository implements IProfileRepository{
     private final AppDatabase appDatabase;
     private final GitLabClient gitLabClient;
 
-    MutableLiveData<String> messageLiveData = new MutableLiveData<>();
+    MutableLiveData<NetworkStatus> messageLiveData = new MutableLiveData<>();
 
     // - - - - - Profile attributes - - - -
     private User loggedIdUser;
@@ -63,17 +64,18 @@ public class ProfileRepository implements IProfileRepository{
                         loggedIdUser = response.body();
                         appDatabase.userDao().insertUsers(loggedIdUser);
                         createProfile();
-                        messageLiveData.setValue("Call successful, profile created");
+                        messageLiveData.setValue(NetworkStatus.PROFILE_CREATED);
                         Log.d("ProfileRepo","SUCCESS" + loggedIdUser.toString());
                     }
                 }else{
                     Log.e("ProfileRepo","call not successful, code" + response.code());
                     if(response.code() == 401){
-                        messageLiveData.setValue("Oops not able to authorize, check access token");
+                        messageLiveData.setValue(NetworkStatus.AUTHENTICATION_ERROR);
                     }else if(response.code() == 404){
-                        messageLiveData.setValue("Oops cannot find user with id " + userId + ", check user id");
+                        NetworkStatus.PROFILE_NOT_FOUND.setMessage("Oops cannot find user with id " + userId + ", check user id");
+                        messageLiveData.setValue(NetworkStatus.PROFILE_NOT_FOUND);
                     }else{
-                        messageLiveData.setValue("Error, code " + response.code());
+                        messageLiveData.setValue(NetworkStatus.FAIL);
                     }
 
                 }
@@ -84,9 +86,10 @@ public class ProfileRepository implements IProfileRepository{
                 try{
                     Log.e("ProfileRepo","FAIL " + t.getMessage());
                     if(Objects.requireNonNull(t.getMessage()).contains("Malformed URL")){
-                        messageLiveData.setValue("Oops, the url seems to be incorrect");
+                        messageLiveData.setValue(NetworkStatus.MALFORMED_URL);
                     }else{
-                        messageLiveData.setValue("Not able to create profile, check internet connection");
+                        NetworkStatus.NETWORK_ERROR.setMessage("Not able to create profile, check internet connection");
+                        messageLiveData.setValue(NetworkStatus.NETWORK_ERROR);
                     }
                 }catch (NullPointerException e){
                     Log.e("Api",e.getMessage());
@@ -122,7 +125,7 @@ public class ProfileRepository implements IProfileRepository{
     }
 
     @Override
-    public MutableLiveData<String> getMessageLiveData() {
+    public MutableLiveData<NetworkStatus> getMessageLiveData() {
         return messageLiveData;
     }
 

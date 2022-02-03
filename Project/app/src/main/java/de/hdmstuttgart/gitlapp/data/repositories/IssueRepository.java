@@ -86,7 +86,7 @@ public class IssueRepository implements IIssueRepository{
                         issuesLiveData.postValue(responseList);
 
                         Log.d("Api", "IssueCall SUCCESS " + responseList.toString());
-                        networkCallMessage.postValue(NetworkStatus.SUCCESS);
+                        networkCallMessage.setValue(NetworkStatus.SUCCESS);
                     }catch(NullPointerException e){
                         Log.e("Api", "responseList is null");
                     }
@@ -95,8 +95,8 @@ public class IssueRepository implements IIssueRepository{
                     if(response.code() == 401){
                         networkCallMessage.setValue(NetworkStatus.AUTHENTICATION_ERROR);
                     }else if(response.code() == 404){
-                        NetworkStatus.NOT_FOUND.setMessage("Project with id " + projectId + " not found");
-                        networkCallMessage.setValue(NetworkStatus.NOT_FOUND);
+                        NetworkStatus.PROJECT_NOT_FOUND.setMessage("Project with id " + projectId + " not found");
+                        networkCallMessage.setValue(NetworkStatus.PROJECT_NOT_FOUND);
                     }else{
                         NetworkStatus.FAIL.setMessage("Code " + response.code());
                         networkCallMessage.setValue(NetworkStatus.FAIL);
@@ -118,13 +118,14 @@ public class IssueRepository implements IIssueRepository{
      */
     @Override
     public void postNewIssue(int projectId, String issueTitle, String issueDescription, String dueDate, int weight,  String labels, int milestoneId){
+        networkCallMessage.setValue(NetworkStatus.LOADING);
         Call<Void> call = gitLabClient.postNewIssue(projectId,accessToken,issueTitle,issueDescription,dueDate,weight,milestoneId,labels);
         call.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
                 if(response.isSuccessful()){
                     Log.d("Api","IssuePost SUCCESS");
-                    networkCallMessage.setValue(NetworkStatus.POST_SUCCESS);
+                    networkCallMessage.setValue(NetworkStatus.ISSUE_POST_SUCCESS);
                     fetchProjectIssues(projectId,1); //todo its not efficient to make two network calls!
                 }else{
                     Log.e("Api","IssuePost FAIL, " + response.code());
@@ -159,6 +160,7 @@ public class IssueRepository implements IIssueRepository{
                     networkCallMessage.setValue(NetworkStatus.SUCCESS);
                 }else{
                     Log.e("Api","IssueClose FAIL, " + response.code());
+                    NetworkStatus.FAIL.setMessage("Code " + response.code());
                     networkCallMessage.setValue(NetworkStatus.FAIL);
                 }
 

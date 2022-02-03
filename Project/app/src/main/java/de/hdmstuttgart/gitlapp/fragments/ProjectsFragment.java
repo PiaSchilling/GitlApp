@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Objects;
 
 import de.hdmstuttgart.gitlapp.R;
+import de.hdmstuttgart.gitlapp.data.network.NetworkStatus;
 import de.hdmstuttgart.gitlapp.dependencies.AppContainer;
 import de.hdmstuttgart.gitlapp.CustomApplication;
 import de.hdmstuttgart.gitlapp.databinding.FragmentProjectsBinding;
@@ -55,8 +56,7 @@ public class ProjectsFragment extends Fragment implements OnProjectClickListener
 
     //data
     private MutableLiveData<List<Project>> projectsLiveData;
-    private MutableLiveData<String> networkCallMessage;
-    List<Project> projectList = new ArrayList<>();
+    private final List<Project> projectList = new ArrayList<>();
 
 
     public ProjectsFragment() {
@@ -84,7 +84,6 @@ public class ProjectsFragment extends Fragment implements OnProjectClickListener
         projectsViewModel.initProjectsLiveData();
         projectsLiveData = projectsViewModel.getMutableLiveData();
         projectList.addAll(Objects.requireNonNull(projectsLiveData.getValue()));
-        networkCallMessage = projectsViewModel.getMessage();
     }
 
     @Override
@@ -129,16 +128,12 @@ public class ProjectsFragment extends Fragment implements OnProjectClickListener
             adapter.notifyDataSetChanged();
         });
 
-        networkCallMessage.observe(getViewLifecycleOwner(), s -> {
-            if(!Objects.equals(s,"Update successful")){ //needed to stop refresh layout but should not be displayed as a toast
-                Toast.makeText(getActivity(), s, Toast.LENGTH_SHORT).show();
+        projectsViewModel.getMessage().observe(getViewLifecycleOwner(), s -> {
+            if(s != NetworkStatus.SUCCESS){ //needed to stop refresh layout but should not be displayed as a toast
+                Toast.makeText(getActivity(), s.message, Toast.LENGTH_SHORT).show();
             }
             swipeRefresh.setRefreshing(false);
         });
-
-
-        // - - - - set listeners  - - - -
-        //(bc getViewLifecycleOwner() it can be done only after onCreateView)
 
         projectsLiveData.observe(getViewLifecycleOwner(), changeList -> {
             projectList.clear();

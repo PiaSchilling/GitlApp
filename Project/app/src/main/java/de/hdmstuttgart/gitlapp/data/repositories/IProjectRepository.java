@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import java.util.List;
 
+import de.hdmstuttgart.gitlapp.data.network.NetworkStatus;
 import de.hdmstuttgart.gitlapp.models.Label;
 import de.hdmstuttgart.gitlapp.models.Milestone;
 import de.hdmstuttgart.gitlapp.models.Project;
@@ -16,7 +17,7 @@ public interface IProjectRepository {
 
     MutableLiveData<List<Project>> getProjectsLiveData();
 
-    MutableLiveData<String> getNetworkCallMessage();
+    MutableLiveData<NetworkStatus> getNetworkCallMessage();
 
     void fetchProjectLabels(int projectId);
 

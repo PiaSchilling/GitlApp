@@ -24,6 +24,7 @@ import android.widget.Toast;
 import java.util.Objects;
 
 import de.hdmstuttgart.gitlapp.CustomApplication;
+import de.hdmstuttgart.gitlapp.data.network.NetworkStatus;
 import de.hdmstuttgart.gitlapp.dependencies.LoginContainer;
 import de.hdmstuttgart.gitlapp.R;
 import de.hdmstuttgart.gitlapp.databinding.FragmentLogInBinding;
@@ -49,7 +50,7 @@ public class LoginFragment extends Fragment {
 
     private String baseUrl;
 
-    private MutableLiveData<String> messageLiveData;
+    private MutableLiveData<NetworkStatus> messageLiveData;
 
     public LoginFragment() {
         // Required empty public constructor
@@ -101,13 +102,13 @@ public class LoginFragment extends Fragment {
         messageLiveData.observe(getViewLifecycleOwner(), s -> {
 
             //inform the user if login failed etc
-            if(!Objects.equals(messageLiveData.getValue(), "default")){ //default value is set after profile creation
-                Toast.makeText(getActivity(), messageLiveData.getValue(), Toast.LENGTH_SHORT).show();
+            if( s != NetworkStatus.DEFAULT){ //default value is set after profile creation
+                Toast.makeText(getActivity(), s.message, Toast.LENGTH_SHORT).show();
                 spinner.setVisibility(View.GONE);
             }
 
             //fragment transaction when profile was successfully created
-            if (s.equals("Call successful, profile created")) {
+            if (s == NetworkStatus.PROFILE_CREATED) {
 
                 //write profile info to shared preferences only if login was successful
                 String url = baseUrl + "/api/v4/";
@@ -116,7 +117,7 @@ public class LoginFragment extends Fragment {
                 editor.putString("baseUrl", url);
                 editor.apply();
 
-                messageLiveData.setValue("default"); //otherwise this if clause will be always true afterwards -> app crash on logout (where login screen is called again)
+                messageLiveData.setValue(NetworkStatus.DEFAULT); //otherwise this if clause will be always true afterwards -> app crash on logout (where login screen is called again)
 
                 getParentFragmentManager().beginTransaction()
                         .replace(R.id.fragment_container, ProjectsFragment.class, null)

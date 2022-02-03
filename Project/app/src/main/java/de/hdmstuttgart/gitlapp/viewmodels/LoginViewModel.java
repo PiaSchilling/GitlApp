@@ -3,6 +3,7 @@ package de.hdmstuttgart.gitlapp.viewmodels;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import de.hdmstuttgart.gitlapp.data.network.NetworkStatus;
 import de.hdmstuttgart.gitlapp.data.repositories.IProfileRepository;
 
 public class LoginViewModel extends ViewModel {
@@ -18,7 +19,7 @@ public class LoginViewModel extends ViewModel {
         profileRepository.setProfileInformation(userId,hostUrl,accessToken);
     }
 
-    public MutableLiveData<String> getMessageLiveData(){
+    public MutableLiveData<NetworkStatus> getMessageLiveData(){
         return profileRepository.getMessageLiveData();
     }
 }

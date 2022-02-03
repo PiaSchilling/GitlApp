@@ -11,6 +11,7 @@ import java.util.Objects;
 
 import de.hdmstuttgart.gitlapp.data.database.AppDatabase;
 import de.hdmstuttgart.gitlapp.data.network.GitLabClient;
+import de.hdmstuttgart.gitlapp.data.network.NetworkStatus;
 import de.hdmstuttgart.gitlapp.models.Label;
 import de.hdmstuttgart.gitlapp.models.Milestone;
 import de.hdmstuttgart.gitlapp.models.Project;
@@ -31,7 +32,7 @@ public class ProjectRepository implements IProjectRepository {
 
     // present data to the view model
     private final MutableLiveData<List<Project>> projectsLiveData = new MutableLiveData<>();
-    private final MutableLiveData<String> networkCallMessage = new MutableLiveData<>();
+    private final MutableLiveData<NetworkStatus> networkCallMessage = new MutableLiveData<>();
     private final MutableLiveData<List<Label>> labelsLiveData = new MutableLiveData<>();
     private final MutableLiveData<List<Milestone>> milestoneLiveData = new MutableLiveData<>();
 
@@ -76,16 +77,18 @@ public class ProjectRepository implements IProjectRepository {
                     responseList = response.body();
                     appDatabase.projectDao().insertProjects(responseList);
                     projectsLiveData.setValue(responseList);
-                    networkCallMessage.setValue("Update successful");
+                    networkCallMessage.setValue(NetworkStatus.SUCCESS);
                     Log.d("Api", "ProjectCall SUCCESS " + responseList.toString());
                 } else {
                     Log.d("Api", "ProjectCall FAIL, code " + response.code());
                     if (response.code() == 401) {
-                        networkCallMessage.setValue("Problem with authentication");
+                        networkCallMessage.setValue(NetworkStatus.AUTHENTICATION_ERROR);
                     } else if (response.code() == 404) {
-                        networkCallMessage.setValue("Projects not found");
+                        networkCallMessage.setValue(NetworkStatus.PROJECT_NOT_FOUND);
                     } else {
-                        networkCallMessage.setValue("Error, code " + response.code());
+                        Log.e("Api","FetchProjects FAIL, " + response.code());
+                        NetworkStatus.FAIL.setMessage("Code " + response.code());
+                        networkCallMessage.setValue(NetworkStatus.FAIL);
                     }
                 }
             }
@@ -93,7 +96,7 @@ public class ProjectRepository implements IProjectRepository {
             @Override
             public void onFailure(@NonNull Call<List<Project>> call, @NonNull Throwable t) {
                 Log.e("Api", "Oh no " + t.getMessage() + ", loading data form database");
-                networkCallMessage.setValue("Oh no, check your wifi connection");
+                networkCallMessage.setValue(NetworkStatus.NETWORK_ERROR);
             }
         });
     }
@@ -104,7 +107,7 @@ public class ProjectRepository implements IProjectRepository {
     }
 
     @Override
-    public MutableLiveData<String> getNetworkCallMessage() {
+    public MutableLiveData<NetworkStatus> getNetworkCallMessage() {
         return networkCallMessage;
     }
 
