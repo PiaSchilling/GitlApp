@@ -4,7 +4,7 @@ GitLapp is a small android app for managing GitLab issues.
 
 
 
-##What GitlApp can do
+## What GitlApp can do
 
 - easy connection to (custom) Gitlab servers 
 - user-friendly forwarding to generate an access token
@@ -16,13 +16,13 @@ GitLapp is a small android app for managing GitLab issues.
 
 
 
-##Requirements
+## Requirements
 
 The Android devices requires at least API 26 (Android 8.0 Oreo) or higher. 
 
 
 
-##Known issues
+## Known issues
 
 - Issues that are deleted in the browser still exist in GitlApp
 - DB actions are executed in the UI thread, which should actually be done in a separate background thread
@@ -32,7 +32,7 @@ The Android devices requires at least API 26 (Android 8.0 Oreo) or higher.
 
 
 
-##Developers
+## Developers
 
 Pia Schilling (ps149@hdm-stuttgart.de)
 Sara Tietze (st093@hdm-stuttgart.de)
