@@ -8,7 +8,7 @@ import androidx.room.PrimaryKey;
 
 
 /**
- * keeps the information of the logged in user including the access token for the gitlab api //todo this should be a singleton (only one logged in user)
+ * keeps the information of the logged in user including the access token for the gitlab api
  */
 
 @Entity(tableName = "profile")

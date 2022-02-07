@@ -129,7 +129,7 @@ public class IssueRepository implements IIssueRepository{
                     fetchProjectIssues(projectId,1); //todo its not efficient to make two network calls!
                 }else{
                     Log.e("Api","IssuePost FAIL, " + response.code());
-                    networkCallMessage.setValue(NetworkStatus.FAIL); //todo implement more meaningful message
+                    networkCallMessage.setValue(NetworkStatus.FAIL);
                 }
             }
 

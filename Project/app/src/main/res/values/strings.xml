@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">GitLapp</string>
+    <string name="app_name">GitlApp</string>
     <string name="hint_issue_title">Issue title</string>
     <string name="hint_issue_description">Issue description</string>
     <string name="hint_issue_weight">Issue weight</string>

@@ -2,7 +2,7 @@ package de.hdmstuttgart.gitlapp.fragments.adapters;
 
 import de.hdmstuttgart.gitlapp.models.Issue;
 
-public interface OnIssueClickListener { //todo implement this also for project list
+public interface OnIssueClickListener {
 
     /**
      * defines click action when clicking an issue list element

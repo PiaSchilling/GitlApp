@@ -79,7 +79,7 @@ public class IssueListAdapter extends ListAdapter<Issue, IssueListAdapter.ViewHo
     public static final DiffUtil.ItemCallback<Issue> DIFF_CALLBACK =
             new DiffUtil.ItemCallback<Issue>() {
                 @Override
-                public boolean areItemsTheSame( //todo understand
+                public boolean areItemsTheSame(
                         @NonNull Issue oldIssue, @NonNull Issue newIssue) {
                     return oldIssue.getId() == newIssue.getId();
                 }

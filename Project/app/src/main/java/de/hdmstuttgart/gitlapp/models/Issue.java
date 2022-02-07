@@ -41,7 +41,6 @@ public class Issue {
     private Milestone milestone;
     private int milestone_id;
 
-    //todo add comments (notes)
 
 
     @Ignore
@@ -70,7 +69,7 @@ public class Issue {
                 ", iid=" + iid + "}";
     }
 
-    @Override//todo recreate for real issue implementation
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;

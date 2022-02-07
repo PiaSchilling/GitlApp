@@ -58,7 +58,7 @@ public class IssueOverviewFragment extends Fragment implements OnIssueClickListe
     private SwipeRefreshLayout swipeRefreshLayout;
 
     //tab filtering, all per default/on fragment start
-    private String tabFilter = "all";//todo move to viewModel
+    private String tabFilter = "all";   //todo move to viewModel
     private int selectedTab = 0; //default selected tab is 0 (all)
 
 
@@ -74,7 +74,7 @@ public class IssueOverviewFragment extends Fragment implements OnIssueClickListe
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState); //todo this whole method should ideal only called once
+        super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             projectId = getArguments().getInt(ARG_PARAM1);
             projectName = getArguments().getString(ARG_PARAM2);
@@ -126,7 +126,7 @@ public class IssueOverviewFragment extends Fragment implements OnIssueClickListe
             } else {
                 binding.addIssueButton.setEnabled(false);
                 binding.progressSpinnerIssue.setVisibility(View.GONE); //cant add issues when offline
-                Toast.makeText(getActivity(), s.message, Toast.LENGTH_SHORT).show(); //todo test if error toast is displayed
+                Toast.makeText(getActivity(), s.message, Toast.LENGTH_SHORT).show();
             }
             swipeRefreshLayout.setRefreshing(false); //when receive message update failed/success -> stop refreshing
         });

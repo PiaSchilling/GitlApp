@@ -191,8 +191,6 @@ public class CreateIssueFragment extends Fragment {
 
         // - - - - button listeners - - - -
         binding.createButton.setOnClickListener(view12 -> {
-            //todo end fragment if successful
-            //todo labels are not displayed offline check why
             try{
                 Chip chip = milestoneGroup.findViewById(milestoneGroup.getCheckedChipId());
                 String title = Objects.requireNonNull(binding.inputIssueEditText.getText()).toString();
@@ -207,7 +205,7 @@ public class CreateIssueFragment extends Fragment {
 
                 //title may not be empty
                 if (!title.isEmpty()) {
-                    viewModel.postNewIssue(projectId, title, description, dueDate, weight, selectedLabels, milestoneName); //todo implement labels and milestones
+                    viewModel.postNewIssue(projectId, title, description, dueDate, weight, selectedLabels, milestoneName);
                 } else {
                     Toast.makeText(getActivity(), "Title can not be empty", Toast.LENGTH_SHORT).show();
                 }

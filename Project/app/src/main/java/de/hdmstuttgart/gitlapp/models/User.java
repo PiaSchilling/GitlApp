@@ -22,7 +22,7 @@ public class User {
         this.username = username;
         this.name = name;
         this.avatar_url = avatar_url;
-        this.email = email; //todo maybe remove wont be displayed
+        this.email = email;
     }
 
     public User(){
