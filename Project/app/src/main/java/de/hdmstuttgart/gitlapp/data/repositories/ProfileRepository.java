@@ -22,7 +22,7 @@ public class ProfileRepository implements IProfileRepository{
     private final AppDatabase appDatabase;
     private final GitLabClient gitLabClient;
 
-    MutableLiveData<NetworkStatus> messageLiveData = new MutableLiveData<>();
+    private final MutableLiveData<NetworkStatus> messageLiveData = new MutableLiveData<>();
 
     // - - - - - Profile attributes - - - -
     private User loggedIdUser;

@@ -17,7 +17,7 @@ public class LoginContainer {
 
     // - - - - - - Retrofit api - - - - - - - - - - - - -
     private final String baseUrl = "https://gitlab.com/api/v4/"; //just a placeholder (will be overridden by the user input)
-    ServiceGenerator serviceGenerator = new ServiceGenerator(this.baseUrl); //can only be instanced after the base url is set
+    private ServiceGenerator serviceGenerator = new ServiceGenerator(this.baseUrl); //can only be instanced after the base url is set
     public GitLabClient gitLabClient = serviceGenerator.getGitLabClient();
 
     // - - - - -  Repository - - - - - - - - -

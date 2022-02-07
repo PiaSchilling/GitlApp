@@ -18,7 +18,6 @@ public abstract class AppDatabase extends RoomDatabase {
 
     private static AppDatabase INSTANCE;
 
-    //Singleton access bc each db object is expensive (its recommended to implement this as a singleton on android.developers.com)
     public static AppDatabase getDatabaseInstance(Context context) {
         synchronized (AppDatabase.class){
         if(INSTANCE == null){

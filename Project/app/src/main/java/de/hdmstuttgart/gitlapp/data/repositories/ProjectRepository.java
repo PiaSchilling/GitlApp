@@ -64,8 +64,7 @@ public class ProjectRepository implements IProjectRepository {
 
 
     /**
-     * reloads the data by making api calls
-     * if call fails, data from the local database will be loaded
+     * reloads the data by making api call
      */
     @Override
     public void fetchProjects() {

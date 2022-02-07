@@ -92,7 +92,7 @@ public class CreateIssueFragment extends Fragment {
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) { //todo split up in multiple methods for better readability
         super.onViewCreated(view, savedInstanceState);
 
         // - - - - -  data observation - - - -

@@ -1,10 +1,7 @@
 package de.hdmstuttgart.gitlapp.fragments;
 
-import static androidx.core.content.ContextCompat.getSystemService;
 
 import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -21,7 +18,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.Objects;

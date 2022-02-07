@@ -17,36 +17,31 @@ import de.hdmstuttgart.gitlapp.data.repositories.ProfileRepository;
 import de.hdmstuttgart.gitlapp.data.repositories.ProjectRepository;
 import de.hdmstuttgart.gitlapp.viewmodels.vmpFactories.ViewModelFactory;
 
-// Container of objects shared across the whole app (dependency injection)
+// Container of objects required by other classes (dependency injection)
 public class AppContainer {
 
-    // - - - - - -  Room local database - - - - - - - - -
+    // - - - - - -  sources - - - - - - - - -
     public AppDatabase appDatabase;
-
     public GitLabClient gitLabClient;
 
-    // - - - - - - Repositories - - - - - - - - - - - - -
+    // - - - - - - repositories - - - - - - - - - - - - -
     public IIssueRepository issueRepository;
     public IProjectRepository projectRepository;
     public IProfileRepository profileRepository;
 
-
-    // - - - - - - view model provider factories - - - - -
+    // - - - - - - view model provider - - - - -
     public ViewModelFactory viewModelFactory;
-
-
 
     public AppContainer(Context context) {
         SharedPreferences sharedPref = context.getSharedPreferences("profileInformation", Context.MODE_PRIVATE);
-        // - - - - - - Retrofit api - - - - - - - - - - - - -
         String baseUrl = sharedPref.getString("baseUrl", "default");
 
         if (!baseUrl.equals("default")) {
             //can only be instanced after the base url is set
-            ServiceGenerator serviceGenerator = new ServiceGenerator(Objects.requireNonNull(baseUrl)); //can only be instanced after the base url is set
+            ServiceGenerator serviceGenerator = new ServiceGenerator(Objects.requireNonNull(baseUrl));
             gitLabClient = serviceGenerator.getGitLabClient();
 
-            appDatabase = AppDatabase.getDatabaseInstance(context); //needs the context this is why its instanced in the constructor
+            appDatabase = AppDatabase.getDatabaseInstance(context);
 
             issueRepository = new IssueRepository(Objects.requireNonNull(appDatabase), Objects.requireNonNull(gitLabClient));
             projectRepository = new ProjectRepository(Objects.requireNonNull(appDatabase), Objects.requireNonNull(gitLabClient));
@@ -55,7 +50,7 @@ public class AppContainer {
             viewModelFactory = new ViewModelFactory(issueRepository, projectRepository, profileRepository);
 
         } else {
-            Log.e("Api", "Can not find base url in shared preferences"); //can never happen
+            Log.e("Api", "Can not find base url in shared preferences");
         }
 
     }

@@ -40,7 +40,6 @@ public class IssueDetailFragment extends Fragment {
 
     private Context context;
 
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ISSUE_ID = "issueId";
     private int issueId;
 
@@ -96,7 +95,7 @@ public class IssueDetailFragment extends Fragment {
     }
 
 
-    //todo split up in multiple methods
+    //todo split up in multiple methods for better readability
     private void bindDataToViews() {
 
         try {

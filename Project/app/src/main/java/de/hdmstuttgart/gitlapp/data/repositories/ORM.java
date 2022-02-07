@@ -11,7 +11,7 @@ import de.hdmstuttgart.gitlapp.models.Milestone;
 import de.hdmstuttgart.gitlapp.models.User;
 
 /**
- * class holds methods which map nested objects in the issueObject to and from the according database table
+ * class holds methods which map nested objects to and from the according database table (we did not like the solutions for this problem provided by room)
  */
 public class ORM {
 
