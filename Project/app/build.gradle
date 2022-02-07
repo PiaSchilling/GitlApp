@@ -59,4 +59,6 @@ dependencies {
     implementation "com.squareup.retrofit2:retrofit:2.9.0"
 
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
+
+    //testImplementation 'android.arch.core:core-testing:1.0.0-alpha3' //comment in for unit test class issueOverviewViewModelTest (we are not sure if this dependency is allowed to use for the project bc its not androidx)
 }
