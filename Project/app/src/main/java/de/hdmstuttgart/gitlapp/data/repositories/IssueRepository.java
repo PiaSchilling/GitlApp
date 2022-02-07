@@ -69,7 +69,7 @@ public class IssueRepository implements IIssueRepository{
      * fetches all issues by a specific project
      */
     @Override
-    public void fetchProjectIssues(int projectId, int page) {           //todo make background thread for this (thread pool)
+    public void fetchProjectIssues(int projectId, int page) {
         networkCallMessage.postValue(NetworkStatus.LOADING);
         Call<List<Issue>> call = gitLabClient.getProjectIssues(projectId, accessToken, page);
         call.enqueue(new Callback<List<Issue>>() {
