@@ -83,7 +83,7 @@ public class IssueRepository implements IIssueRepository{
                         responseList = ORM.completeIssueObjects(projectId,appDatabase);
 
                         responseList.sort(Comparator.comparingInt(Issue::getIid).reversed());
-                        issuesLiveData.postValue(responseList);
+                        issuesLiveData.setValue(responseList);
 
                         Log.d("Api", "IssueCall SUCCESS " + responseList.toString());
                         networkCallMessage.setValue(NetworkStatus.SUCCESS);
