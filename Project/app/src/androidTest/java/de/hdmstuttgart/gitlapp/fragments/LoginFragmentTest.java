@@ -60,7 +60,7 @@ public class LoginFragmentTest {
                 .perform(click());
 
         onView(withId(R.id.accessToken_editText))
-                .perform(typeText("glpat-MQyhAW81xUxn-JzofrW3"), closeSoftKeyboard());
+                .perform(typeText("glpat-MQyhAW81xUxn-JzofrW3"), closeSoftKeyboard()); //access token expires on february 28th
 
         onView(withId(R.id.login_button))
                 .perform(click()); //should now login
