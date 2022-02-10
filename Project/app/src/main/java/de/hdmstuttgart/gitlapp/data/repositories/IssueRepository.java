@@ -66,7 +66,9 @@ public class IssueRepository implements IIssueRepository{
     }
 
     /**
-     * fetches all issues by a specific project
+     * fetch issues for a specific project
+     * @param projectId the id of the project to get the issues for
+     * @param page api page number which indicates the page to get the issues from
      */
     @Override
     public void fetchProjectIssues(int projectId, int page) {
