@@ -21,9 +21,8 @@ import de.hdmstuttgart.gitlapp.R;
  * basic ui test for login screen
  *
  * due to tight coupling between fragment and viewModel we were not able to mock data here
- * therefore testing is done with a gitlab account created specifically for this test (which contains only a test project)
- * we know that it is not a good idea to hardcode the access token here (to be on the safe side, the token has been created with an expiration date of february 28th)
- *
+ * therefore testing was done with a gitlab account created specifically for this test, account has been removed now 
+ * 
  * log out or clear app data before testing otherwise login screen will not be shown
  */
 public class LoginFragmentTest {
@@ -54,13 +53,13 @@ public class LoginFragmentTest {
                 .perform(click());
 
         onView(withId(R.id.userId_editText))
-                .perform(typeText("10725890"), closeSoftKeyboard());
+                .perform(typeText("0"), closeSoftKeyboard());
 
         onView(withId(R.id.accessToken_editText))
                 .perform(click());
 
         onView(withId(R.id.accessToken_editText))
-                .perform(typeText("glpat-MQyhAW81xUxn-JzofrW3"), closeSoftKeyboard()); //access token expires on february 28th
+                .perform(typeText("0"), closeSoftKeyboard()); 
 
         onView(withId(R.id.login_button))
                 .perform(click()); //should now login
@@ -71,7 +70,7 @@ public class LoginFragmentTest {
             e.printStackTrace();
         }
 
-        onView(withId(R.id.userNameLabel)).check(matches(withText("Pia Schilling")));
+        onView(withId(R.id.userNameLabel)).check(matches(withText("-")));
 
 
     }
