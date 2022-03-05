@@ -1,8 +1,6 @@
 # GitlApp
 
-GitLapp is a small android app for managing GitLab issues. 
-
-
+GitLapp is a small android app for managing GitLab issues.
 
 ### What GitlApp can do
 
@@ -15,12 +13,17 @@ GitLapp is a small android app for managing GitLab issues.
 - convenient closing of an issue
 
 
-
 ### Requirements
 
 The Android devices requires at least API 26 (Android 8.0 Oreo) or higher. 
 
-
+### Technolgy Stack
+ 
+ - [Retrofit](https://square.github.io/retrofit/) - for Gitlab API communication
+ - androidx [Room](https://developer.android.com/jetpack/androidx/releases/room), - for local data caching 
+ - [Glide](https://github.com/bumptech/glide) - for loading images
+ - [JUnit](https://junit.org/junit5/) - for simple unit tests
+ - several other androidx libraries 
 
 ### Known issues
 
