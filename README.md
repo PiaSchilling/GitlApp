@@ -1,6 +1,8 @@
 # GitlApp
 
-GitLapp is a small android app for managing GitLab issues.
+GitLapp is a small android app for managing GitLab issues. It was developed as part of a university project in a team of two students. 
+
+
 
 ### What GitlApp can do
 
@@ -11,6 +13,8 @@ GitLapp is a small android app for managing GitLab issues.
 - view issue details like due date, author, milestone, labels, title and description
 - add new issues to a project with title, description, due date, select labels and milestones (which are already defined for the project) 
 - convenient closing of an issue
+
+![Screens](https://user-images.githubusercontent.com/96486990/157705869-31e6f385-f365-49e2-8c67-3e7a899c819b.png)
 
 
 ### Requirements
