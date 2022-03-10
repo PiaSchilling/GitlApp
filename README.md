@@ -41,5 +41,4 @@ The Android devices requires at least API 26 (Android 8.0 Oreo) or higher.
 
 ### Developers
 
-Pia Schilling 
-Sara Tietze 
+Pia Schilling & Sara Tietze (Hochschule der Medien, Stuttgart)
